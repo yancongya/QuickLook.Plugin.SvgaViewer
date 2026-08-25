@@ -586,13 +586,37 @@
                 parser.load(dataUri, function(videoItem) {
                     log('SVGA parsed successfully');
 
-                    // Debug: log videoItem details
-                    log('videoItem keys: ' + Object.keys(videoItem).join(', '));
-                    log('videoItem.frames: ' + videoItem.frames);
-                    log('videoItem.FPS: ' + videoItem.FPS);
-                    log('videoItem.videoSize: ' + JSON.stringify(videoItem.videoSize));
-                    log('videoItem.sprites count: ' + (videoItem.sprites ? videoItem.sprites.length : 0));
-                    log('videoItem.images keys: ' + (videoItem.images ? Object.keys(videoItem.images).join(', ') : 'none'));
+                    // Debug: log ALL videoItem properties
+                    log('=== videoItem Debug ===');
+                    log('keys: ' + Object.keys(videoItem).join(', '));
+                    log('version: ' + videoItem.version);
+                    log('frames: ' + videoItem.frames);
+                    log('FPS: ' + videoItem.FPS);
+                    log('fps: ' + videoItem.fps);
+                    log('videoSize: ' + JSON.stringify(videoItem.videoSize));
+                    log('size: ' + JSON.stringify(videoItem.size));
+                    log('sprites count: ' + (videoItem.sprites ? videoItem.sprites.length : 0));
+                    
+                    // Log images details
+                    if (videoItem.images) {
+                        var imgKeys = Object.keys(videoItem.images);
+                        log('images count: ' + imgKeys.length);
+                        imgKeys.forEach(function(key) {
+                            var val = videoItem.images[key];
+                            log('  image[' + key + ']: type=' + typeof val + ', length=' + (val ? val.length : 0));
+                        });
+                    } else {
+                        log('images: null/undefined');
+                    }
+
+                    // Log first sprite details
+                    if (videoItem.sprites && videoItem.sprites.length > 0) {
+                        var sprite = videoItem.sprites[0];
+                        log('sprite[0] keys: ' + Object.keys(sprite).join(', '));
+                        log('sprite[0].imageKey: ' + sprite.imageKey);
+                        log('sprite[0].frames count: ' + (sprite.frames ? sprite.frames.length : 0));
+                    }
+                    log('=== End Debug ===');
 
                     // Get metadata (1.x uses FPS and videoSize)
                     totalFrames = videoItem.frames || 0;
@@ -604,7 +628,7 @@
                         frames: totalFrames,
                         fps: fps,
                         sprites: videoItem.sprites ? videoItem.sprites.length : 0,
-                        version: '1.x'
+                        version: videoItem.version || '1.x'
                     };
 
                     log('Canvas size: ' + svgaMeta.width + 'x' + svgaMeta.height);
@@ -621,8 +645,9 @@
                     // Progress tracking
                     player.onFrame(function(frame) {
                         currentFrame = frame;
-                        if (frame === 0 || frame === 1 || frame % 30 === 0) {
-                            log('Frame ' + frame + '/' + totalFrames);
+                        // Log every frame for debugging
+                        if (frame < 5 || frame % 10 === 0) {
+                            log('Frame ' + frame + '/' + totalFrames + ' (fps=' + fps + ')');
                         }
                         if (!isDragging) {
                             var p = totalFrames > 0 ? frame / totalFrames : 0;
