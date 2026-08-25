@@ -86,11 +86,23 @@
             background: var(--control-bg);
             padding: 8px 12px; border-radius: 4px;
             color: var(--fg); font-size: 11px;
-            line-height: 1.8; z-index: 21;
-            display: none; white-space: nowrap;
+            line-height: 1.6; z-index: 21;
+            display: none; max-width: 280px;
+            max-height: 300px; overflow-y: auto;
         }
         #metaPanel.show { display: block; }
         #metaPanel .label { color: var(--fg-alt); }
+        #metaPanel hr { border-color: rgba(255,255,255,0.1); margin: 4px 0; }
+        #metaPanel .meta-row { display: flex; justify-content: space-between; }
+        #metaPanel .meta-row .label { flex: 0 0 auto; }
+        #metaPanel .meta-row .value { text-align: right; }
+        #metaPanel .image-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 2px 8px; margin-top: 4px;
+        }
+        #metaPanel .image-item {
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
 
         #colorPicker {
             position: absolute; top: 36px; right: 8px;
@@ -376,22 +388,26 @@
         // --- Metadata ---
         function updateMetaPanel() {
             if (!svgaMeta) return;
-            var html = 
-                '<span class="label">' + T('META_Version') + ': </span>' + (svgaMeta.version || '-') + '<br>' +
-                '<span class="label">' + T('META_FPS') + ': </span>' + (svgaMeta.fps || '-') + '<br>' +
-                '<span class="label">' + T('META_Frames') + ': </span>' + (svgaMeta.frames || '-') + '<br>' +
-                '<span class="label">' + T('META_Width') + ': </span>' + (svgaMeta.width || '-') + 'px<br>' +
-                '<span class="label">' + T('META_Height') + ': </span>' + (svgaMeta.height || '-') + 'px<br>' +
-                '<span class="label">' + T('META_Sprites') + ': </span>' + (svgaMeta.sprites || '-') + '<br>' +
-                '<span class="label">' + T('META_Images') + ': </span>' + (svgaMeta.images || '-') + '<br>' +
-                '<span class="label">Memory: </span>' + (svgaMeta.memory ? (svgaMeta.memory / 1024 / 1024).toFixed(2) + ' MB' : '-');
             
-            // Add image details
+            var memoryStr = svgaMeta.memory ? (svgaMeta.memory / 1024 / 1024).toFixed(2) + ' MB' : '-';
+            
+            var html = 
+                '<div class="meta-row"><span class="label">' + T('META_Version') + '</span><span class="value">' + (svgaMeta.version || '-') + '</span></div>' +
+                '<div class="meta-row"><span class="label">' + T('META_FPS') + '</span><span class="value">' + (svgaMeta.fps || '-') + '</span></div>' +
+                '<div class="meta-row"><span class="label">' + T('META_Frames') + '</span><span class="value">' + (svgaMeta.frames || '-') + '</span></div>' +
+                '<div class="meta-row"><span class="label">' + T('META_Width') + '×' + T('META_Height') + '</span><span class="value">' + (svgaMeta.width || '-') + '×' + (svgaMeta.height || '-') + '</span></div>' +
+                '<div class="meta-row"><span class="label">' + T('META_Sprites') + '</span><span class="value">' + (svgaMeta.sprites || '-') + '</span></div>' +
+                '<div class="meta-row"><span class="label">' + T('META_Images') + '</span><span class="value">' + (svgaMeta.images || '-') + '</span></div>' +
+                '<div class="meta-row"><span class="label">Memory</span><span class="value">' + memoryStr + '</span></div>';
+            
+            // Add image details in compact grid
             if (svgaMeta.imageDetails && svgaMeta.imageDetails.length > 0) {
-                html += '<hr style="border-color:rgba(255,255,255,0.1);margin:4px 0">';
+                html += '<hr>';
+                html += '<div class="image-grid">';
                 svgaMeta.imageDetails.forEach(function(img) {
-                    html += '<span class="label">' + img.key + ':</span> ' + img.width + '\u00d7' + img.height + '<br>';
+                    html += '<div class="image-item"><span class="label">' + img.key + '</span> ' + img.width + '×' + img.height + '</div>';
                 });
+                html += '</div>';
             }
             
             metaPanel.innerHTML = html;
@@ -712,11 +728,29 @@
                         for (var key in videoItem.images) {
                             if (videoItem.images.hasOwnProperty(key)) {
                                 var imgData = videoItem.images[key];
-                                var imgSize = typeof imgData === 'string' ? imgData.length * 0.75 : 0;
+                                var imgSize = 0;
+                                var base64Data = null;
+                                
+                                // Handle both formats: 1.x (base64 string) and 2.x (Uint8Array)
+                                if (typeof imgData === 'string') {
+                                    // 1.x: base64 string
+                                    imgSize = imgData.length * 0.75;
+                                    base64Data = imgData;
+                                } else if (imgData instanceof Uint8Array || imgData instanceof ArrayBuffer) {
+                                    // 2.x: binary data
+                                    var bytes = imgData instanceof Uint8Array ? imgData : new Uint8Array(imgData);
+                                    imgSize = bytes.length;
+                                    // Convert to base64 for image loading
+                                    base64Data = btoa(String.fromCharCode.apply(null, bytes));
+                                } else if (imgData && imgData.buffer) {
+                                    // TypedArray
+                                    imgSize = imgData.byteLength;
+                                    base64Data = btoa(String.fromCharCode.apply(null, imgData));
+                                }
                                 memorySize += imgSize;
                                 
                                 // Get image dimensions
-                                var dimensions = await getImageDimensions(imgData);
+                                var dimensions = base64Data ? await getImageDimensions(base64Data) : {width: 0, height: 0};
                                 imageDetails.push({
                                     key: key,
                                     width: dimensions.width,
