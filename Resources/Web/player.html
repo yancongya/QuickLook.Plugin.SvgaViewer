@@ -501,18 +501,9 @@
         // --- Canvas fit to container ---
         function fitCanvasToContainer() {
             if (!svgaMeta || !svgaMeta.width) return;
-            var container = document.getElementById('canvasWrap');
-            var cw = container.clientWidth || 800;
-            var ch = container.clientHeight || 600;
-            
-            var scaleX = cw / svgaMeta.width;
-            var scaleY = ch / svgaMeta.height;
-            var scale = Math.min(scaleX, scaleY);
-            
-            canvas.style.width = Math.floor(svgaMeta.width * scale) + 'px';
-            canvas.style.height = Math.floor(svgaMeta.height * scale) + 'px';
-            
-            log('Container: ' + cw + 'x' + ch + ', Scale: ' + scale.toFixed(2) + ', Display: ' + canvas.style.width + 'x' + canvas.style.height);
+            // Let SVGAPlayer-Web handle scaling via setContentMode
+            // Just ensure canvas has correct internal resolution
+            log('Canvas resolution: ' + canvas.width + 'x' + canvas.height);
         }
         
         var baseScale = 1;
@@ -719,10 +710,21 @@
                     
                     infoEl.innerHTML = svgaMeta.width + '\u00d7' + svgaMeta.height + '<br><span id="fpsDisplay">0 FPS</span>';
 
-                    // Set up player
+                    // Set up player with content mode
                     player.setVideoItem(videoItem);
                     player.loops = 0; // infinite loop
                     player.clearsAfterStop = false;
+                    
+                    // Use SVGAPlayer-Web built-in scaling
+                    if (typeof player.setContentMode === 'function') {
+                        player.setContentMode('AspectFit');
+                        log('setContentMode: AspectFit');
+                    }
+                    if (typeof player.setClipsToBounds === 'function') {
+                        player.setClipsToBounds(true);
+                        log('setClipsToBounds: true');
+                    }
+                    
                     log('Player configured, starting animation...');
 
                     // Progress tracking
