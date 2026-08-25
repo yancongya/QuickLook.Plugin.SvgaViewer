@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        :root {
+            --bg: #202020;
+            --fg: #cccccc;
+            --fg-alt: #888888;
+            --accent: #76b9ed;
+            --control-bg: rgba(30,30,30,0.92);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%; height: 100%; overflow: hidden;
+            background: var(--bg); font-family: 'Segoe UI', sans-serif;
+            user-select: none;
+        }
+        .icon { font-family: 'Segoe MDL2 Assets', 'Segoe Fluent Icons'; font-size: 14px; }
+
+        #container {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+
+        #bgLayer { position: absolute; inset: 0; z-index: 0; }
+        #bgLayer.checker {
+            background-color: #ffffff;
+            background-image:
+                linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+                linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+                linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+        }
+        #bgLayer.checker.dark {
+            background-color: #2a2a2a;
+            background-image:
+                linear-gradient(45deg, #333 25%, transparent 25%),
+                linear-gradient(-45deg, #333 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #333 75%),
+                linear-gradient(-45deg, transparent 75%, #333 75%);
+        }
+        #bgLayer.white { background: #ffffff; }
+        #bgLayer.black { background: #000000; }
+        #bgLayer.default { background: var(--bg); }
+
+        #canvas {
+            max-width: 100%; max-height: 100%;
+            position: relative; z-index: 1;
+        }
+
+        #canvasWrap {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 100%;
+            transform-origin: center center;
+        }
+
+        #zoomInfo {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(80,80,80,0.9); color: #fff;
+            padding: 4px 14px; border-radius: 5px;
+            font-size: 18px; pointer-events: none;
+            opacity: 0; z-index: 20; transition: opacity 0.2s;
+        }
+
+        #topBar {
+            position: absolute; top: 8px; right: 8px;
+            display: flex; gap: 4px;
+            z-index: 20; opacity: 1; transition: opacity 0.3s;
+        }
+        #topBar.hidden { opacity: 0; pointer-events: none; }
+        #topBar .btn {
+            width: 24px; height: 24px;
+            background: transparent; border: none; color: var(--fg);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            border-radius: 2px; transition: background 0.1s;
+        }
+        #topBar .btn:hover { background: rgba(255,255,255,0.1); }
+        #topBar .btn .icon { font-size: 12px; }
+
+        #metaPanel {
+            position: absolute; top: 36px; right: 8px;
+            background: var(--control-bg);
+            padding: 8px 12px; border-radius: 4px;
+            color: var(--fg); font-size: 11px;
+            line-height: 1.8; z-index: 21;
+            display: none; white-space: nowrap;
+        }
+        #metaPanel.show { display: block; }
+        #metaPanel .label { color: var(--fg-alt); }
+
+        #colorPicker {
+            position: absolute; top: 36px; right: 8px;
+            background: var(--control-bg);
+            padding: 8px; border-radius: 4px;
+            display: none; z-index: 21;
+            flex-direction: column; gap: 6px;
+        }
+        #colorPicker.show { display: flex; }
+        #colorPicker input[type="color"] {
+            width: 100%; height: 28px; border: none;
+            cursor: pointer; background: transparent;
+        }
+        .colorSwatches { display: flex; gap: 4px; }
+        .swatch {
+            width: 20px; height: 20px; border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer; border-radius: 2px;
+        }
+        .swatch:hover { border-color: var(--fg); }
+
+        #controls {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 32px; background: var(--control-bg);
+            display: flex; align-items: center; padding: 0 8px;
+            opacity: 1; transition: opacity 0.3s ease; z-index: 10;
+        }
+        #controls.hidden { opacity: 0; pointer-events: none; }
+
+        .btn {
+            background: transparent; border: none; color: var(--fg);
+            width: 32px; height: 32px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 2px; transition: background 0.1s; flex-shrink: 0;
+        }
+        .btn:hover { background: rgba(255,255,255,0.08); }
+        .btn:active { background: rgba(255,255,255,0.12); }
+        .btn.active { color: var(--accent); }
+
+        #progressWrap {
+            flex: 1; height: 10px; margin: 0 6px;
+            position: relative; cursor: pointer;
+            display: flex; align-items: center;
+        }
+        #progressBg {
+            position: absolute; left: 10px; right: 10px;
+            height: 1px; background: rgba(255,255,255,0.2);
+            top: 50%; transform: translateY(-50%);
+        }
+        #progressFill {
+            position: absolute; left: 10px; width: 0;
+            height: 1px; background: var(--fg);
+            top: 50%; transform: translateY(-50%);
+        }
+        #progressThumb {
+            position: absolute; left: 10px;
+            width: 10px; height: 10px;
+            border: 1px solid var(--fg); border-radius: 50%;
+            background: transparent;
+            top: 50%; transform: translate(-50%, -50%);
+            opacity: 0; transition: opacity 0.15s, background 0.15s; z-index: 2;
+        }
+        #progressWrap:hover #progressThumb { opacity: 1; }
+        #progressWrap.dragging #progressThumb { opacity: 1; background: var(--fg); }
+        #progressWrap:hover #progressFill { height: 2px; }
+        #progressWrap:hover #progressBg { height: 2px; }
+
+        #time {
+            color: var(--fg); font-size: 11px;
+            font-family: 'Segoe UI', sans-serif;
+            min-width: 90px; text-align: center;
+            flex-shrink: 0; white-space: nowrap;
+        }
+
+        #volumeLayer {
+            position: absolute; bottom: 32px; right: 8px;
+            width: 130px; height: 32px;
+            background: var(--control-bg);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.15s; z-index: 11;
+        }
+        #volumeLayer.show { opacity: 1; pointer-events: auto; }
+        #volumeSlider {
+            width: 110px; height: 4px;
+            -webkit-appearance: none; appearance: none;
+            background: rgba(255,255,255,0.2); outline: none;
+            border-radius: 2px; cursor: pointer;
+        }
+        #volumeSlider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 10px; height: 10px;
+            background: var(--fg); border-radius: 50%; cursor: pointer;
+        }
+
+        #status {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--fg-alt); font-size: 13px; z-index: 1;
+        }
+
+        #info {
+            position: absolute; top: 8px; left: 8px;
+            color: var(--fg-alt); font-size: 11px;
+            font-family: 'Segoe UI', sans-serif;
+            pointer-events: none; opacity: 0;
+            transition: opacity 0.3s; z-index: 2;
+            line-height: 1.4;
+        }
+        #info.show { opacity: 1; }
+        #fpsDisplay {
+            font-family: 'Consolas', monospace;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        #toast {
+            position: absolute; bottom: 44px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(80,80,80,0.95); color: #fff;
+            padding: 6px 16px; border-radius: 4px;
+            font-size: 12px; pointer-events: none;
+            opacity: 0; z-index: 30; transition: opacity 0.3s;
+        }
+        #toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="bgLayer" class="default"></div>
+        <div id="canvasWrap">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div id="zoomInfo"></div>
+        <div id="info"></div>
+        <div id="toast"></div>
+
+        <div id="topBar">
+            <button class="btn" id="btnMeta" title="文件信息">
+                <span class="icon">&#xE946;</span>
+            </button>
+            <button class="btn" id="btnSave" title="保存为PNG">
+                <span class="icon">&#xE74B;</span>
+            </button>
+            <button class="btn" id="btnBg" title="切换背景">
+                <span class="icon">&#xEF1F;</span>
+            </button>
+        </div>
+        <div id="metaPanel"></div>
+        <div id="colorPicker">
+            <div class="colorSwatches">
+                <div class="swatch" data-bg="default" style="background:var(--bg)" title="默认"></div>
+                <div class="swatch" data-bg="checker" style="background:repeating-conic-gradient(#e0e0e0 0% 25%, #fff 0% 50%) 50%/8px 8px" title="棋盘格"></div>
+                <div class="swatch" data-bg="white" style="background:#fff" title="白色"></div>
+                <div class="swatch" data-bg="black" style="background:#000" title="黑色"></div>
+            </div>
+            <input type="color" id="customColor" value="#202020" title="自定义颜色">
+        </div>
+
+        <div id="controls">
+            <button class="btn" id="btnPlayPause" title="播放 / 暂停">
+                <span class="icon">&#xE768;</span>
+            </button>
+            <button class="btn active" id="btnLoop" title="循环">
+                <span class="icon">&#xE777;</span>
+            </button>
+            <div id="progressWrap">
+                <div id="progressBg"></div>
+                <div id="progressFill"></div>
+                <div id="progressThumb"></div>
+            </div>
+            <span id="time">00:00 / 00:00</span>
+            <button class="btn" id="btnMute" title="音量">
+                <span class="icon" id="volumeIcon">&#xE767;</span>
+            </button>
+        </div>
+        <div id="volumeLayer">
+            <input type="range" id="volumeSlider" min="0" max="100" value="100" step="1">
+        </div>
+        <div id="status"></div>
+    </div>
+
+    <!-- JSZip for SVGA 1.x support -->
+    <script src="https://assets.local/jszip.min.js"></script>
+    <!-- SVGAPlayer-Web -->
+    <script src="https://assets.local/svga.min.js"></script>
+
+    <script>
+    (function() {
+        // --- i18n ---
+        var _defaultT = {
+            'BTN_PlayPause': {zh:'播放 / 暂停',en:'Play / Pause'},
+            'BTN_Loop': {zh:'循环',en:'Loop'},
+            'BTN_Volume': {zh:'音量',en:'Volume'},
+            'BTN_Meta': {zh:'文件信息',en:'Info'},
+            'BTN_Save': {zh:'保存为PNG',en:'Save as PNG'},
+            'BTN_Background': {zh:'切换背景',en:'Background'},
+            'BG_Default': {zh:'默认',en:'Default'},
+            'BG_Checker': {zh:'棋盘格',en:'Checkerboard'},
+            'BG_White': {zh:'白色',en:'White'},
+            'BG_Black': {zh:'黑色',en:'Black'},
+            'BG_Custom': {zh:'自定义颜色',en:'Custom color'},
+            'STATUS_Loading': {zh:'加载中...',en:'Loading...'},
+            'STATUS_InitSDK': {zh:'加载 SVGA SDK...',en:'Loading SVGA SDK...'},
+            'STATUS_Decoding': {zh:'解码中...',en:'Decoding...'},
+            'STATUS_InvalidFile': {zh:'无效的SVGA文件',en:'Invalid SVGA file'},
+            'STATUS_Error': {zh:'错误',en:'Error'},
+            'TOAST_Saved': {zh:'已保存',en:'Saved'},
+            'TOAST_Copied': {zh:'已复制',en:'Copied'},
+            'TOAST_SaveFailed': {zh:'保存失败',en:'Save failed'},
+            'META_Width': {zh:'宽度',en:'Width'},
+            'META_Height': {zh:'高度',en:'Height'},
+            'META_Frames': {zh:'总帧数',en:'Frames'},
+            'META_FPS': {zh:'帧率',en:'FPS'},
+            'META_Sprites': {zh:'精灵数',en:'Sprites'},
+            'META_Version': {zh:'版本',en:'Version'}
+        };
+        var lang = (navigator.language || 'zh').startsWith('zh') ? 'zh' : 'en';
+        var _t = _defaultT;
+        function T(key) { var v = _t[key]; return v ? (v[lang] || v.zh || '') : key; }
+
+        var statusEl = document.getElementById('status');
+        var canvas = document.getElementById('canvas');
+        var bgLayer = document.getElementById('bgLayer');
+        var controls = document.getElementById('controls');
+        var topBar = document.getElementById('topBar');
+        var btnPlay = document.getElementById('btnPlayPause');
+        var btnLoop = document.getElementById('btnLoop');
+        var btnMute = document.getElementById('btnMute');
+        var btnBg = document.getElementById('btnBg');
+        var btnMeta = document.getElementById('btnMeta');
+        var btnSave = document.getElementById('btnSave');
+        var metaPanel = document.getElementById('metaPanel');
+        var colorPicker = document.getElementById('colorPicker');
+        var customColor = document.getElementById('customColor');
+        var volumeIcon = document.getElementById('volumeIcon');
+        var volumeLayer = document.getElementById('volumeLayer');
+        var volumeSlider = document.getElementById('volumeSlider');
+        var progressWrap = document.getElementById('progressWrap');
+        var progressFill = document.getElementById('progressFill');
+        var progressThumb = document.getElementById('progressThumb');
+        var timeEl = document.getElementById('time');
+        var infoEl = document.getElementById('info');
+        var toastEl = document.getElementById('toast');
+
+        var player = null;
+        var parser = null;
+        var svgaData = null;
+        var isPlaying = false, isLooping = true, isDragging = false;
+        var totalFrames = 0, fps = 20, currentFrame = 0;
+        var hideTimer = null;
+        var volume = 1.0;
+        var isMuted = false;
+        var svgaMeta = null;
+        var currentFps = 0;
+
+        window.applyI18n = function() {
+            lang = window.__lang || lang;
+            _t = Object.assign({}, _defaultT, window.__translations || {});
+            btnPlay.title = T('BTN_PlayPause');
+            btnLoop.title = T('BTN_Loop');
+            btnMute.title = T('BTN_Volume');
+            btnMeta.title = T('BTN_Meta');
+            btnSave.title = T('BTN_Save');
+            btnBg.title = T('BTN_Background');
+            document.querySelector('.swatch[data-bg="default"]').title = T('BG_Default');
+            document.querySelector('.swatch[data-bg="checker"]').title = T('BG_Checker');
+            document.querySelector('.swatch[data-bg="white"]').title = T('BG_White');
+            document.querySelector('.swatch[data-bg="black"]').title = T('BG_Black');
+            customColor.title = T('BG_Custom');
+            statusEl.textContent = T('STATUS_Loading');
+        };
+        applyI18n();
+
+        // --- Toast ---
+        var toastTimer = null;
+        function showToast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 1500);
+        }
+
+        // --- Metadata ---
+        function updateMetaPanel() {
+            if (!svgaMeta) return;
+            metaPanel.innerHTML =
+                '<span class="label">' + T('META_Width') + ': </span>' + (svgaMeta.width || '-') + 'px<br>' +
+                '<span class="label">' + T('META_Height') + ': </span>' + (svgaMeta.height || '-') + 'px<br>' +
+                '<span class="label">' + T('META_Frames') + ': </span>' + (svgaMeta.frames || '-') + '<br>' +
+                '<span class="label">' + T('META_FPS') + ': </span>' + (svgaMeta.fps || '-') + '<br>' +
+                '<span class="label">' + T('META_Sprites') + ': </span>' + (svgaMeta.sprites || '-') + '<br>' +
+                '<span class="label">' + T('META_Version') + ': </span>' + (svgaMeta.version || '-');
+        }
+
+        btnMeta.addEventListener('mouseenter', function() { updateMetaPanel(); metaPanel.classList.add('show'); });
+        btnMeta.addEventListener('mouseleave', function() { metaPanel.classList.remove('show'); });
+
+        // --- Background ---
+        var BG_MODES = ['default', 'checker', 'white', 'black'];
+        var bgIndex = parseInt(localStorage.getItem('svga-bg-index') || '0');
+        var customBgColor = localStorage.getItem('svga-bg-custom') || '#202020';
+
+        function applyBg() {
+            var mode = BG_MODES[bgIndex];
+            bgLayer.className = mode;
+            if (mode === 'checker') {
+                var bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+                if (bg === '#202020' || bg === '#1a1a1a') bgLayer.classList.add('dark');
+            }
+            bgLayer.style.background = (mode === 'default' || mode === 'checker') ? '' : mode;
+            customColor.value = customBgColor;
+            localStorage.setItem('svga-bg-index', bgIndex);
+        }
+
+        function cycleBg() { bgIndex = (bgIndex + 1) % BG_MODES.length; applyBg(); }
+
+        document.querySelectorAll('.swatch').forEach(function(el) {
+            el.addEventListener('click', function() {
+                bgIndex = BG_MODES.indexOf(el.dataset.bg);
+                applyBg(); colorPicker.classList.remove('show');
+            });
+        });
+
+        customColor.addEventListener('input', function() {
+            customBgColor = customColor.value;
+            bgLayer.className = ''; bgLayer.style.background = customBgColor;
+            localStorage.setItem('svga-bg-custom', customBgColor);
+            bgIndex = -1; localStorage.setItem('svga-bg-index', '-1');
+        });
+
+        btnBg.addEventListener('click', function() { cycleBg(); });
+        btnBg.addEventListener('contextmenu', function(e) { e.preventDefault(); colorPicker.classList.toggle('show'); });
+        document.addEventListener('click', function(e) {
+            if (!colorPicker.contains(e.target) && e.target !== btnBg && !btnBg.contains(e.target))
+                colorPicker.classList.remove('show');
+            if (!metaPanel.contains(e.target) && e.target !== btnMeta && !btnMeta.contains(e.target))
+                metaPanel.classList.remove('show');
+        });
+
+        if (bgIndex < 0) { bgLayer.className = ''; bgLayer.style.background = customBgColor; }
+        else applyBg();
+
+        // --- Auto-hide ---
+        function showControls() {
+            controls.classList.remove('hidden');
+            topBar.classList.remove('hidden');
+            infoEl.classList.add('show');
+            resetHideTimer();
+        }
+        function hideControls() {
+            if (isDragging) return;
+            controls.classList.add('hidden');
+            topBar.classList.add('hidden');
+            infoEl.classList.remove('show');
+            volumeLayer.classList.remove('show');
+            colorPicker.classList.remove('show');
+            metaPanel.classList.remove('show');
+        }
+        function resetHideTimer() {
+            if (hideTimer) clearTimeout(hideTimer);
+            hideTimer = setTimeout(hideControls, 1500);
+        }
+        document.addEventListener('mousemove', showControls);
+        document.addEventListener('mousedown', showControls);
+
+        // --- Time format ---
+        function fmt(frames, fps) {
+            var totalSec = frames / fps;
+            var m = Math.floor(totalSec / 60);
+            var s = Math.floor(totalSec % 60);
+            return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+        }
+
+        function log(msg) {
+            console.log('[SVGA] ' + msg);
+            if (window.chrome && window.chrome.webview)
+                window.chrome.webview.postMessage({type:'log', message:msg});
+        }
+
+        // --- Volume ---
+        var ICON_VOL3 = '\uE767', ICON_VOL2 = '\uE994', ICON_VOL1 = '\uE993', ICON_VOL0 = '\uE74F';
+
+        function updateVolumeIcon() {
+            var v = isMuted ? 0 : volume;
+            if (v < 0.01) volumeIcon.textContent = ICON_VOL0;
+            else if (v < 0.34) volumeIcon.textContent = ICON_VOL1;
+            else if (v < 0.67) volumeIcon.textContent = ICON_VOL2;
+            else volumeIcon.textContent = ICON_VOL3;
+        }
+
+        btnMute.addEventListener('click', function() { isMuted = !isMuted; updateVolumeIcon(); });
+        volumeSlider.addEventListener('input', function() { volume = volumeSlider.value / 100; isMuted = false; updateVolumeIcon(); });
+
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                // Zoom not implemented for SVGA
+            } else {
+                if (e.deltaY < 0) volume = Math.min(1, volume + 0.04);
+                else volume = Math.max(0, volume - 0.04);
+                isMuted = false; updateVolumeIcon(); showControls();
+                volumeLayer.classList.add('show');
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(function() { volumeLayer.classList.remove('show'); }, 1500);
+            }
+        }, { passive: false });
+
+        // --- Performance ---
+        var currentFlushTime = 0;
+        function updatePerfDisplay() {
+            var fpsColor = currentFps >= 15 ? '#4CAF50' : (currentFps >= 10 ? '#FFC107' : '#F44336');
+            var fpsEl = document.getElementById('fpsDisplay');
+            if (fpsEl) {
+                fpsEl.textContent = currentFps + ' FPS';
+                fpsEl.style.color = fpsColor;
+            }
+            var barColor;
+            if (currentFlushTime <= 10) barColor = '#4CAF50';
+            else if (currentFlushTime <= 20) barColor = '#FFC107';
+            else barColor = '#F44336';
+            progressFill.style.background = barColor;
+        }
+
+        // --- Save/Copy ---
+        function captureCanvas() {
+            if (!canvas || canvas.width === 0) return null;
+            var tmp = document.createElement('canvas');
+            tmp.width = canvas.width;
+            tmp.height = canvas.height;
+            var ctx = tmp.getContext('2d');
+            ctx.drawImage(canvas, 0, 0);
+            return tmp;
+        }
+
+        function captureAsBase64() {
+            var tmp = captureCanvas();
+            if (!tmp) return null;
+            var dataUrl = tmp.toDataURL('image/png');
+            return dataUrl.split(',')[1];
+        }
+
+        btnSave.addEventListener('click', function() {
+            var base64 = captureAsBase64();
+            if (!base64) { showToast(T('TOAST_SaveFailed')); return; }
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage({type: 'saveImage', data: base64});
+                showToast(T('TOAST_Saved'));
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                var base64 = captureAsBase64();
+                if (!base64) return;
+                if (window.chrome && window.chrome.webview) {
+                    window.chrome.webview.postMessage({type: 'copyImage', data: base64});
+                    showToast(T('TOAST_Copied'));
+                }
+            }
+        });
+
+        // --- Load SVGA ---
+        async function loadFile(base64, jszipSrc, svgaSrc) {
+            try {
+                statusEl.textContent = T('STATUS_InitSDK');
+                log('Loading JSZip and SVGAPlayer-Web');
+
+                // Wait for scripts to be available
+                if (typeof JSZip === 'undefined') {
+                    log('JSZip not loaded, waiting...');
+                    await new Promise(function(resolve) { setTimeout(resolve, 100); });
+                }
+
+                if (typeof SVGA === 'undefined') {
+                    log('SVGA not loaded, waiting...');
+                    await new Promise(function(resolve) { setTimeout(resolve, 100); });
+                }
+
+                statusEl.textContent = T('STATUS_Decoding');
+                log('Decoding SVGA file (' + base64.length + ' chars base64)');
+
+                // Convert base64 to Blob
+                var raw = atob(base64);
+                var buf = new Uint8Array(raw.length);
+                for (var i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
+                var blob = new Blob([buf]);
+                var url = URL.createObjectURL(blob);
+
+                // Detect format version
+                var isV1 = buf[0] === 0x50 && buf[1] === 0x4B;
+                log('SVGA version: ' + (isV1 ? '1.x (ZIP)' : '2.x (zlib)'));
+
+                // Create parser and player
+                parser = new SVGA.Parser('#canvas');
+                player = new SVGA.Player('#canvas');
+
+                parser.load(url, function(videoItem) {
+                    log('SVGA parsed successfully');
+                    URL.revokeObjectURL(url);
+
+                    // Get metadata
+                    totalFrames = videoItem.frames || 0;
+                    fps = videoItem.fps || 20;
+                    svgaMeta = {
+                        width: videoItem.size ? videoItem.size.width : 0,
+                        height: videoItem.size ? videoItem.size.height : 0,
+                        frames: totalFrames,
+                        fps: fps,
+                        sprites: videoItem.sprites ? videoItem.sprites.length : 0,
+                        version: isV1 ? '1.x' : '2.x'
+                    };
+
+                    canvas.width = svgaMeta.width;
+                    canvas.height = svgaMeta.height;
+                    infoEl.innerHTML = svgaMeta.width + '\u00d7' + svgaMeta.height + '<br><span id="fpsDisplay">0 FPS</span>';
+
+                    // Set up player
+                    player.setVideoItem(videoItem);
+                    player.loops = 0; // infinite loop
+                    player.clearsAfterStop = false;
+
+                    // Progress tracking
+                    player.onFrame(function(frame) {
+                        currentFrame = frame;
+                        if (!isDragging) {
+                            var p = totalFrames > 0 ? frame / totalFrames : 0;
+                            var pct = (p * 100).toFixed(2) + '%';
+                            progressFill.style.width = 'calc(' + pct + ' - 10px)';
+                            progressThumb.style.left = 'calc(' + pct + ')';
+                            timeEl.textContent = fmt(frame, fps) + ' / ' + fmt(totalFrames, fps);
+                        }
+                    });
+
+                    player.onPercentage(function(pct) {
+                        // Update FPS display
+                        currentFps = Math.round(fps);
+                        updatePerfDisplay();
+                    });
+
+                    // Start playing
+                    player.startAnimation();
+                    isPlaying = true;
+                    btnPlay.querySelector('.icon').textContent = '\uE769'; // Pause icon
+                    statusEl.style.display = 'none';
+                    log('Playing SVGA (' + svgaMeta.version + ')');
+
+                    if (window.chrome && window.chrome.webview)
+                        window.chrome.webview.postMessage({type:'loaded', width:svgaMeta.width, height:svgaMeta.height});
+                }, function(error) {
+                    log('SVGA parse error: ' + error);
+                    statusEl.textContent = T('STATUS_InvalidFile');
+                    if (window.chrome && window.chrome.webview)
+                        window.chrome.webview.postMessage({type:'error', message: 'Failed to parse SVGA: ' + error});
+                });
+            } catch(err) {
+                statusEl.textContent = T('STATUS_Error') + ': ' + err.message;
+                log('Error: ' + err.message);
+                if (window.chrome && window.chrome.webview)
+                    window.chrome.webview.postMessage({type:'error', message: err.message});
+            }
+        }
+
+        // --- Progress interaction ---
+        function getProgressFromEvent(e) {
+            var rect = progressWrap.getBoundingClientRect();
+            return Math.max(0, Math.min(1, (e.clientX - rect.left - 10) / (rect.width - 20)));
+        }
+
+        progressWrap.addEventListener('mousedown', function(e) {
+            isDragging = true; progressWrap.classList.add('dragging');
+            var p = getProgressFromEvent(e);
+            var frame = Math.round(p * totalFrames);
+            if (player) player.stepToFrame(frame, false);
+        });
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                var p = getProgressFromEvent(e);
+                var frame = Math.round(p * totalFrames);
+                if (player) player.stepToFrame(frame, false);
+            }
+        });
+        document.addEventListener('mouseup', function() { isDragging = false; progressWrap.classList.remove('dragging'); });
+
+        // --- Buttons ---
+        var ICON_PLAY = '\uE768', ICON_PAUSE = '\uE769';
+        var ICON_LOOP_OFF = '\uE8D8', ICON_LOOP_ON = '\uE777';
+
+        btnPlay.addEventListener('click', function() {
+            if (!player) return;
+            if (isPlaying) {
+                player.pauseAnimation();
+                isPlaying = false;
+                btnPlay.querySelector('.icon').textContent = ICON_PLAY;
+            } else {
+                player.startAnimation();
+                isPlaying = true;
+                btnPlay.querySelector('.icon').textContent = ICON_PAUSE;
+            }
+        });
+
+        btnLoop.addEventListener('click', function() {
+            isLooping = !isLooping;
+            btnLoop.classList.toggle('active', isLooping);
+            btnLoop.querySelector('.icon').textContent = isLooping ? ICON_LOOP_ON : ICON_LOOP_OFF;
+            if (player) player.loops = isLooping ? 0 : 1;
+        });
+
+        // --- Messages from C# ---
+        window.addEventListener('message', function(e) {
+            var msg = e.data;
+            if (!msg || typeof msg !== 'object') return;
+            if (msg.type === 'loadFile') loadFile(msg.base64, msg.jszipSrc, msg.svgaSrc);
+        });
+
+        // --- Ready ---
+        log('Page ready');
+        if (window.chrome && window.chrome.webview)
+            window.chrome.webview.postMessage({type: 'ready'});
+    })();
+    </script>
+</body>
+</html>

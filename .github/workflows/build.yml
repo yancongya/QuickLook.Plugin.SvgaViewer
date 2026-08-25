@@ -1,0 +1,69 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ "master" ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+env:
+  BUILD_CONFIGURATION: Release
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Update version from git tag
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File Scripts/update-version.ps1
+
+      - name: Build
+        run: dotnet build -c ${{env.BUILD_CONFIGURATION}}
+
+      - name: Package
+        shell: pwsh
+        run: |
+          $releaseDir = "bin/Release"
+          $exclude = @("*.pdb", "*.xml")
+          $files = Get-ChildItem -Path $releaseDir -Exclude $exclude
+          Compress-Archive -Path $files -DestinationPath "QuickLook.Plugin.PagViewer.zip"
+          Move-Item "QuickLook.Plugin.PagViewer.zip" "QuickLook.Plugin.PagViewer.qlplugin"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin
+          path: QuickLook.Plugin.PagViewer.qlplugin
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions: write-all
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: QuickLook.Plugin.PagViewer.qlplugin
+          generate_release_notes: true
