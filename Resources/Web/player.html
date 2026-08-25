@@ -272,8 +272,9 @@
         <div id="status"></div>
     </div>
 
-    <!-- JSZip for SVGA 1.x support -->
+    <!-- JSZip for SVGA 1.x support (both required by SVGAPlayer-Web) -->
     <script src="https://assets.local/jszip.min.js"></script>
+    <script src="https://assets.local/jszip-utils.min.js"></script>
     <!-- SVGAPlayer-Web -->
     <script src="https://assets.local/svga.min.js"></script>
 
@@ -553,44 +554,37 @@
             }
         });
 
-        // --- Load SVGA ---
+        // --- Load SVGA (1.x only) ---
         async function loadFile(base64, jszipSrc, svgaSrc) {
             try {
                 statusEl.textContent = T('STATUS_InitSDK');
-                log('Loading JSZip and SVGAPlayer-Web');
+                log('Loading SVGAPlayer-Web');
 
-                // Wait for scripts to be available
-                if (typeof JSZip === 'undefined') {
-                    log('JSZip not loaded, waiting...');
-                    await new Promise(function(resolve) { setTimeout(resolve, 100); });
+                // Wait for SVGA to be available
+                var waitCount = 0;
+                while (typeof SVGA === 'undefined' && waitCount < 50) {
+                    await new Promise(function(r) { setTimeout(r, 100); });
+                    waitCount++;
                 }
 
                 if (typeof SVGA === 'undefined') {
-                    log('SVGA not loaded, waiting...');
-                    await new Promise(function(resolve) { setTimeout(resolve, 100); });
+                    statusEl.textContent = 'SVGA SDK not loaded';
+                    log('SVGA SDK not available after waiting');
+                    return;
                 }
 
                 statusEl.textContent = T('STATUS_Decoding');
-                log('Decoding SVGA file (' + base64.length + ' chars base64)');
+                log('Loading SVGA 1.x file (' + base64.length + ' chars base64)');
 
-                // Convert base64 to Blob
-                var raw = atob(base64);
-                var buf = new Uint8Array(raw.length);
-                for (var i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
-                var blob = new Blob([buf]);
-                var url = URL.createObjectURL(blob);
-
-                // Detect format version
-                var isV1 = buf[0] === 0x50 && buf[1] === 0x4B;
-                log('SVGA version: ' + (isV1 ? '1.x (ZIP)' : '2.x (zlib)'));
+                // Use data URI format for 1.x (SVGAPlayer-Web will use JSZip)
+                var dataUri = 'data:svga/1.0;base64,' + base64;
 
                 // Create parser and player
                 parser = new SVGA.Parser('#canvas');
                 player = new SVGA.Player('#canvas');
 
-                parser.load(url, function(videoItem) {
+                parser.load(dataUri, function(videoItem) {
                     log('SVGA parsed successfully');
-                    URL.revokeObjectURL(url);
 
                     // Get metadata
                     totalFrames = videoItem.frames || 0;
@@ -601,7 +595,7 @@
                         frames: totalFrames,
                         fps: fps,
                         sprites: videoItem.sprites ? videoItem.sprites.length : 0,
-                        version: isV1 ? '1.x' : '2.x'
+                        version: '1.x'
                     };
 
                     canvas.width = svgaMeta.width;
