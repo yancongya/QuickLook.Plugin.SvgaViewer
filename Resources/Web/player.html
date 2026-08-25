@@ -49,13 +49,13 @@
 
         #canvas {
             position: relative; z-index: 1;
+            transition: transform 0.05s ease-out;
         }
 
         #canvasWrap {
             display: flex; align-items: center; justify-content: center;
             width: 100%; height: 100%;
             transform-origin: center center;
-            overflow: hidden;
         }
 
         #zoomInfo {
@@ -499,6 +499,86 @@
             }
         }, { passive: false });
 
+        // --- Canvas fit to container ---
+        function fitCanvasToContainer() {
+            if (!svgaMeta || !svgaMeta.width) return;
+            var container = document.getElementById('canvasWrap');
+            var containerWidth = container.clientWidth || 800;
+            var containerHeight = container.clientHeight || 600;
+            
+            var scaleX = containerWidth / svgaMeta.width;
+            var scaleY = containerHeight / svgaMeta.height;
+            var fitScale = Math.min(scaleX, scaleY, 1);
+            
+            canvas.style.width = (svgaMeta.width * fitScale) + 'px';
+            canvas.style.height = (svgaMeta.height * fitScale) + 'px';
+            
+            baseScale = fitScale;
+        }
+        
+        var baseScale = 1;
+        var zoomLevel = 1.0;
+        var panX = 0, panY = 0;
+        var isPanning = false;
+        var panStartX = 0, panStartY = 0;
+        var canvasWrap = document.getElementById('canvasWrap');
+        
+        function applyTransform() {
+            canvas.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + zoomLevel + ')';
+            canvas.style.transformOrigin = 'center center';
+        }
+        
+        function resetView() {
+            zoomLevel = 1.0;
+            panX = 0;
+            panY = 0;
+            applyTransform();
+            fitCanvasToContainer();
+        }
+
+        // Zoom: Ctrl+Scroll
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                var delta = e.deltaY > 0 ? -0.1 : 0.1;
+                zoomLevel = Math.max(0.1, Math.min(5.0, zoomLevel + delta));
+                applyTransform();
+                showControls();
+            }
+        }, { passive: false });
+
+        // Pan: left-click drag on canvas
+        canvas.addEventListener('mousedown', function(e) {
+            if (e.button === 0) {
+                isPanning = true;
+                panStartX = e.clientX - panX;
+                panStartY = e.clientY - panY;
+                canvas.style.cursor = 'grabbing';
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('mousemove', function(e) {
+            if (isPanning) {
+                panX = e.clientX - panStartX;
+                panY = e.clientY - panStartY;
+                applyTransform();
+            }
+        });
+        document.addEventListener('mouseup', function() {
+            if (isPanning) {
+                isPanning = false;
+                canvas.style.cursor = '';
+            }
+        });
+
+        // Double-click to reset
+        canvas.addEventListener('dblclick', resetView);
+
+        // Resize handler
+        window.addEventListener('resize', function() {
+            fitCanvasToContainer();
+        });
+
         // --- Performance ---
         var currentFlushTime = 0;
         function updatePerfDisplay() {
@@ -633,24 +713,12 @@
 
                     log('Canvas size: ' + svgaMeta.width + 'x' + svgaMeta.height);
                     
-                    // Set canvas size to fit container
-                    var container = document.getElementById('canvasWrap');
-                    var containerWidth = container.clientWidth || 800;
-                    var containerHeight = container.clientHeight || 600;
-                    
-                    // Calculate scale to fit
-                    var scaleX = containerWidth / svgaMeta.width;
-                    var scaleY = containerHeight / svgaMeta.height;
-                    var scale = Math.min(scaleX, scaleY, 1); // Don't scale up
-                    
+                    // Set canvas internal resolution
                     canvas.width = svgaMeta.width;
                     canvas.height = svgaMeta.height;
-                    canvas.style.width = (svgaMeta.width * scale) + 'px';
-                    canvas.style.height = (svgaMeta.height * scale) + 'px';
                     
-                    log('Container: ' + containerWidth + 'x' + containerHeight);
-                    log('Scale: ' + scale.toFixed(2));
-                    log('Display size: ' + (svgaMeta.width * scale).toFixed(0) + 'x' + (svgaMeta.height * scale).toFixed(0));
+                    // Fit to container
+                    fitCanvasToContainer();
                     
                     infoEl.innerHTML = svgaMeta.width + '\u00d7' + svgaMeta.height + '<br><span id="fpsDisplay">0 FPS</span>';
 
