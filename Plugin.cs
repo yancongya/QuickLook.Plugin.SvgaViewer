@@ -30,10 +30,14 @@ namespace QuickLook.Plugin.SvgaViewer
                     if (fs.Length < 4) return false;
                     var header = new byte[4];
                     fs.Read(header, 0, 4);
-                    // Only handle 1.x (ZIP format: PK\x03\x04)
-                    // 2.x files will be handled by official ImageViewer
+                    // 1.x: ZIP format (PK\x03\x04)
                     if (header[0] == 0x50 && header[1] == 0x4B &&
                         header[2] == 0x03 && header[3] == 0x04)
+                        return true;
+                    // 2.x: zlib format (0x78 followed by 0x01, 0x5E, 0x9C, or 0xDA)
+                    if (header[0] == 0x78 && 
+                        (header[1] == 0x01 || header[1] == 0x5E || 
+                         header[1] == 0x9C || header[1] == 0xDA))
                         return true;
                     return false;
                 }

@@ -376,13 +376,25 @@
         // --- Metadata ---
         function updateMetaPanel() {
             if (!svgaMeta) return;
-            metaPanel.innerHTML =
+            var html = 
+                '<span class="label">' + T('META_Version') + ': </span>' + (svgaMeta.version || '-') + '<br>' +
+                '<span class="label">' + T('META_FPS') + ': </span>' + (svgaMeta.fps || '-') + '<br>' +
+                '<span class="label">' + T('META_Frames') + ': </span>' + (svgaMeta.frames || '-') + '<br>' +
                 '<span class="label">' + T('META_Width') + ': </span>' + (svgaMeta.width || '-') + 'px<br>' +
                 '<span class="label">' + T('META_Height') + ': </span>' + (svgaMeta.height || '-') + 'px<br>' +
-                '<span class="label">' + T('META_Frames') + ': </span>' + (svgaMeta.frames || '-') + '<br>' +
-                '<span class="label">' + T('META_FPS') + ': </span>' + (svgaMeta.fps || '-') + '<br>' +
                 '<span class="label">' + T('META_Sprites') + ': </span>' + (svgaMeta.sprites || '-') + '<br>' +
-                '<span class="label">' + T('META_Version') + ': </span>' + (svgaMeta.version || '-');
+                '<span class="label">' + T('META_Images') + ': </span>' + (svgaMeta.images || '-') + '<br>' +
+                '<span class="label">Memory: </span>' + (svgaMeta.memory ? (svgaMeta.memory / 1024 / 1024).toFixed(2) + ' MB' : '-');
+            
+            // Add image details
+            if (svgaMeta.imageDetails && svgaMeta.imageDetails.length > 0) {
+                html += '<hr style="border-color:rgba(255,255,255,0.1);margin:4px 0">';
+                svgaMeta.imageDetails.forEach(function(img) {
+                    html += '<span class="label">' + img.key + ':</span> ' + img.width + '\u00d7' + img.height + '<br>';
+                });
+            }
+            
+            metaPanel.innerHTML = html;
         }
 
         btnMeta.addEventListener('mouseenter', function() { updateMetaPanel(); metaPanel.classList.add('show'); });
@@ -622,7 +634,30 @@
             }
         });
 
-        // --- Load SVGA (1.x only) ---
+        // --- Image dimension helper ---
+        function getImageDimensions(data) {
+            return new Promise(function(resolve) {
+                if (typeof data === 'string' && data.length > 0) {
+                    var img = new Image();
+                    img.onload = function() {
+                        resolve({width: img.width, height: img.height});
+                    };
+                    img.onerror = function() {
+                        resolve({width: 0, height: 0});
+                    };
+                    // Check if it's base64 (starts with iVBO for PNG or /9j/ for JPEG)
+                    if (data.indexOf('iVBO') === 0 || data.indexOf('/9j/') === 0) {
+                        img.src = 'data:image/' + (data.indexOf('iVBO') === 0 ? 'png' : 'jpeg') + ';base64,' + data;
+                    } else {
+                        resolve({width: 0, height: 0});
+                    }
+                } else {
+                    resolve({width: 0, height: 0});
+                }
+            });
+        }
+
+        // --- Load SVGA (1.x and 2.x) ---
         async function loadFile(base64, jszipSrc, svgaSrc) {
             try {
                 statusEl.textContent = T('STATUS_InitSDK');
@@ -642,77 +677,95 @@
                 }
 
                 statusEl.textContent = T('STATUS_Decoding');
-                log('Loading SVGA 1.x file (' + base64.length + ' chars base64)');
+                log('Loading SVGA file (' + base64.length + ' chars base64)');
 
-                // Use data URI format for 1.x (SVGAPlayer-Web will use JSZip)
-                var dataUri = 'data:svga/1.0;base64,' + base64;
+                // Detect format: 1.x (ZIP) or 2.x (zlib)
+                var raw = atob(base64);
+                var isV1 = raw.charCodeAt(0) === 0x50 && raw.charCodeAt(1) === 0x4B;
+                var formatVersion = isV1 ? '1.0' : '2.0';
+                log('Detected format: SVGA ' + formatVersion);
+
+                // Use appropriate data URI format
+                var dataUri = 'data:svga/' + formatVersion + ';base64,' + base64;
 
                 // Create parser and player
                 parser = new SVGA.Parser('#canvas');
                 player = new SVGA.Player('#canvas');
 
-                parser.load(dataUri, function(videoItem) {
+                parser.load(dataUri, async function(videoItem) {
                     log('SVGA parsed successfully');
 
-                    // Debug: log ALL videoItem properties
-                    log('=== videoItem Debug ===');
-                    log('keys: ' + Object.keys(videoItem).join(', '));
-                    log('version: ' + videoItem.version);
-                    log('frames: ' + videoItem.frames);
-                    log('FPS: ' + videoItem.FPS);
-                    log('fps: ' + videoItem.fps);
-                    log('videoSize: ' + JSON.stringify(videoItem.videoSize));
-                    log('size: ' + JSON.stringify(videoItem.size));
-                    log('sprites count: ' + (videoItem.sprites ? videoItem.sprites.length : 0));
-                    
-                    // Log images details
-                    if (videoItem.images) {
-                        var imgKeys = Object.keys(videoItem.images);
-                        log('images count: ' + imgKeys.length);
-                        imgKeys.forEach(function(key) {
-                            var val = videoItem.images[key];
-                            log('  image[' + key + ']: type=' + typeof val + ', length=' + (val ? val.length : 0));
-                        });
-                    } else {
-                        log('images: null/undefined');
-                    }
-
-                    // Log first sprite details
-                    if (videoItem.sprites && videoItem.sprites.length > 0) {
-                        var sprite = videoItem.sprites[0];
-                        log('sprite[0] keys: ' + Object.keys(sprite).join(', '));
-                        log('sprite[0].imageKey: ' + sprite.imageKey);
-                        log('sprite[0].frames count: ' + (sprite.frames ? sprite.frames.length : 0));
-                    }
-                    log('=== End Debug ===');
-
-                    // Get metadata (1.x uses FPS and videoSize)
-                    totalFrames = videoItem.frames || 0;
-                    fps = videoItem.FPS || videoItem.fps || 20;
+                    // Get metadata using official API
+                    var version = videoItem.version || formatVersion;
+                    var videoFrames = videoItem.frames || 0;
+                    var videoFps = videoItem.FPS || videoItem.fps || 20;
                     var size = videoItem.videoSize || videoItem.size || {};
+                    var width = size.width || 0;
+                    var height = size.height || 0;
+                    var spriteCount = videoItem.sprites ? videoItem.sprites.length : 0;
+                    var imageCount = videoItem.images ? Object.keys(videoItem.images).length : 0;
+
+                    // Get image details with sizes
+                    var imageDetails = [];
+                    var memorySize = 0;
+                    if (videoItem.images) {
+                        for (var key in videoItem.images) {
+                            if (videoItem.images.hasOwnProperty(key)) {
+                                var imgData = videoItem.images[key];
+                                var imgSize = typeof imgData === 'string' ? imgData.length * 0.75 : 0;
+                                memorySize += imgSize;
+                                
+                                // Get image dimensions
+                                var dimensions = await getImageDimensions(imgData);
+                                imageDetails.push({
+                                    key: key,
+                                    width: dimensions.width,
+                                    height: dimensions.height,
+                                    size: imgSize
+                                });
+                            }
+                        }
+                    }
+
+                    // Log metadata
+                    log('=== SVGA Metadata ===');
+                    log('Version: ' + version);
+                    log('FPS: ' + videoFps);
+                    log('Frames: ' + videoFrames);
+                    log('Size: ' + width + 'x' + height);
+                    log('Sprites: ' + spriteCount);
+                    log('Images: ' + imageCount);
+                    log('Memory: ' + (memorySize / 1024 / 1024).toFixed(2) + ' MB');
+                    imageDetails.forEach(function(img) {
+                        log('  ' + img.key + ' --- {"width":' + img.width + ',"height":' + img.height + '}');
+                    });
+                    log('=== End Metadata ===');
+
+                    // Store metadata
+                    totalFrames = videoFrames;
+                    fps = videoFps;
                     svgaMeta = {
-                        width: size.width || 0,
-                        height: size.height || 0,
-                        frames: totalFrames,
-                        fps: fps,
-                        sprites: videoItem.sprites ? videoItem.sprites.length : 0,
-                        version: videoItem.version || '1.x'
+                        width: width,
+                        height: height,
+                        frames: videoFrames,
+                        fps: videoFps,
+                        sprites: spriteCount,
+                        images: imageCount,
+                        version: version,
+                        memory: memorySize,
+                        imageDetails: imageDetails
                     };
 
-                    log('Canvas size: ' + svgaMeta.width + 'x' + svgaMeta.height);
-                    
-                    // Set canvas internal resolution
-                    canvas.width = svgaMeta.width;
-                    canvas.height = svgaMeta.height;
-                    
-                    // Fit to container
+                    // Set canvas
+                    canvas.width = width;
+                    canvas.height = height;
                     fitCanvasToContainer();
                     
-                    infoEl.innerHTML = svgaMeta.width + '\u00d7' + svgaMeta.height + '<br><span id="fpsDisplay">0 FPS</span>';
+                    // Update info display
+                    infoEl.innerHTML = width + '\u00d7' + height + '<br><span id="fpsDisplay">0 FPS</span>';
 
-                    // Set up player with content mode
-                    player.setVideoItem(videoItem);
-                    player.loops = 0; // infinite loop
+                    // Update metadata panel
+                    updateMetaPanel();
                     player.clearsAfterStop = false;
                     
                     // Use SVGAPlayer-Web built-in scaling
