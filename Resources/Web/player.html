@@ -103,6 +103,11 @@
         #metaPanel .image-item {
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
+        /* Custom scrollbar */
+        #metaPanel::-webkit-scrollbar { width: 4px; }
+        #metaPanel::-webkit-scrollbar-track { background: transparent; }
+        #metaPanel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+        #metaPanel::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
         #colorPicker {
             position: absolute; top: 36px; right: 8px;
@@ -413,8 +418,28 @@
             metaPanel.innerHTML = html;
         }
 
-        btnMeta.addEventListener('mouseenter', function() { updateMetaPanel(); metaPanel.classList.add('show'); });
-        btnMeta.addEventListener('mouseleave', function() { metaPanel.classList.remove('show'); });
+        var metaPinned = false;
+        btnMeta.addEventListener('click', function(e) {
+            e.stopPropagation();
+            metaPinned = !metaPinned;
+            if (metaPinned) {
+                updateMetaPanel();
+                metaPanel.classList.add('show');
+            } else {
+                metaPanel.classList.remove('show');
+            }
+        });
+        btnMeta.addEventListener('mouseenter', function() {
+            if (!metaPinned) {
+                updateMetaPanel();
+                metaPanel.classList.add('show');
+            }
+        });
+        btnMeta.addEventListener('mouseleave', function() {
+            if (!metaPinned) {
+                metaPanel.classList.remove('show');
+            }
+        });
 
         // --- Background ---
         var BG_MODES = ['default', 'checker', 'white', 'black'];
@@ -454,7 +479,7 @@
         document.addEventListener('click', function(e) {
             if (!colorPicker.contains(e.target) && e.target !== btnBg && !btnBg.contains(e.target))
                 colorPicker.classList.remove('show');
-            if (!metaPanel.contains(e.target) && e.target !== btnMeta && !btnMeta.contains(e.target))
+            if (!metaPinned && !metaPanel.contains(e.target) && e.target !== btnMeta && !btnMeta.contains(e.target))
                 metaPanel.classList.remove('show');
         });
 
