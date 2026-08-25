@@ -586,6 +586,14 @@
                 parser.load(dataUri, function(videoItem) {
                     log('SVGA parsed successfully');
 
+                    // Debug: log videoItem details
+                    log('videoItem keys: ' + Object.keys(videoItem).join(', '));
+                    log('videoItem.frames: ' + videoItem.frames);
+                    log('videoItem.fps: ' + videoItem.fps);
+                    log('videoItem.size: ' + JSON.stringify(videoItem.size));
+                    log('videoItem.sprites count: ' + (videoItem.sprites ? videoItem.sprites.length : 0));
+                    log('videoItem.images keys: ' + (videoItem.images ? Object.keys(videoItem.images).join(', ') : 'none'));
+
                     // Get metadata
                     totalFrames = videoItem.frames || 0;
                     fps = videoItem.fps || 20;
@@ -598,6 +606,7 @@
                         version: '1.x'
                     };
 
+                    log('Canvas size: ' + svgaMeta.width + 'x' + svgaMeta.height);
                     canvas.width = svgaMeta.width;
                     canvas.height = svgaMeta.height;
                     infoEl.innerHTML = svgaMeta.width + '\u00d7' + svgaMeta.height + '<br><span id="fpsDisplay">0 FPS</span>';
@@ -606,10 +615,14 @@
                     player.setVideoItem(videoItem);
                     player.loops = 0; // infinite loop
                     player.clearsAfterStop = false;
+                    log('Player configured, starting animation...');
 
                     // Progress tracking
                     player.onFrame(function(frame) {
                         currentFrame = frame;
+                        if (frame === 0 || frame === 1 || frame % 30 === 0) {
+                            log('Frame ' + frame + '/' + totalFrames);
+                        }
                         if (!isDragging) {
                             var p = totalFrames > 0 ? frame / totalFrames : 0;
                             var pct = (p * 100).toFixed(2) + '%';
