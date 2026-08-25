@@ -508,7 +508,7 @@
             
             var scaleX = containerWidth / svgaMeta.width;
             var scaleY = containerHeight / svgaMeta.height;
-            var fitScale = Math.min(scaleX, scaleY, 1);
+            var fitScale = Math.min(scaleX, scaleY); // Allow upscaling to fill
             
             canvas.style.width = (svgaMeta.width * fitScale) + 'px';
             canvas.style.height = (svgaMeta.height * fitScale) + 'px';
