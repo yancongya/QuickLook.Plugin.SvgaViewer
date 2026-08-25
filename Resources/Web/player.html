@@ -766,6 +766,10 @@
 
                     // Update metadata panel
                     updateMetaPanel();
+
+                    // Set up player
+                    player.setVideoItem(videoItem);
+                    player.loops = 0; // infinite loop
                     player.clearsAfterStop = false;
                     
                     // Use SVGAPlayer-Web built-in scaling
