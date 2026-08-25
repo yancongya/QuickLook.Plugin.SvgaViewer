@@ -589,17 +589,18 @@
                     // Debug: log videoItem details
                     log('videoItem keys: ' + Object.keys(videoItem).join(', '));
                     log('videoItem.frames: ' + videoItem.frames);
-                    log('videoItem.fps: ' + videoItem.fps);
-                    log('videoItem.size: ' + JSON.stringify(videoItem.size));
+                    log('videoItem.FPS: ' + videoItem.FPS);
+                    log('videoItem.videoSize: ' + JSON.stringify(videoItem.videoSize));
                     log('videoItem.sprites count: ' + (videoItem.sprites ? videoItem.sprites.length : 0));
                     log('videoItem.images keys: ' + (videoItem.images ? Object.keys(videoItem.images).join(', ') : 'none'));
 
-                    // Get metadata
+                    // Get metadata (1.x uses FPS and videoSize)
                     totalFrames = videoItem.frames || 0;
-                    fps = videoItem.fps || 20;
+                    fps = videoItem.FPS || videoItem.fps || 20;
+                    var size = videoItem.videoSize || videoItem.size || {};
                     svgaMeta = {
-                        width: videoItem.size ? videoItem.size.width : 0,
-                        height: videoItem.size ? videoItem.size.height : 0,
+                        width: size.width || 0,
+                        height: size.height || 0,
                         frames: totalFrames,
                         fps: fps,
                         sprites: videoItem.sprites ? videoItem.sprites.length : 0,
