@@ -145,6 +145,7 @@
         .btn:hover { background: rgba(255,255,255,0.08); }
         .btn:active { background: rgba(255,255,255,0.12); }
         .btn.active { color: var(--accent); }
+        .btn.pinned { background: var(--accent); color: #fff; }
 
         #progressWrap {
             flex: 1; height: 10px; margin: 0 6px;
@@ -422,7 +423,7 @@
         btnMeta.addEventListener('click', function(e) {
             e.stopPropagation();
             metaPinned = !metaPinned;
-            btnMeta.classList.toggle('active', metaPinned);
+            btnMeta.classList.toggle('pinned', metaPinned);
             if (metaPinned) {
                 updateMetaPanel();
                 metaPanel.classList.add('show');
