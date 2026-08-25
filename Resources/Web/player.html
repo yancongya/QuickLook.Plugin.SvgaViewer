@@ -422,6 +422,7 @@
         btnMeta.addEventListener('click', function(e) {
             e.stopPropagation();
             metaPinned = !metaPinned;
+            btnMeta.classList.toggle('active', metaPinned);
             if (metaPinned) {
                 updateMetaPanel();
                 metaPanel.classList.add('show');
