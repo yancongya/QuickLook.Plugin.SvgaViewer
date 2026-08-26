@@ -12,6 +12,8 @@
 
 **修复官方 ImageViewer 的 SVGA 1.x 空白预览问题**，完整支持 1.x（ZIP 格式）和 2.x（zlib 格式）。
 
+🌐 在线预览（GitHub Pages）：https://yancongya.github.io/QuickLook.Plugin.SvgaViewer/
+
 ### 功能特性
 
 - 实时 SVGA 动画播放（自动循环）
@@ -89,6 +91,8 @@ powershell -ExecutionPolicy Bypass -File Scripts/build.ps1
 A [QuickLook](https://github.com/QL-Win/QuickLook) plugin for previewing SVGA (SVGA Animation) files.
 
 **Fixes the official ImageViewer's SVGA 1.x blank preview issue**, with full support for both 1.x (ZIP format) and 2.x (zlib format).
+
+🌐 Online preview (GitHub Pages): https://yancongya.github.io/QuickLook.Plugin.SvgaViewer/
 
 ### Features
 
