@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 450" role="img" aria-labelledby="title desc">
+  <title id="title">SvgaViewer download package</title>
+  <desc id="desc">A transparent-background blue download package with a play mark and SVGA frames.</desc>
+  <path d="m82 139 157-86 159 86-23 215a20 20 0 0 1-20 18H125a20 20 0 0 1-20-18L82 139Z" fill="#147AE8"/>
+  <path d="m82 139 157-86 159 86-23 28H105l-23-28Z" fill="#42AAFA"/>
+  <path d="M239 53 277 74l-5 72-33-17-33 17-5-72 38-21Z" fill="#DDF4FF" fill-opacity=".82"/>
+  <path d="M131 193h218" stroke="#B5E5FF" stroke-width="3" stroke-linecap="round" opacity=".72"/><path d="M131 216h218M131 239h218" stroke="#B5E5FF" stroke-width="2" stroke-linecap="round" opacity=".42"/>
+  <rect x="139" y="267" width="68" height="48" rx="12" fill="#EAF8FF"/><path d="m167 279 18 12-18 12v-24Z" fill="#1977E6"/><path d="M224 282h88M224 303h58" stroke="#D8F3FF" stroke-width="9" stroke-linecap="round" opacity=".92"/>
+  <path d="M131 338h218" stroke="#B5E5FF" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+  <circle cx="383" cy="349" r="48" fill="#45A8F4"/><circle cx="383" cy="349" r="44" fill="#2084E6"/><path d="M383 323v43m0 0-15-15m15 15 15-15" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
