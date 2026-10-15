@@ -78,11 +78,11 @@ QuickLook.Plugin.{Format}/
 ├── Resources/Web/                      # Web SDK + 播放器 HTML
 ├── Properties/AssemblyInfo.cs          # 改程序集信息
 ├── Scripts/
-│   ├── build.ps1                       # 通用，无需改
-│   ├── pack-zip.ps1                    # 通用，无需改
-│   └── update-version.ps1              # 通用，无需改
+│   ├── build.ps1                       # 改 $project/$pluginFile 命名（真相源）
+│   ├── pack-zip.ps1                    # 改输出资产名（3 处）
+│   └── update-version.ps1              # 改 AssemblyTitle/Product 等
 ├── .github/
-│   ├── workflows/build.yml             # 通用，无需改
+│   ├── workflows/build.yml             # 改 env.PLUGIN_NAME（唯一命名改点）
 │   ├── ISSUE_TEMPLATE/                 # 通用
 │   └── PULL_REQUEST_TEMPLATE.md        # 通用
 ├── Translations.config                 # 按格式补充翻译
@@ -90,7 +90,7 @@ QuickLook.Plugin.{Format}/
 ├── QuickLook.Plugin.Metadata.Base.config
 ├── QuickLook.Plugin.{Format}.csproj    # 改包名和依赖
 ├── QuickLook.Plugin.{Format}.sln
-├── AGENTS.md                           # 改项目描述
+├── AGENTS.md                           # 改项目描述 + CI/Release 节资产名
 ├── README.md                           # 重写
 ├── CHANGELOG.md
 ├── LICENSE                             # GPL-3.0
@@ -131,6 +131,19 @@ QuickLook.Plugin.{Format}/
 3. 重命名 XAML 的 `x:Class`
 4. 更新 `AssemblyInfo.cs`
 5. 更新 `QuickLook.Plugin.Metadata.config`
+6. 改脚本与 CI 中的**插件名**（模板从 PagViewer 复制时全部是源插件名，漏改即产生错名 Release）：
+   - `Scripts/build.ps1`：`$project`、`$pluginFile`
+   - `Scripts/pack-zip.ps1`：输出 `.zip`/`.qlplugin` 资产名（3 处）
+   - `Scripts/update-version.ps1`：`AssemblyTitle`/`AssemblyProduct`
+   - `.github/workflows/build.yml`：`env.PLUGIN_NAME`（workflow 内其余命名均引用它，只改这一处）
+   - `AGENTS.md`：项目描述与 `## CI / Release` 节中的资产名
+7. **残留检查（不可跳过）**：
+
+```powershell
+Get-ChildItem -Recurse -File -Include *.ps1,*.yml,*.yaml,*.md,*.cs,*.xaml,*.csproj,*.config |
+  Select-String -Pattern 'PagViewer'
+# 期望 0 结果；skills/ 内嵌模板与 README Credits/参考链接中的历史提及除外
+```
 
 ## 阶段 2：核心实现
 
@@ -398,9 +411,42 @@ powershell -ExecutionPolicy Bypass -File Scripts/update-version.ps1
 
 ```bash
 git tag v1.0.0
-git push --tags
+git push origin master --follow-tags
 # GitHub Actions 自动构建并创建 Release
 ```
+
+### CI/CD 规范（workflow 与 build.ps1 的分工）
+
+**打包与命名的唯一真相源是 `Scripts/build.ps1`。** workflow 的 Package 步只允许：
+
+```yaml
+- name: Package
+  shell: pwsh
+  run: powershell -ExecutionPolicy Bypass -File Scripts/build.ps1 -SkipBuild -SkipVersion
+```
+
+禁止在 workflow 内联第二份打包/命名逻辑——SvgaViewer 曾因 workflow 从 PagViewer 复制，
+发布出错名资产 `QuickLook.Plugin.PagViewer.qlplugin`。
+
+workflow 关键要素（两插件仓已按此规范化）：
+
+| 要素 | 约定 |
+|------|------|
+| `env.PLUGIN_NAME` | `QuickLook.Plugin.{Format}`，artifact 名/资产名的唯一改点 |
+| `permissions` | 顶层 `contents: read`；publish job `contents: write`（不写 `write-all`） |
+| `concurrency` | 同 ref 只保留最新构建；`v*` tag 构建绝不取消（`cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}`） |
+| upload-artifact | `if-no-files-found: error`、`retention-days: 14` |
+| action-gh-release | `fail_on_unmatched_files: true`、`generate_release_notes: true` |
+| publish job | 仅 `if: startsWith(github.ref, 'refs/tags/')`；用 download-artifact 取回 |
+
+触发模型：push `master` / PR / 手动 dispatch 只做构建校验（不发版）；推 `v*` tag 才
+构建 + 创建 Release。改 CI 只改 workflow，不改触发模型。
+
+配套约定：
+
+- `AGENTS.md` 必须含 `## CI / Release` 节，与 workflow 使用同一资产名（命名改点变了要同步）
+- 落地页从 `releases/latest` 按 `.qlplugin` **扩展名**抓资产，workflow/资产改名不破坏落地页
+- 首次推 tag 前先在本地确认 `Scripts/build.ps1` 能产出正确名的 `.qlplugin`
 
 ### README 必备结构（中英双语）
 
@@ -455,6 +501,8 @@ I'd like to add my {Format} viewer plugin to the Available Plugins list.
 ### 阶段 1 DoD
 - [ ] 项目能编译（`dotnet build -c Release` 无错误）
 - [ ] 命名空间、程序集名、文件名符合规范
+- [ ] 脚本/CI 命名已替换（build.ps1、pack-zip.ps1、update-version.ps1、build.yml 的 `PLUGIN_NAME`、AGENTS.md）
+- [ ] 残留检查通过（`Select-String PagViewer` 在脚本/workflow/源码中为 0）
 
 ### 阶段 2 DoD
 - [ ] `CanHandle` 能识别目标格式（扩展名 + 文件头）
@@ -472,8 +520,9 @@ I'd like to add my {Format} viewer plugin to the Available Plugins list.
 - [ ] 主题适配（暗色/亮色）
 
 ### 阶段 5 DoD
-- [ ] 有 `.qlplugin` 产物
-- [ ] GitHub Release 有资产
+- [ ] 有 `.qlplugin` 产物且资产名为 `QuickLook.Plugin.{Format}.qlplugin`
+- [ ] GitHub Release 有资产（tag 推送后 Actions 全绿，publish 未报 unmatched files）
+- [ ] CI 打包走 `build.ps1 -SkipBuild -SkipVersion`（workflow 无内联打包逻辑）
 - [ ] README 中英双语完整
 
 ### 阶段 6 DoD
@@ -486,5 +535,126 @@ I'd like to add my {Format} viewer plugin to the Available Plugins list.
 - 开发文档：https://github.com/QL-Win/QuickLook/wiki/Develop,-build-and-integrate
 - HelloWorld 模板：https://github.com/QL-Win/QuickLook.Plugin.HelloWorld
 - PagViewer 参考：https://github.com/yancongya/QuickLook.Plugin.PagViewer
+- SvgaViewer 参考：https://github.com/yancongya/QuickLook.Plugin.SvgaViewer
 - IViewer 接口：https://github.com/QL-Win/QuickLook.Common/blob/master/Plugin/IViewer.cs
+
+## 实战经验（PagViewer + SvgaViewer 总结）
+
+### WebView2 关键配置
+
+```csharp
+// 必须禁用 WebView2 自带缩放
+_webView.CoreWebView2.Settings.IsZoomControlEnabled = false;
+
+// 使用 virtual host 加载本地资源（避免 file:// 安全问题）
+_webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
+    "assets.local", _webAssetsDir, CoreWebView2HostResourceAccessKind.Allow);
+
+// 拦截外部导航
+_webView.CoreWebView2.NavigationStarting += (s, e) => {
+    if (!e.Uri.StartsWith("https://assets.local/") && !e.Uri.StartsWith("file:"))
+        e.Cancel = true;
+};
+```
+
+### 文件加载最佳实践
+
+```csharp
+// C# 端：读取字节 → base64 → 传给 WebView
+var bytes = File.ReadAllBytes(path);
+var base64 = Convert.ToBase64String(bytes);
+var msg = JsonSerializer.Serialize(new { type = "loadFile", base64 = base64 });
+await _webView.CoreWebView2.ExecuteScriptAsync("window.postMessage(" + msg + ", '*');");
+```
+
+```javascript
+// JS 端：接收 base64 → 转 ArrayBuffer/Blob
+var raw = atob(base64);
+var buf = new Uint8Array(raw.length);
+for (var i = 0; i < raw.length; i++) buf[i] = raw.charCodeAt(i);
+// 根据 SDK 要求选择传递方式：
+// 1. ArrayBuffer: buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength)
+// 2. Blob URL: URL.createObjectURL(new Blob([buf]))
+// 3. Data URI: 'data:svga/1.0;base64,' + base64
+```
+
+### Canvas 缩放陷阱
+
+```css
+/* ❌ object-fit 对 canvas 不生效 */
+#canvas { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* ✅ 需要手动计算缩放 */
+function fitCanvasToContainer() {
+    var scaleX = container.clientWidth / canvas.width;
+    var scaleY = container.clientHeight / canvas.height;
+    var scale = Math.min(scaleX, scaleY);
+    canvas.style.width = Math.floor(canvas.width * scale) + 'px';
+    canvas.style.height = Math.floor(canvas.height * scale) + 'px';
+}
+```
+
+### SVGA 格式特殊处理
+
+```javascript
+// 1.x 和 2.x 属性名不同
+var fps = videoItem.FPS || videoItem.fps || 20;           // 1.x: FPS, 2.x: fps
+var size = videoItem.videoSize || videoItem.size || {};   // 1.x: videoSize, 2.x: size
+
+// 1.x 需要 JSZip + JSZipUtils（两个都需要！）
+<script src="jszip.min.js"></script>
+<script src="jszip-utils.min.js"></script>  <!-- 必须！SVGAPlayer-Web 检测两个全局变量 -->
+<script src="svga.min.js"></script>
+
+// 1.x 使用 data URI 格式
+var dataUri = 'data:svga/1.0;base64,' + base64;
+parser.load(dataUri, success, failure);
+
+// 2.x 图片是 Uint8Array，不是 base64 字符串
+if (typeof imgData === 'string') {
+    imgSize = imgData.length * 0.75;  // 1.x base64
+} else if (imgData instanceof Uint8Array) {
+    imgSize = imgData.length;          // 2.x binary
+    base64Data = btoa(String.fromCharCode.apply(null, imgData));
+}
+```
+
+### 元数据面板最佳实践
+
+```javascript
+// 点击固定 + 高亮状态（使用 pinned 类，不要用 active）
+var metaPinned = false;
+btnMeta.addEventListener('click', function(e) {
+    e.stopPropagation();
+    metaPinned = !metaPinned;
+    btnMeta.classList.toggle('pinned', metaPinned);
+    // ...
+});
+
+// 自定义滚动条
+#metaPanel::-webkit-scrollbar { width: 4px; }
+#metaPanel::-webkit-scrollbar-track { background: transparent; }
+#metaPanel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+```
+
+### 双语支持
+
+```xml
+<!-- Metadata.config: 单字段双语 -->
+<Description>Preview PAG files. 预览 PAG 动画文件。</Description>
+
+<!-- Translations.config: 中英分开 -->
+<Entry Key="BTN_Play" Value="播放" ValueEn="Play" />
+```
+
+### 常见错误清单
+
+| 错误 | 原因 | 修复 |
+|------|------|------|
+| `file:` URLs are treated as unique security origins | 直接用 file:// 加载 | 改用 virtual host mapping |
+| `Cannot set properties of undefined` | DOM 元素未找到 | 检查元素 ID 和脚本执行顺序 |
+| `incorrect header check` | zlib 解压失败 | 检查文件格式，使用正确的 data URI 前缀 |
+| Canvas 空白 | object-fit 不生效 | 手动计算 style.width/height |
+| 图片不显示 | 1.x/2.x 图片格式不同 | 检查是 string 还是 Uint8Array |
+| WebView2 缩放干扰 | Ctrl+滚轮触发 WebView2 缩放 | 设置 IsZoomControlEnabled = false |
 - ContextObject：https://github.com/QL-Win/QuickLook.Common/blob/master/Plugin/ContextObject.cs

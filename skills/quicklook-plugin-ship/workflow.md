@@ -46,9 +46,14 @@
 2. 从 PagViewer 复制通用文件
 3. 全局替换命名空间
 4. 重命名文件
-5. 下载格式 Web SDK 到 `Resources/Web/`
-6. 更新 csproj 依赖
-7. 验证编译通过
+5. **替换脚本/CI 中的插件名**：`Scripts/build.ps1`（`$project`/`$pluginFile`）、
+   `Scripts/pack-zip.ps1`（资产名）、`Scripts/update-version.ps1`（程序集信息）、
+   `.github/workflows/build.yml`（仅 `env.PLUGIN_NAME`）、`AGENTS.md`（描述 + CI/Release 节）
+6. **残留检查**：`Get-ChildItem -Recurse -File -Include *.ps1,*.yml,*.md,*.cs,*.csproj,*.config | Select-String PagViewer`
+   —— 脚本/workflow/源码中必须为 0（`skills/` 模板与参考链接除外）
+7. 下载格式 Web SDK 到 `Resources/Web/`
+8. 更新 csproj 依赖
+9. 验证编译通过
 
 ### 输出
 - 可编译的空壳项目
@@ -57,6 +62,7 @@
 ### 验收
 - [ ] 命名空间统一为 `QuickLook.Plugin.{Format}`
 - [ ] 程序集名为 `QuickLook.Plugin.{Format}.dll`
+- [ ] 脚本/CI 命名替换完成，残留检查为 0
 - [ ] 编译无错误
 
 ### 命令
@@ -200,19 +206,21 @@ await webView.ExecuteScriptAsync($"window.postMessage({{type:'load',data:'{base6
 ### 动作
 1. 更新版本号：`powershell -File Scripts/update-version.ps1`
 2. 构建：`dotnet build -c Release`
-3. 打包：`powershell -File Scripts/build.ps1`
-4. 创建 Git tag：`git tag v1.0.0`
-5. 推送：`git push --tags`
-6. 验证 GitHub Actions 构建成功
-7. 验证 Release 有 .qlplugin 资产
-8. 更新 README 和 CHANGELOG
+3. 本地打包验证：`powershell -File Scripts/build.ps1`（确认 `.qlplugin` 资产名为 `QuickLook.Plugin.{Format}.qlplugin`）
+4. 更新 README 和 CHANGELOG
+5. 创建 Git tag：`git tag v1.0.0`
+6. 推送：`git push origin master --follow-tags`
+7. 验证 GitHub Actions `Build and Release` 全绿（push/PR 只构建，tag 触发 publish）
+8. 验证 Release 资产名正确且唯一（`fail_on_unmatched_files` 兜底）
+9. 若有落地页，确认 latest release 抓取正常（按扩展名识别，无需随 CI 改名）
 
 ### 输出
-- GitHub Release 有 .qlplugin 下载
+- GitHub Release 有 `.qlplugin` 下载
 - README 中英双语完整
 
 ### 验收
-- [ ] Release 页面有 .qlplugin 文件
+- [ ] Release 页面有 `.qlplugin` 文件，资产名为 `QuickLook.Plugin.{Format}.qlplugin`
+- [ ] Actions 构建全绿（CI 打包走 `build.ps1 -SkipBuild -SkipVersion`，无内联逻辑）
 - [ ] README 包含：简介、功能、安装、构建、快捷键、项目结构
 - [ ] CHANGELOG 有版本记录
 

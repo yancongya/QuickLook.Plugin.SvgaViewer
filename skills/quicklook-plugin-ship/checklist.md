@@ -23,6 +23,8 @@
 - [ ] 输出目录有 `.dll` 文件
 - [ ] `Translations.config` 存在且有中英翻译
 - [ ] `QuickLook.Plugin.Metadata.config` 描述正确
+- [ ] 脚本/CI 命名已替换（build.ps1、pack-zip.ps1、update-version.ps1、build.yml 的 `PLUGIN_NAME`、AGENTS.md）
+- [ ] 残留检查通过：脚本/workflow/源码中 `PagViewer` 为 0（skills/ 模板与参考链接除外）
 
 ---
 
@@ -118,7 +120,7 @@
 
 ### 构建
 - [ ] `dotnet build -c Release` 成功
-- [ ] `Scripts/build.ps1` 能生成 .qlplugin
+- [ ] `Scripts/build.ps1` 能生成 .qlplugin，资产名为 `QuickLook.Plugin.{Format}.qlplugin`
 - [ ] .qlplugin 文件大小合理（<50MB）
 
 ### 版本
@@ -126,9 +128,11 @@
 - [ ] Git tag 格式为 `v{major}.{minor}.{patch}`
 
 ### GitHub
-- [ ] Release 页面有 .qlplugin 资产
-- [ ] Release 有说明文字
-- [ ] GitHub Actions 构建成功
+- [ ] 推 tag 后 Actions `Build and Release` 全绿
+- [ ] CI 打包走 `build.ps1 -SkipBuild -SkipVersion`（workflow 无内联打包逻辑）
+- [ ] Release 页面有 .qlplugin 资产且**命名正确**（非模板源插件名）
+- [ ] Release 有说明文字（generate_release_notes）
+- [ ] publish 权限为 `contents: write`（非 write-all）
 
 ### 文档
 - [ ] README 包含中文简介
