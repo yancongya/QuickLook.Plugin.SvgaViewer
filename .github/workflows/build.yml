@@ -11,9 +11,15 @@ on:
 
 env:
   BUILD_CONFIGURATION: Release
+  PLUGIN_NAME: QuickLook.Plugin.SvgaViewer
 
 permissions:
   contents: read
+
+# 同一 ref 的并发运行只保留最新；tag 构建（发版）绝不取消
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
 jobs:
   build:
@@ -34,36 +40,36 @@ jobs:
         run: powershell -ExecutionPolicy Bypass -File Scripts/update-version.ps1
 
       - name: Build
-        run: dotnet build -c ${{env.BUILD_CONFIGURATION}}
+        run: dotnet build -c ${{ env.BUILD_CONFIGURATION }}
 
+      # 打包与命名的唯一真相源是 Scripts/build.ps1，CI 不再内联第二份拷贝
       - name: Package
         shell: pwsh
-        run: |
-          $releaseDir = "bin/Release"
-          $exclude = @("*.pdb", "*.xml")
-          $files = Get-ChildItem -Path $releaseDir -Exclude $exclude
-          Compress-Archive -Path $files -DestinationPath "QuickLook.Plugin.PagViewer.zip"
-          Move-Item "QuickLook.Plugin.PagViewer.zip" "QuickLook.Plugin.PagViewer.qlplugin"
+        run: powershell -ExecutionPolicy Bypass -File Scripts/build.ps1 -SkipBuild -SkipVersion
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: plugin
-          path: QuickLook.Plugin.PagViewer.qlplugin
+          name: ${{ env.PLUGIN_NAME }}
+          path: ${{ env.PLUGIN_NAME }}.qlplugin
+          if-no-files-found: error
+          retention-days: 14
 
   publish:
     needs: build
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: write
     if: startsWith(github.ref, 'refs/tags/')
 
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: plugin
+          name: ${{ env.PLUGIN_NAME }}
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: QuickLook.Plugin.PagViewer.qlplugin
+          files: ${{ env.PLUGIN_NAME }}.qlplugin
+          fail_on_unmatched_files: true
           generate_release_notes: true
