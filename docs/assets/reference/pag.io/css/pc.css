@@ -1,0 +1,2578 @@
+@charset "UTF-8";
+* {
+  font-family: "PingFang SC", "Microsoft YaHei", "Heiti SC", "Heiti TC", "Helvetica Neue", "Helvetica", "Arial", "sans-serif" !important;
+}
+
+body {
+  background-repeat: no-repeat;
+  background-color: #fafafa;
+}
+
+.strong {
+  height: 24px;
+  line-height: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "PingFangSC-Semibold";
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+#languages-menu {
+  display: none;
+}
+
+body {
+  min-width: 1320px;
+  /* 隐藏滚动条 */
+  /* 当滚动时，显示滚动条 */
+  /* 滚动条颜色  */
+  /* 滚动条背景颜色 - 透明 */
+}
+body blockquote {
+  background-color: #f9fbff !important;
+  border-left: 8px solid #005ad9 !important;
+  padding: 15px 30px 15px 15px;
+}
+body a.btn {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  height: 48px;
+  line-height: 48px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #fff;
+}
+body a.btn img {
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+}
+body a.btn span {
+  flex: 1;
+  font-weight: 600;
+  white-space: nowrap;
+}
+body a.btn.blue {
+  border: 1px solid #005ad9;
+  background-color: #005ad9;
+  color: #fff;
+}
+body .fixedHeaderContainer {
+  min-width: 1320px;
+  padding: 0;
+  border-bottom: 1px solid rgba(197, 197, 197, 0.2);
+}
+body .fixedHeaderContainer .wrapper {
+  max-width: inherit;
+}
+body .fixedHeaderContainer .logo {
+  margin-left: 24px;
+  margin-top: 16px;
+  max-width: 999px;
+}
+body .intro-box {
+  margin-top: 114px;
+  font-size: 16px;
+  height: 476px;
+}
+body .intro-box .wrap {
+  width: 980px;
+  margin: 0 auto;
+  position: relative;
+  font-weight: 100;
+}
+body .intro-box .wrap .main-content {
+  padding-top: 35px;
+  width: 476px;
+}
+body .intro-box .wrap .paragraph {
+  font-size: 16px;
+  font-weight: 300;
+  margin-bottom: 23px;
+  font-family: "PingFangSC-Light" !important;
+}
+body .intro-box .wrap .nowrapParagraph {
+  white-space: nowrap;
+}
+body .intro-box .wrap .pag {
+  width: 231px;
+  display: block;
+  margin-bottom: 25px;
+}
+body .intro-box .wrap .logo-l {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  width: 360px;
+  height: 360px;
+}
+body .intro-box .wrap .logo-l .logo-l-static {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+body .intro-box .wrap .logo-l .logo-l-pag {
+  position: absolute;
+  top: -100px;
+  left: -110px;
+  width: 560px;
+  height: 560px;
+}
+body .intro-box .wrap .btn-bar {
+  display: flex;
+  margin-top: 32px;
+}
+body .intro-box .wrap .btn-bar a {
+  margin-right: 15px;
+  font-weight: 600;
+  padding: 0 16px;
+  justify-content: center;
+  align-items: center;
+}
+body .intro-box .wrap .tip {
+  margin-top: 16px;
+  color: #666;
+  font-size: 12px;
+  line-height: 18px;
+  display: block;
+}
+body .main {
+  background-color: #fff;
+  position: relative;
+  padding-top: 95px;
+}
+body .main .chapter {
+  margin: 0 auto;
+  width: 980px;
+}
+body .main .chapter .wrap {
+  display: flex;
+  justify-content: space-between;
+}
+body .main .chapter .wrap .detail {
+  width: 354px;
+}
+body .main .chapter .reverse {
+  flex-direction: row-reverse;
+}
+body .main .chapter .detail.reverse {
+  padding-right: 7px;
+}
+body .main .chapter .feature {
+  display: block;
+  margin-bottom: 48px;
+  width: 80px;
+}
+body .main .chapter .text {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 300;
+  font-family: "PingFangSC-Light" !important;
+}
+body .main .chapter .arrow {
+  width: 33px;
+  display: block;
+  margin: 35px auto 46px auto;
+  position: relative;
+  right: -10px;
+}
+body .main .chapter .arrow.reverse {
+  transform: scaleX(-1);
+  right: 17px;
+}
+body .main .chapter .num {
+  margin-bottom: 14px;
+  height: 72px;
+}
+body .main .chapter .title {
+  height: 48px;
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 900;
+  margin-bottom: 24px;
+  font-family: "PingFangSC-Semibold" !important;
+  white-space: nowrap;
+}
+body .main .chapter .btn-bar {
+  display: flex;
+}
+body .main .chapter .btn-bar a {
+  margin-top: 46px;
+  font-weight: 600;
+}
+body .main .chapter .btn-bar.reverse {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-right: -7px;
+}
+body .main .chapter .btn-bar.reverse a {
+  margin-top: 48px;
+  font-weight: 600;
+}
+body .main .chapter:last-child {
+  padding-bottom: 83px;
+}
+body .partner {
+  padding-top: 96px;
+  position: relative;
+  padding-bottom: 255px;
+}
+body .partner .wrap {
+  width: 980px;
+  margin: 0 auto;
+}
+body .partner .wrap .users {
+  width: 65px;
+}
+body .partner .wrap .title {
+  margin-top: 19px;
+  margin-bottom: 23px;
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 900;
+}
+body .partner .wrap .gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+body .partner .wrap .item:nth-child(6n) {
+  margin-right: 0;
+}
+body .partner .wrap .item {
+  margin-right: 16px;
+  width: 150px;
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.16);
+  padding-top: 25px;
+}
+body .partner .wrap .item .thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 18px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
+}
+body .partner .wrap .item .name {
+  margin-top: 16px;
+  line-height: 24px;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+body .partner .wrap .btn-bar {
+  display: flex;
+  margin-top: 4px;
+}
+body .partner .wrap .btn-bar a {
+  margin-top: 23px;
+  margin-right: 15px;
+  font-weight: 600;
+}
+body .download {
+  background-color: #222;
+  position: relative;
+}
+body .download .wrap {
+  width: 980px;
+  margin: 0 auto;
+  padding-bottom: 90px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  text-align: center;
+}
+body .download .wrap img {
+  margin-top: -160px;
+}
+body .download .wrap .pkg {
+  position: relative;
+}
+body .download .wrap .pkg .pkg-download {
+  display: inline-block;
+  width: 507px;
+  height: 616px;
+  margin-top: -160px;
+  background-size: 507px 616px;
+  background-image: url("../img/new_official_website/pkg_download.png");
+}
+body .download .wrap .mac-download,
+body .download .wrap .win-download {
+  position: absolute;
+  width: 235px;
+  height: 64px;
+  display: block;
+  bottom: 6px;
+  left: 50%;
+}
+body .download .wrap .mac-download {
+  margin-left: -256px;
+}
+body .download .wrap .win-download {
+  margin-left: -5px;
+}
+body .customer-service {
+  position: fixed;
+  right: 40px;
+  bottom: 36px;
+  z-index: 999;
+  cursor: pointer;
+}
+body .customer-service #js_cs_popup {
+  display: none;
+}
+body .customer-service #js_cs {
+  width: 96px;
+}
+body .customer-service .panel {
+  position: absolute;
+  width: 384px;
+  height: 596px;
+  border-radius: 24px;
+  background-color: #005ad9;
+  right: 8px;
+  bottom: 135px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+}
+body .customer-service .panel .title {
+  padding: 22px 0 22px 22px;
+  font-size: 32px;
+  line-height: 48px;
+  color: #fff;
+}
+body .customer-service .panel .content {
+  font-weight: 100;
+  padding: 0 22px 22px 22px;
+  background-color: #005ad9;
+  font-size: 16px;
+  line-height: 24px;
+  color: #fff;
+}
+body .customer-service .panel .questions {
+  height: 325px;
+  background-color: #fff;
+  overflow: scroll;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.16);
+}
+body .customer-service .panel .questions .q-wrap .unit .unit-wrap {
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.16);
+  margin: 22px;
+  line-height: 24px;
+  font-size: 16px;
+  padding-bottom: 22px;
+}
+body .customer-service .panel .questions .q-wrap .unit .unit-wrap:hover {
+  color: #005ad9;
+}
+body .customer-service .panel .more {
+  color: #005ad9;
+  z-index: 10;
+  background-color: #fff;
+  height: 96px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  font-weight: 100;
+  text-align: center;
+  padding-top: 25px;
+  font-size: 16px;
+  line-height: 24px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.16);
+}
+body .customer-service .panel .more .strong {
+  cursor: pointer;
+  text-decoration: underline;
+}
+body .customer-service .panel .more .strong a {
+  color: #005ad9;
+}
+body .mobile-alert-modal {
+  display: none;
+}
+body .nav-footer {
+  background-color: #222;
+}
+body .headerTitleWithLogo {
+  display: none !important;
+}
+body .headerWrapper header a {
+  float: left;
+}
+body .headerWrapper header a .logo {
+  position: fixed;
+  margin-top: 39px;
+  width: 133px;
+  height: 48px;
+}
+body .fixedHeaderContainer {
+  height: 80px;
+  backdrop-filter: saturate(180%) blur(20px);
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+body .fixedHeaderContainer header {
+  display: block;
+}
+body .fixedHeaderContainer .wrapper {
+  padding: 0;
+}
+body .navigationWrapper {
+  margin: 0 auto !important;
+}
+body .navigationWrapper .slidingNav {
+  width: 1080px !important;
+  margin: 0 auto !important;
+}
+body .navigationSlider .slidingNav ul {
+  background: transparent !important;
+}
+body .navigationSlider .slidingNav ul li > a:focus,
+body .navigationSlider .slidingNav ul li > a:hover,
+body .navigationSlider .slidingNav ul li.siteNavItemActive > a,
+body .navigationSlider .slidingNav ul li.siteNavGroupActive > a:focus {
+  background-color: transparent !important;
+}
+body .nav-site.nav-site-internal {
+  width: 448px !important;
+  margin: 0 auto !important;
+  display: flex;
+  align-items: center;
+}
+body .nav-site.nav-site-internal > li > a {
+  cursor: pointer;
+  color: #000 !important;
+  margin-top: 23px !important;
+  font-weight: 600 !important;
+  padding: 6px 16px 6px 16px;
+}
+body .nav-site.nav-site-internal li:nth-child(1) a,
+body .nav-site.nav-site-internal li:nth-child(2) a,
+body .nav-site.nav-site-internal li:nth-child(3) a,
+body .nav-site.nav-site-internal li:nth-child(4) a,
+body .nav-site.nav-site-internal li:nth-child(5) a {
+  color: #000 !important;
+  text-align: center;
+  position: relative;
+}
+body .nav-site.nav-site-internal li:nth-child(1) a:hover,
+body .nav-site.nav-site-internal li:nth-child(2) a:hover,
+body .nav-site.nav-site-internal li:nth-child(3) a:hover,
+body .nav-site.nav-site-internal li:nth-child(4) a:hover,
+body .nav-site.nav-site-internal li:nth-child(5) a:hover {
+  background-color: transparent !important;
+  color: #005ad9 !important;
+}
+body .nav-site.nav-site-internal > li:nth-child(1) a:hover:after,
+body .nav-site.nav-site-internal > li:nth-child(1) a.active {
+  content: "";
+  border-top: 2px solid #005ad9;
+  position: absolute;
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal > li:nth-child(2) a:hover:after,
+body .nav-site.nav-site-internal > li:nth-child(2) a.active {
+  content: "";
+  border-top: 2px solid #005ad9;
+  position: absolute;
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal > li:nth-child(3) a:hover:after,
+body .nav-site.nav-site-internal > li:nth-child(3) a.active {
+  content: "";
+  border-top: 2px solid #005ad9;
+  position: absolute;
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal > li:nth-child(4) a:hover:after,
+body .nav-site.nav-site-internal > li:nth-child(4) a.active {
+  content: "";
+  border-top: 2px solid #005ad9;
+  position: absolute;
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal > li:nth-child(5) a:hover:after,
+body .nav-site.nav-site-internal > li:nth-child(5) a.active {
+  content: "";
+  border-top: 2px solid #005ad9;
+  position: absolute;
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal li:nth-child(6),
+body .nav-site.nav-site-internal li:nth-child(7),
+body .nav-site.nav-site-internal li:nth-child(8),
+body .nav-site.nav-site-internal li:nth-child(9) {
+  position: fixed;
+}
+body .nav-site.nav-site-internal li:nth-child(6) {
+  right: 402px;
+}
+body .nav-site.nav-site-internal li:nth-child(6) a {
+  height: 40px;
+  color: #333333 !important;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "PingFangSC-Semibold" !important;
+  float: left;
+  padding: 8px 12px 8px 32px;
+  background-repeat: no-repeat;
+  background-size: 18px 18px;
+  background-position: 12.7% 50%;
+  background-image: url("../img/new_official_website/icon_earth.png");
+  position: relative;
+}
+body .nav-site.nav-site-internal li:nth-child(6) a::after {
+  position: absolute;
+  content: "";
+  position: absolute;
+  right: 0;
+  top: calc(50% - 3px);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #24292e;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+body .nav-site.nav-site-internal li:nth-child(7) {
+  right: 278px;
+}
+body .nav-site.nav-site-internal li:nth-child(7) a {
+  width: 102px;
+  height: 40px;
+  color: #333333 !important;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "PingFangSC-Semibold" !important;
+  float: left;
+  padding: 8px 12px 8px 35px;
+  background-repeat: no-repeat;
+  background-size: 18px;
+  background-position: 12.7% 50%;
+  background-image: url("../../pag.qq.com/img/new_official_website/github_top.png");
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background-color: #ffffff !important;
+  box-shadow: none;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+body .nav-site.nav-site-internal li:nth-child(7) a:hover {
+  box-shadow: inset 0 0 4px #3495fc3e, 0 0 4px #3495fc3e;
+  border-color: #005ad975;
+  background-color: #ffffff !important;
+  background-position: 12.7% 46%;
+  background-image: url("../../pag.qq.com/img/new_official_website/star.png");
+  animation: star 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+body .nav-site.nav-site-internal li:nth-child(8) {
+  right: 144px;
+}
+body .nav-site.nav-site-internal li:nth-child(8) a {
+  height: 40px;
+  color: #333333 !important;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "PingFangSC-Semibold" !important;
+  float: left;
+  padding: 8px 12px 8px 32px;
+  background-repeat: no-repeat;
+  background-size: 15px 18px;
+  background-position: 12.7% 50%;
+  background-image: url("../../pag.qq.com/img/new_official_website/bbs.png");
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background-color: #ffffff !important;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+body .nav-site.nav-site-internal li:nth-child(8) a:hover {
+  box-shadow: inset 0 0 4px #3495fc3e, 0 0 4px #3495fc3e;
+  border-color: #005ad975;
+  background-color: #ffffff !important;
+}
+body .nav-site.nav-site-internal li:nth-child(9) {
+  right: 32px;
+}
+body .nav-site.nav-site-internal li:nth-child(9) a {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "PingFangSC-Semibold" !important;
+  border-radius: 8px;
+  background-color: #005ad9;
+  color: #ffffff !important;
+  height: 40px;
+  width: 88px;
+  margin-top: 20px !important;
+}
+body .nav-site.nav-site-internal li:nth-child(9) a:hover {
+  background-color: #005ad9 !important;
+}
+body .nav-site.nav-site-internal li:nth-child(9) a:focus {
+  background-color: #005ad9 !important;
+}
+body .nav-site.nav-site-internal li.active a {
+  color: #000 !important;
+  text-align: center;
+  position: relative;
+  background-color: transparent !important;
+  color: #005ad9 !important;
+}
+body .nav-site.nav-site-internal li.active a:after {
+  content: "";
+  border-top: 2px solid #005ad9;
+  position: absolute;
+}
+body .nav-site.nav-site-internal li:nth-child(1).active a:after {
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal li:nth-child(2).active a:after {
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal li:nth-child(3).active a:after {
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal li:nth-child(4).active a:after {
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body .nav-site.nav-site-internal li:nth-child(5).active a:after {
+  width: 30px;
+  height: 1px;
+  bottom: -8px;
+}
+body #languages-menu {
+  top: 12px;
+}
+body #languages-menu .languages-icon {
+  display: none;
+}
+body #languages-dropdown {
+  top: 45px;
+}
+body .arrowPopup {
+  position: fixed;
+  display: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+}
+body #navPopUp_github {
+  right: 265px;
+  top: 84px;
+  padding: 16px;
+  width: 96px;
+  height: 56px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+body .shader {
+  width: inherit;
+  background-color: #ffffff;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 9;
+  color: #005ad9ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: "PingFangSC-Medium" !important;
+  font-size: 16px;
+}
+body #popup_github_wrapper {
+  width: 96px;
+  height: 56px;
+}
+body #navPopUp_github::after {
+  content: "";
+  top: 78px;
+  right: 297px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+  height: 30px;
+  width: 30px;
+  position: fixed;
+  margin-left: -30px;
+  z-index: 9;
+  transform: rotate(45deg);
+  z-index: 1;
+}
+body #navPopUp_qqgroup {
+  right: 80px;
+  top: 84px;
+  padding: 16px;
+  width: 222px;
+  height: 56px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+body #navPopUp_qqgroup::after {
+  content: "";
+  top: 78px;
+  right: 171px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+  height: 30px;
+  width: 30px;
+  position: fixed;
+  margin-left: -30px;
+  z-index: 9;
+  transform: rotate(45deg);
+  z-index: 1;
+}
+body #popup_qqgroup_wrapper {
+  height: 56px;
+  padding: 16px 16px 16px 42px;
+  background-repeat: no-repeat;
+  background-size: 16px 15px;
+  background-position: 7.4% 50%;
+  background-image: url("../../pag.qq.com/img/new_official_website/chat.png");
+}
+body .nav-footer {
+  padding: 48px 0 48px 0;
+  height: 148px;
+  position: relative;
+}
+body .nav-footer .content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+body .nav-footer .copyright {
+  display: flex;
+  min-width: 980px;
+  font-size: 12px;
+  line-height: 16px;
+  margin: 0 auto;
+  text-align: left !important;
+  color: #cccccc;
+  margin-bottom: 8px;
+}
+body .nav-footer .copyright .copyright-first-item {
+  width: 315px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+body .nav-footer .copyright .copyright-first-item font {
+  font-size: 12px;
+}
+body .nav-footer .copyright font {
+  font-size: 12px;
+}
+body .nav-footer .copyright-bottom .copyright-first-item {
+  line-height: 20px;
+}
+body .nav-footer .copyright-bottom .privacy-policy {
+  line-height: 20px;
+  position: relative;
+}
+body .nav-footer .copyright-bottom .privacy-policy::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 3px;
+  height: 1px;
+  background-color: #cccccc;
+}
+body .nav-footer .copyright-bottom .social {
+  height: 18px;
+  display: flex;
+  margin-left: 32px;
+  align-items: center;
+}
+body .nav-footer .copyright-bottom .social a {
+  display: block;
+  width: 18px;
+  height: 18px;
+  position: relative;
+  border-radius: 50%;
+  margin-right: 18px;
+}
+body .nav-footer .copyright-bottom .social a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+}
+body .nav-footer .copyright-bottom .social a:nth-child(1)::after {
+  background-image: url("../img/new_official_website/footer_github.png");
+}
+body .nav-footer .copyright-bottom .social a:nth-child(2)::after {
+  background-image: url("../img/new_official_website/footer_facebook.png");
+}
+body .nav-footer .copyright-bottom .social a:nth-child(3)::after {
+  background-image: url("../img/new_official_website/footer_twitter.png");
+}
+body .nav-footer .privacy-policy {
+  cursor: pointer;
+  margin-left: 32px;
+}
+body .nav-footer .qq-group {
+  cursor: pointer;
+  margin-left: 24px;
+  display: none;
+}
+body .nav-footer .beian {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  color: #ccc;
+}
+body .nav-footer .tel {
+  margin-left: 32px;
+  color: #ccc;
+}
+body .nav-footer .beian-gov {
+  width: 300px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+body .nav-footer .beian-gov a {
+  color: #ccc;
+  display: flex;
+  align-items: center;
+}
+body .nav-footer .beian-gov a img {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+body .nav-footer .beian-gov a p {
+  margin: 0;
+  position: relative;
+}
+body .nav-footer .beian-gov a p::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  height: 1px;
+  background-color: #cccccc;
+}
+body .mobile-footer {
+  display: none;
+}
+body .docsNavContainer::-webkit-scrollbar {
+  display: none;
+}
+body .docsNavContainer.scrolling::-webkit-scrollbar {
+  display: block;
+  height: 7px;
+  width: 7px;
+}
+body .docsNavContainer::-webkit-scrollbar-thumb {
+  background: #7d7d7d;
+  border-radius: 10px;
+}
+body .docsNavContainer::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+body .docs-prevnext .docs-prev > span:nth-child(1) {
+  color: transparent;
+}
+body .docs-prevnext .docs-prev > span:nth-child(1):after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 0;
+  top: -3px;
+  border-radius: 40px;
+  border: 1px solid #333;
+  background-image: url("../img/new_official_website/arrow_right.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+body .docs-prevnext .docs-prev > span:nth-child(2) {
+  visibility: hidden;
+}
+body .docs-prevnext .docs-prev:hover > span:nth-child(1):after {
+  border: 1px solid #005ad9;
+  background-image: url("../img/new_official_website/arrow_left.png");
+  transform: scaleX(-1);
+}
+body .docs-prevnext .docs-prev:hover > span:nth-child(2) {
+  visibility: hidden;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.48);
+  font-size: 10px;
+  line-height: 14px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 2px;
+  left: 0;
+  top: -25px;
+  position: absolute;
+  height: 18px;
+  line-height: 18px;
+}
+body .docs-prevnext .docs-next > span:nth-child(1) {
+  visibility: hidden;
+}
+body .docs-prevnext .docs-next > span:nth-child(2) {
+  color: transparent;
+}
+body .docs-prevnext .docs-next > span:nth-child(2):after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 0;
+  top: -3px;
+  border-radius: 40px;
+  border: 1px solid #333;
+  background-image: url("../img/new_official_website/arrow_right.png");
+  transform: scaleX(-1);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+body .docs-prevnext .docs-next:hover > span:nth-child(2):after {
+  border: 1px solid #005ad9;
+  background-image: url("../img/new_official_website/arrow_left.png");
+  transform: scaleX(1);
+}
+body .docs-prevnext .docs-next:hover > span:nth-child(1) {
+  visibility: hidden;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.48);
+  font-size: 10px;
+  line-height: 14px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 2px;
+  right: 0;
+  top: -25px;
+  position: absolute;
+  height: 18px;
+  line-height: 18px;
+}
+body .docs-prevnext .docs-prev,
+body .docs-prevnext .docs-next {
+  border: none;
+  position: relative;
+  width: auto;
+  min-width: 150px;
+}
+body .docs-prevnext .docs-prev:after,
+body .docs-prevnext .docs-next:after {
+  font-size: 16px;
+  position: absolute;
+}
+body .docs-prevnext .docs-prev:after {
+  content: "上一篇";
+  left: 55px;
+  top: 10px;
+}
+body .docs-prevnext .docs-next:after {
+  content: "下一篇";
+  right: 55px;
+  top: 10px;
+}
+body .docs-prevnext .docs-prev:hover,
+body .docs-prevnext .docs-next:hover {
+  background: none;
+}
+body .docs-prevnext .docs-prev:hover:after,
+body .docs-prevnext .docs-next:hover:after {
+  color: #005ad9;
+}
+body .toc .toggleNav {
+  width: 360px;
+}
+body .toc .toggleNav .navGroup .navGroupCategoryTitle {
+  font-size: 24px;
+  line-height: 32px;
+  min-height: 40px;
+  padding-left: 33px;
+  font-weight: 700;
+}
+body .toc .toggleNav ul {
+  padding: 0;
+}
+body .toc .toggleNav ul li {
+  padding-left: 33px;
+}
+body .toc .toggleNav ul li a {
+  font-size: 16px;
+  line-height: 40px;
+  font-weight: 400;
+  color: #333;
+  padding: 0;
+  min-height: 40px;
+}
+body .toc .toggleNav ul li:last-child {
+  margin-bottom: 24px !important;
+}
+body .toc .toggleNav ul li.navListItemActive {
+  background-color: #d7ebff;
+}
+body .toc .toggleNav ul li.navListItemActive a {
+  color: #005ad9;
+}
+body.separateOnPageNav .navPusher .mainContainer {
+  max-width: 720px;
+  padding: 48px 0 0;
+}
+body .navPusher .docMainWrapper.wrapper {
+  padding: 0 20px 0 0;
+}
+body .onPageNav {
+  position: fixed;
+  top: 90px;
+  display: none;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+body .onPageNav ul li a {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+body .docMainWrapper > *:first-child {
+  flex: 0 0 380px;
+}
+body.separateOnPageNav .toc {
+  width: 360px;
+}
+body .homePageNavPusher.navPusher {
+  background: #ffffff;
+}
+body .homePageNavPusher.navPusher .docMainWrapper {
+  background: #ffffff;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .titleContainer {
+  display: flex;
+  color: #000000;
+  margin-bottom: 60px;
+  flex-direction: column;
+  position: relative;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .titleContainer .titleContainerTitle {
+  max-width: 520px;
+  flex: 1;
+  margin-right: 60px;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .titleContainer .titleContainerTitle .titleContainerTitleText {
+  font-size: 48px;
+  margin-bottom: 40px;
+  color: #24292e;
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  line-height: 48px;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .titleContainer .titleContainerTitle .titleContainerTitleContent {
+  color: #24292e;
+  text-align: justify;
+  font-size: 16px;
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .titleContainer .playButton {
+  width: 104.889px;
+  height: 104.889px;
+  background-size: contain;
+  position: absolute;
+  top: calc(50% + 35px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+  cursor: pointer;
+  background-image: url("../img/docs/home/play.png");
+}
+body .homePageNavPusher.navPusher .docMainWrapper .titleContainer.mobile {
+  display: none;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper {
+  margin-top: 60px;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .wrapperTitle {
+  text-align: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 32px;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .wrapperTitle img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .wrapperTitle .wrapperTitleText {
+  font-size: 32px;
+  font-weight: 600;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 60px;
+  font-weight: 300;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .firstItem,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .firstItem {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .firstItem .linkItem:last-of-type,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .firstItem .linkItem:last-of-type {
+  border-right: none;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .secondItem,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .secondItem {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .secondItem .linkItem:last-of-type,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .secondItem .linkItem:last-of-type {
+  border-right: none;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .linkItem,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .linkItem {
+  flex: 1;
+  text-align: left;
+  display: flex;
+  padding: 32px 0px 40px 32px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .linkItem .linkItemTitle,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .linkItem .linkItemTitle {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  margin-bottom: 48px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  color: #24292e;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .linkItem .linkItemTitle::after,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .linkItem .linkItemTitle::after {
+  display: inline;
+  content: "";
+  position: absolute;
+  background: #ccc;
+  width: 48px;
+  height: 1px;
+  top: 46px;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .linkItem a,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .linkItem a {
+  display: inline-block;
+  text-align: center;
+  color: #0000ff;
+  font-weight: 400;
+  margin-bottom: 24px;
+  line-height: 22px;
+  position: relative;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .linkItem br,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .linkItem br {
+  display: none;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .linkItem a:last-of-type,
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .linkItem a:last-of-type {
+  margin-bottom: 0;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .designContainer .linkItem:nth-child(2n+1),
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer .linkItem:nth-child(2n+1) {
+  background: #f9fbff;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .designWrapper .developerContainer {
+  margin-bottom: 0;
+}
+body .homePageNavPusher.navPusher .docMainWrapper .mainContainer .wrapper .post .postHeader {
+  margin-bottom: 0px;
+}
+body .homePageNavPusher.navPusher .toc section .navGroups {
+  padding-top: 0;
+}
+body .installExporterPageNavPusher.navPusher article p img {
+  margin-left: initial;
+}
+body .docsContainer .tavEffectContainer {
+  padding: 60px;
+  background: #fafafa;
+}
+body .docsContainer .tavEffectContainer .tavEffectWrap {
+  display: flex;
+  justify-content: space-between;
+}
+body .docsContainer .tavEffectContainer.mobile {
+  display: none;
+}
+body .docsContainer .tavPicture.mobile {
+  display: none;
+}
+body .navPusher .usersContainer {
+  padding: 48px 0 0;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection {
+  max-width: 1080px;
+  min-width: 1080px;
+  width: 1080px;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .prose {
+  max-width: 1080px;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .prose h1 {
+  text-align: left;
+  font-size: 32px;
+  line-height: 40px;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 180px;
+  justify-content: flex-start;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos > a:nth-child(6n) {
+  margin-right: 0;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos > a {
+  margin-right: 35px;
+  width: 150px;
+  text-align: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.16);
+  padding-top: 25px;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos > a > img {
+  width: 80px;
+  height: 80px;
+  border-radius: 18px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
+  padding: 0;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos > a .name {
+  margin-top: 14px;
+  line-height: 24px;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos .contact {
+  position: relative;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos .contact img {
+  box-shadow: none;
+}
+body .navPusher .usersContainer .container .wrapper .showcaseSection .logos .contact .ts {
+  position: absolute;
+  font-size: 14px;
+  line-height: 24px;
+  color: #005ad9;
+  width: 100%;
+  text-align: center;
+  bottom: 0;
+}
+body .pagView {
+  visibility: hidden;
+  margin: -15px -15px 0 -15px;
+  padding: 0;
+}
+body .pagApng {
+  width: 578px;
+  height: 390px;
+  margin: -15px -15px 0 -15px;
+}
+body .showCase-container .caseMain {
+  position: relative;
+  padding-top: 0;
+  padding-bottom: 100px;
+  background-color: #fafafa;
+}
+body .showCase-container #wallpaper {
+  width: 640px;
+  height: 640px;
+  margin-left: -40px;
+  margin-top: -10px;
+  position: fixed;
+  background-size: 640px, 640px;
+  background-repeat: no-repeat;
+  background-image: url("../../pag.qq.com/img/new_official_website/bgLogo.png");
+}
+body .showCase-container .caseWrapper {
+  width: 460px;
+  padding: 0;
+  margin: -200px auto 0 auto;
+}
+body .showCase-container .caseBox {
+  width: 100%;
+  height: 1300px;
+  display: flex;
+  align-items: center;
+}
+body .showCase-container .caseBox .case {
+  width: 100%;
+  position: sticky;
+  top: calc(100vh / 2 - 458px);
+}
+body .showCase-container .titleBox.pc {
+  display: none;
+}
+body .showCase-container .titleBox {
+  opacity: 1;
+}
+body .showCase-container .titleBox .mainTitle {
+  line-height: 48px;
+  font-size: 46px;
+  font-family: "PingFangSC-Semibold";
+  font-weight: 600;
+  margin-bottom: 24px;
+  display: none;
+}
+body .showCase-container .titleBox .subTitle {
+  line-height: 24px;
+  font-size: 18px;
+  font-family: "PingFangSC-Light" !important;
+  font-weight: 300;
+  white-space: nowrap;
+  margin-bottom: 40px;
+}
+body .showCase-container .videoBox {
+  width: 360px;
+  margin: 0 auto 48px auto;
+}
+body .showCase-container .video {
+  width: 360px;
+  height: 640px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.16);
+}
+body .showCase-container #progressBox {
+  position: fixed;
+  top: 50%;
+  margin-top: -184px;
+  display: flex;
+}
+body .showCase-container #progressUl {
+  margin: 0;
+  padding: 0;
+  z-index: 9;
+}
+body .showCase-container .mark {
+  height: 24px;
+  line-height: 24px;
+  list-style-type: none;
+  font-size: 16px;
+  color: #cccccc;
+  margin: 0 auto 32px auto;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in;
+}
+body .showCase-container .mark::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: #cccccc;
+  margin-right: 12px;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in;
+}
+body .showCase-container .mark::after {
+  content: "";
+  display: block;
+  width: 2px;
+  height: 46px;
+  background-color: #cccccc;
+  position: relative;
+  left: 4px;
+  top: -6px;
+}
+body .showCase-container .mark:hover {
+  color: #3333338a;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in;
+  cursor: pointer;
+}
+body .showCase-container .mark.active {
+  font-size: 18px;
+  color: #005ad9;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in;
+}
+body .showCase-container .mark.active::before {
+  background-color: #005ad9;
+}
+body .showCase-container .mark.active::after {
+  background: linear-gradient(180deg, #005ad9 0%, #cccccc 100%);
+}
+body .showCase-container .mark.near::after {
+  background: linear-gradient(180deg, #cccccc 0%, #005ad9 100%);
+}
+body .showCase-container #progressUl li:last-child {
+  margin: 0;
+}
+body .showCase-container #progressUl li:last-child::after {
+  display: none;
+}
+@keyframes clickMark {
+  40% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+body .product-page-container .product-main {
+  background-color: #fff;
+}
+body .product-page-container .section-one {
+  width: 100%;
+  height: 498px;
+  position: relative;
+}
+body .product-page-container .section-one .banner {
+  position: absolute;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+body .product-page-container .section-one .banner-bg {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url("../../pag.qq.com/img/commerce/banner_bg.png");
+  background-size: cover;
+}
+body .product-page-container .section-one .banner-item {
+  margin: 8px 0 0 8px;
+}
+body .product-page-container .section-one .banner {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: -8px 0 0 -8px;
+  width: calc(100% + 12px);
+}
+body .product-page-container .section-one .product-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+}
+body .product-page-container .section-one .product-nav img {
+  width: 140px;
+  height: 140px;
+  transition: transform 0.5s ease;
+  pointer-events: none;
+}
+body .product-page-container .section-one .product-nav:nth-last-child(1) {
+  margin-right: 0;
+}
+body .product-page-container .section-one .rectangle {
+  position: relative;
+  width: 228px;
+  height: 228px;
+  background: #ffffff;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: box-shadow 0.5s ease;
+}
+body .product-page-container .section-one .rectangle .title {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  text-align: center;
+  line-height: 32px;
+  width: 100%;
+  color: #24292e;
+}
+body .product-page-container .section-one .rectangle .divider {
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  left: 0px;
+  bottom: 0px;
+  background: rgba(0, 91, 217, 0.5);
+}
+body .product-page-container .section-one .rectangle:hover {
+  box-shadow: 0px 4px 16px rgba(10, 13, 80, 0.1);
+}
+body .product-page-container .section-one .rectangle:hover img {
+  transform: scale(1.143);
+}
+body .product-page-container .section {
+  padding-top: 80px;
+  padding-bottom: 100px;
+  position: relative;
+}
+body .product-page-container .section .anchor {
+  position: absolute;
+  top: -80px;
+}
+body .product-page-container .section .section-content {
+  width: 980px;
+  margin: 0 auto;
+}
+body .product-page-container .section .section-top {
+  height: 400px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  padding-right: 16px;
+}
+body .product-page-container .section .section-img {
+  width: 552px;
+  height: 400px;
+  flex-shrink: 0;
+  margin-right: 58px;
+}
+body .product-page-container .section .section-desc {
+  padding-top: 12px;
+}
+body .product-page-container .section .section-bottom {
+  display: flex;
+  padding: 0 16px;
+}
+body .product-page-container .section .section-desc .title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  margin-bottom: 24px;
+  white-space: nowrap;
+}
+body .product-page-container .section .section-desc .content {
+  margin-bottom: 48px;
+}
+body .product-page-container .section .section-desc .content p {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22px;
+  color: #000000;
+  font-weight: 400;
+  font-family: PingFangSC-Light !important;
+}
+body .product-page-container .section .section-desc .btn-group {
+  display: flex;
+  flex-direction: row-reverse;
+}
+body .product-page-container .section .section-desc .btn-group .btn.white {
+  margin-right: 16px;
+}
+body .product-page-container .section .section-middle {
+  height: 44px;
+  display: flex;
+}
+body .product-page-container .section .section-middle .material-type {
+  display: flex;
+  margin-right: 24px;
+  width: 219px;
+  height: 56px;
+  background: #f9fbff;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+body .product-page-container .section .section-middle .material-type .dot {
+  width: 6px;
+  height: 6px;
+  background: #005ad9;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+body .product-page-container .section .section-middle .material-type .title {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  color: #005ad9;
+}
+body .product-page-container .section .section-middle .material-type:nth-last-child(1) {
+  margin-right: 0;
+}
+body .product-page-container .section .section-middle .material-type:nth-child(2n) {
+  background: #ffffff;
+  border: 1px solid #f5f7fc;
+}
+body .product-page-container .card {
+  width: 316px;
+}
+body .product-page-container .section-two {
+  background: #ffffff;
+}
+body .product-page-container .section-two .section-bottom .card:nth-child(2) {
+  background: #ffffff;
+  border: 1px solid #f5f7fc;
+}
+body .product-page-container .section-three {
+  background: #fafafa;
+}
+body .product-page-container .section-three .section-bottom .card:nth-child(2) {
+  background: #ffffff;
+  border: 1px solid #f5f7fc;
+}
+body .product-page-container .section-four {
+  background: #ffffff;
+}
+body .product-page-container .section-four .section-bottom {
+  flex-wrap: wrap;
+}
+body .product-page-container .section-four .section-bottom .card:nth-child(1) {
+  background: #f9fbff;
+}
+body .product-page-container .section-four .section-bottom .card:nth-child(2) {
+  background: #ffffff;
+  border: 1px solid #f5f7fc;
+}
+body .product-page-container .section-four .section-bottom .card:nth-child(3) {
+  background: #ffffff;
+  border: 1px solid #f5f7fc;
+}
+body .product-page-container .section-four .section-bottom .card:nth-child(4) {
+  background: #f9fbff;
+}
+body .product-page-container .section-four .card {
+  width: 474px;
+}
+body .product-page-container .section-five {
+  background: #fafafa;
+}
+body .product-page-container .card {
+  width: 327px;
+  padding: 32px;
+  background: #ffffff;
+}
+body .product-page-container .card .title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  color: #245cd1;
+}
+body .product-page-container .card .divider {
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(180deg, #a1bff4 0%, #96baf8 100%);
+  margin: 24px 0 24px 0;
+}
+body .product-page-container .card .content {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: PingFangSC-Light !important;
+  text-align: justify;
+  hyphens: auto;
+}
+body .product-page-container .card:nth-child(2n+1) {
+  box-shadow: none;
+  background: #f9fbff;
+}
+body .product-page-container .tooltip-text {
+  position: relative;
+  cursor: pointer;
+}
+body .product-page-container .tooltip-text .tooltip {
+  padding: 20px;
+  position: absolute;
+  z-index: 9999;
+  background-image: url("../../pag.qq.com/img/commerce/tooltip_top_bg.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: #333333;
+  visibility: hidden;
+  width: 157px;
+  height: 180px;
+  bottom: 54px;
+  left: -16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body .product-page-container .tooltip-text:hover .tooltip {
+  visibility: visible;
+}
+body .product-page-container .tooltip-text .tooltip-img {
+  width: 100px;
+  height: 100px;
+}
+body .product-page-container .tooltip-text .tooltip-hit {
+  margin-top: 10px;
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+  white-space: nowrap;
+}
+body .feature-page-container .feature-main {
+  background-color: #fff;
+}
+body .feature-page-container .section-one {
+  width: 100%;
+  height: 380px;
+  position: relative;
+  margin-top: 30px;
+}
+body .feature-page-container .section-one .banner {
+  position: absolute;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+body .feature-page-container .section-one .banner .rectangle {
+  position: relative;
+  width: 360px;
+  height: 140px;
+  background: #ffffff;
+  margin-right: 12px;
+  border-radius: 16px 16px 0px 0px;
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+body .feature-page-container .section-one .banner .rectangle .title {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  text-align: center;
+  line-height: 32px;
+  width: 100%;
+  color: #245cd1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+body .feature-page-container .section-one .banner .rectangle .title p {
+  margin-bottom: 0;
+  padding: 0 20px;
+}
+body .feature-page-container .section-one .banner .rectangle .divider {
+  position: absolute;
+  width: 100%;
+  height: 8px;
+  left: 0px;
+  bottom: 0px;
+  background: rgba(0, 91, 217, 0.5);
+  transition: background-color 0.3s ease;
+}
+body .feature-page-container .section-one .banner .rectangle:hover {
+  box-shadow: 0px 4px 16px rgba(10, 13, 80, 0.1);
+}
+body .feature-page-container .section-one .banner .rectangle:nth-last-child(1) {
+  margin-right: 0;
+}
+body .feature-page-container .section-one .banner .rectangle:hover .title {
+  color: #005ad9;
+}
+body .feature-page-container .section-one .banner .rectangle:hover .divider {
+  background-color: #005ad9;
+}
+body .feature-page-container .section-one .banner-bg {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url("../../pag.qq.com/img/commerce/banner_bg.png");
+  background-size: cover;
+}
+body .feature-page-container .section-one .banner-item {
+  margin: 8px 0 0 8px;
+}
+body .feature-page-container .section-one .banner {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: -8px 0 0 -8px;
+  width: calc(100% + 12px);
+}
+body .feature-page-container .feature-banner {
+  position: absolute;
+  background-color: #fff;
+  z-index: 0;
+  height: 320px;
+  width: 100%;
+  margin-top: 30px;
+}
+body .feature-page-container .feature-banner .banner-bg {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url("../../pag.qq.com/img/commerce/banner_bg.png");
+}
+body .feature-page-container .feature-table {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+body .feature-page-container .feature-table .anchor {
+  position: absolute;
+  top: -80px;
+  left: 0;
+  width: 100%;
+}
+body .feature-page-container .feature-table .feature-table-header {
+  padding-top: 120px;
+  padding-bottom: 64px;
+}
+body .feature-page-container .feature-table .feature-table-header .logo {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .feature-page-container .feature-table .feature-table-header .logo .left-line {
+  width: 94px;
+  height: 1px;
+  background: linear-gradient(270.01deg, #245cd1 0%, rgba(36, 92, 209, 0) 100%);
+  border-radius: 2px;
+}
+body .feature-page-container .feature-table .feature-table-header .logo .right-line {
+  width: 94px;
+  height: 1px;
+  background: linear-gradient(270deg, #245cd1 0%, rgba(36, 92, 209, 0) 100%);
+  border-radius: 2px;
+  transform: rotate(-180deg);
+}
+body .feature-page-container .feature-table .feature-table-header .logo .title {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 45px;
+  text-align: center;
+  color: #245cd1;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+body .feature-page-container .feature-table .feature-table-content {
+  width: 980px;
+  margin: 0 auto;
+  border: 1px solid #cccccc;
+  border-radius: 16px;
+}
+body .feature-page-container .feature-table .table-header {
+  height: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f9fbff;
+  padding-right: 24px;
+  border-radius: 16px 16px 0 0;
+  width: 978px;
+}
+body .feature-page-container .feature-table .table-header .table-header-title {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  color: #24292e;
+  text-align: center;
+  width: 200px;
+  flex-shrink: 0;
+}
+body .feature-page-container .feature-table .table-header .table-header-title .table-title {
+  margin-left: 48px;
+  text-align: left;
+}
+body .feature-page-container .feature-table .table-header .table-header-name-title {
+  width: 48px;
+  flex: auto;
+  flex-shrink: 0;
+}
+body .feature-page-container .feature-table .table-header.sticky {
+  width: 980px;
+  border-radius: 0;
+  background: #ffffff;
+  position: sticky;
+  margin-left: -1px;
+  z-index: 1;
+}
+body .feature-page-container .feature-table .table-header.sticky::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  border: 1px solid #cccccc;
+  border-radius: 16px 16px 0 0;
+  background: #f9fbff;
+  z-index: -1;
+}
+body .feature-page-container .feature-table .table-group-header {
+  height: 62px;
+  display: flex;
+}
+body .feature-page-container .feature-table .table-group-header .table-group-header-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body .feature-page-container .feature-table .table-group-header .table-group-header-item .table-group-header-item-title {
+  margin-left: 8px;
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #8f8f8f;
+}
+body .feature-page-container .feature-table .table-group-header .table-group-header-item .table-group-header-item-title-en {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22px;
+  margin-left: 4px;
+  color: #8f8f8f;
+}
+body .feature-page-container .feature-table .table-group-header .table-group-header-item .table-group-header-item-icon {
+  width: 24px;
+  height: 24px;
+}
+body .feature-page-container .feature-table .table-group-header .table-group-header-name-item {
+  justify-content: start;
+  padding-left: 48px;
+  flex: 1;
+}
+body .feature-page-container .feature-table .table-row {
+  height: 62px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 24px;
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: #24292e;
+}
+body .feature-page-container .feature-table .table-row .table-row-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  flex-shrink: 0;
+}
+body .feature-page-container .feature-table .table-row .table-row-item .table-row-item-title {
+  font-size: 16px;
+  color: #333333;
+  margin-right: 8px;
+  margin-left: 48px;
+  max-width: 244px;
+  font-weight: 500;
+}
+body .feature-page-container .feature-table .table-row .table-row-item .table-row-item-title .table-row-item-icon-mobile {
+  display: none;
+}
+body .feature-page-container .feature-table .table-row .table-row-item .table-row-item-title .table-row-item-title-en {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 22px;
+  margin-left: 4px;
+  color: #24292e;
+}
+body .feature-page-container .feature-table .table-row .table-row-item .table-row-item-link {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  text-decoration-line: underline;
+  color: #245cd1;
+}
+body .feature-page-container .feature-table .table-row .table-row-name-item {
+  justify-content: start;
+  flex-shrink: 0;
+  width: 80px;
+  flex: auto;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text {
+  position: relative;
+  cursor: pointer;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text .tooltip {
+  padding: 20px;
+  position: absolute;
+  z-index: 9999;
+  background: #ffffff;
+  border: 1px solid #9bbdf7;
+  border-radius: 8px;
+  left: 30px;
+  visibility: hidden;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text .tooltip-content {
+  display: flex;
+  align-items: center;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text .tooltip-title {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333333;
+  margin-right: 5px;
+  width: fit-content;
+  white-space: nowrap;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text .tooltip-desc {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 22px;
+  color: #000000;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text .tooltip-desc-nowrap {
+  width: fit-content;
+  white-space: nowrap;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text .arrowLeft {
+  visibility: hidden;
+  left: 24.8px;
+  top: calc(50% - 6px);
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  border-left: 1px solid #9bbdf7;
+  border-bottom: 1px solid #9bbdf7;
+  background: #ffffff;
+  z-index: 99999;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text:hover .tooltip {
+  visibility: visible;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text:hover .arrowLeft {
+  visibility: visible;
+}
+body .feature-page-container .feature-table .table-row .tooltip-text::after {
+  content: "";
+  position: absolute;
+  width: 43px;
+  height: 62px;
+  left: -10px;
+  top: -21px;
+}
+body .feature-page-container .feature-table .table-row:last-child {
+  border-radius: 0 0px 16px 16px;
+}
+body .feature-page-container .feature-table .table-row:first-child {
+  border-radius: 16px 16px 0 0;
+}
+body .feature-page-container .feature-table .table-icon {
+  width: 20px;
+  height: 20px;
+}
+body .feature-page-container .feature-table .table-icon .table-icon-img {
+  width: 20px;
+  height: 20px;
+}
+body .feature-page-container .table-row-every:nth-child(2n) {
+  background: #f9fbff;
+}
+body .feature-page-container .feature-table-comparison {
+  padding-bottom: 120px;
+}
+body .feature-page-container .feature-table-comparison .table-header .table-header-title {
+  width: 160px;
+}
+body .feature-page-container .feature-table-comparison .table-header .table-header-title .table-title {
+  margin-left: 48px;
+  text-align: left;
+}
+body .feature-page-container .feature-table-comparison .table-header .table-header-name-title {
+  width: 316px;
+  flex: auto;
+  flex-shrink: 0;
+}
+body .feature-page-container .feature-table-comparison .table-row .table-row-item {
+  width: 160px;
+}
+body .feature-page-container .feature-table-comparison .table-row .table-row-name-item {
+  width: 316px;
+}
+body .feature-page-container .feature-table-ae .feature-table-body {
+  background: #ffffff;
+  border-radius: 0 0 16px 16px;
+}
+body .feature-page-container .feature-table-ae {
+  padding-top: 120px;
+  padding-bottom: 120px;
+  background: #fafafa;
+}
+body .feature-page-container .feature-table-ae .feature-table-header {
+  padding-top: 0;
+}
+body .feature-page-container .mobile-tip-module {
+  display: none;
+}
+body #faq blockquote {
+  color: #605600 !important;
+}
+body #faqLogo {
+  width: 640px;
+  height: 640px;
+  margin-left: -40px;
+  margin-top: -40px;
+  position: fixed;
+  background-size: 640px, 640px;
+  background-repeat: no-repeat;
+  background-image: url("../../pag.qq.com/img/new_official_website/bgLogo.png");
+}
+body #faqLogo::after {
+  content: "";
+  display: block;
+  width: 640px;
+  height: 640px;
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+  backdrop-filter: saturate(180%) blur(8px);
+  z-index: 9;
+}
+@keyframes star {
+  0% {
+    background-size: 18px;
+    background-position: 12.7% 46%;
+    font-size: 16px;
+  }
+  75% {
+    background-size: 30px;
+    background-position: 6.7% 40%;
+    font-size: 18px;
+  }
+  100% {
+    background-size: 18px;
+    background-position: 12.7% 46%;
+    font-size: 16px;
+  }
+}
+body #pdfViewer {
+  width: 980px;
+  height: 750px;
+  border-bottom: 6px solid #7a7a7a;
+}
+body #pdfDownload {
+  font-size: 14px;
+  font-family: "PingFangSC-Semibold" !important;
+  border-radius: 8px;
+  background-color: #005ad9;
+  color: #ffffff !important;
+  height: 40px;
+  width: 88px;
+  margin-bottom: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+body .nav-footer.footer-en {
+  display: none;
+}
+body .nav-footer.footer-cn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 148px;
+}
+body .nav-site.nav-site-internal {
+  opacity: 0;
+}
+body .nav-site.nav-site-internal.ready {
+  opacity: 1;
+}
+body .postHeaderTitle {
+  opacity: 0;
+}
+body .postHeaderTitle.ready {
+  opacity: 1;
+}
+body .downloads-container {
+  display: flex;
+}
+body .downloads-container ul, body .downloads-container ol {
+  margin: 0;
+  padding: 0;
+}
+body .downloads-container .downloads-container-content {
+  width: 100%;
+  height: 100%;
+  background: #fafafa;
+}
+body .downloads-container .downloads-container-content .sdk_content {
+  width: 1400px;
+  min-height: 500px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+body .downloads-container .downloads-container-content .sdk_list {
+  margin-bottom: 40px;
+  float: left;
+  width: 100%;
+}
+body .downloads-container .downloads-container-content .sdk_list h2 {
+  font-size: 20px;
+  color: #282828;
+  text-align: left;
+  font-weight: normal;
+  height: 30px;
+  line-height: 30px;
+}
+body .downloads-container .downloads-container-content .sdk_list span {
+  margin-right: 10px;
+}
+body .downloads-container .downloads-container-content .pid_ico,
+body .downloads-container .downloads-container-content .download_ico {
+  background-size: 20px auto;
+  background-image: url("../img/platform-sprite-map.png");
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+body .downloads-container .downloads-container-content .android_ico {
+  background-position: 0 -45px;
+  vertical-align: -1px;
+}
+body .downloads-container .downloads-container-content .ios_ico {
+  background-position: 0 -68px;
+  vertical-align: -3px;
+}
+body .downloads-container .downloads-container-content .unity_ico {
+  background-position: 0 0;
+  vertical-align: -3px;
+}
+body .downloads-container .downloads-container-content .cocos_ico {
+  background-position: 0 -22px;
+  vertical-align: -3px;
+}
+body .downloads-container .downloads-container-content .list {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+}
+body .downloads-container .downloads-container-content .sdk_title {
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+body .downloads-container .downloads-container-content .list .sdk_info {
+  float: left;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  width: 390px;
+  margin-right: 30px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+body .downloads-container .downloads-container-content .list .sdk_info:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+body .downloads-container .downloads-container-content .list .sdk_info:last-child {
+  margin-right: 0;
+}
+body .downloads-container .downloads-container-content .sdk_info_content {
+  padding: 25px 24px 20px;
+}
+body .downloads-container .downloads-container-content .sdk_info_content h3 {
+  font-size: 18px;
+  color: #282828;
+  line-height: 30px;
+  text-align: left;
+  font-weight: 500;
+  position: relative;
+}
+body .downloads-container .downloads-container-content .sdk_info_content h3 span {
+  display: block;
+}
+body .downloads-container .downloads-container-content .sdk_list .sdk_item {
+  font-size: 14px;
+  margin-right: 0;
+  margin-bottom: 10px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+body .downloads-container .downloads-container-content .sdk_info_content h4 {
+  font-size: 13px;
+  padding: 10px 0 5px 0;
+  font-weight: 500;
+}
+body .downloads-container .downloads-container-content .sdk_info_content .child_item {
+  padding-left: 15px;
+}
+body .downloads-container .downloads-container-content .sdk_info_content ol {
+  padding-left: 15px;
+}
+body .downloads-container .downloads-container-content .sdk_info_content ol li {
+  font-size: 14px;
+  color: #4c4c4c;
+  font-weight: 400;
+  line-height: 22px;
+  position: relative;
+  list-style-type: decimal;
+}
+body .downloads-container .downloads-container-content .sdk_history {
+  padding-top: 10px;
+}
+body .downloads-container .downloads-container-content .sdk_history a {
+  font-size: 14px;
+  color: #0000ee;
+  line-height: 22px;
+  font-weight: 400;
+}
+body .downloads-container .downloads-container-content .download_btn a {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  color: #4c4c4c;
+  width: 100%;
+  height: 48px;
+  line-height: 48px;
+  border-top: 1px solid #ebebeb;
+}
+body .downloads-container .downloads-container-content .download_ico {
+  background-position: 4px -106px;
+  display: inline-block;
+  vertical-align: -2px;
+  height: 14px;
+}
+body .downloads-container .downloads-container-content .download_btn a:hover {
+  background: #42a5f5;
+  border-top: 1px solid rgba(66, 164, 245, 0.3);
+  box-shadow: 0 6px 20px 0 rgba(66, 164, 245, 0.3);
+  color: #ffffff;
+}
+body .downloads-container .downloads-container-content .download_btn a:hover .download_ico {
+  background-position: 4px -89px;
+}
+body .downloads-container .downloads-container-content .mr {
+  margin-right: 30px;
+}
+
+html[lang=en] body {
+  min-width: 1434px;
+}
+html[lang=en] body .fixedHeaderContainer {
+  min-width: 1434px;
+}
+html[lang=en] body .download .wrap .pkg .pkg-download {
+  background-image: url("../img/new_official_website/pkg_download_en.png");
+}
+html[lang=en] body .nav-site.nav-site-internal {
+  opacity: 0;
+}
+html[lang=en] body .nav-site.nav-site-internal.ready {
+  opacity: 1;
+}
+html[lang=en] body .navPusher .usersContainer .container .wrapper .showcaseSection .logos > a .name {
+  height: 48px;
+  margin-bottom: 5px;
+}
+html[lang=en] body .navGroupCategoryTitle {
+  opacity: 0;
+}
+html[lang=en] body .navGroupCategoryTitle.ready {
+  opacity: 1;
+}
+html[lang=en] body .navItem {
+  opacity: 0;
+}
+html[lang=en] body .navItem.ready {
+  opacity: 1;
+}
+html[lang=en] body .table-row-item-title-en,
+html[lang=en] body .table-group-header-item-title-en {
+  display: none;
+}
+html[lang=en] body .feature-page-container .feature-table .table-row .tooltip-text .tooltip-desc {
+  white-space: normal;
+}
+html[lang=en] body .docs-prevnext .docs-prev:after {
+  content: "Previous";
+  text-transform: none;
+}
+html[lang=en] body .docs-prevnext .docs-next:after {
+  content: "Next";
+  text-transform: none;
+}
+html[lang=en] body .showCase-container .titleBox .mainTitle {
+  line-height: 46px;
+  font-size: 32px;
+  font-family: "PingFang SC";
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+html[lang=en] body .showCase-container #progressUl {
+  width: 380px;
+}
+html[lang=en] body .showCase-container .titleBox .subTitle {
+  line-height: 22px;
+  font-size: 16px;
+  font-family: "PingFang SC" !important;
+  font-weight: 300;
+  white-space: normal;
+}
+html[lang=en] body .product-page-container .section-one .rectangle .title {
+  height: 64px;
+}
+html[lang=en] body .nav-footer .tel {
+  display: none;
+}
+html[lang=en] body .nav-footer .qq-group {
+  display: none;
+}
+html[lang=en] body .nav-site.nav-site-internal li:nth-child(9) a {
+  width: auto;
+}
+html[lang=en] body .nav-site.nav-site-internal li:nth-child(6) {
+  right: 436px;
+}
+html[lang=en] body .nav-site.nav-site-internal li:nth-child(8) {
+  right: 156px;
+}
+html[lang=en] body .nav-site.nav-site-internal li:nth-child(7) {
+  right: 309px;
+}
+html[lang=en] body .feature-page-container .feature-table .table-header {
+  height: 96px;
+}
+html[lang=en] body .product-page-container .section-one .rectangle {
+  width: 308px;
+  height: 228px;
+}
+html[lang=en] body .homePageNavPusher.navPusher .docMainWrapper .titleContainer .titleContainerTitle .titleContainerTitleText {
+  font-size: 43px;
+  line-height: 48px;
+  margin-bottom: 36px;
+}
+html[lang=en] body .homePageNavPusher.navPusher .docMainWrapper .titleContainer .titleContainerTitle .titleContainerTitleContent {
+  font-size: 14px;
+  line-height: 20px;
+}
+html[lang=en] body .showCase-container .caseWrapper {
+  width: 550px;
+}
+html[lang=en] body .docMainWrapper #pdfDownload {
+  width: 130px;
+}
+
+body.separateOnPageNav .fixedHeaderContainer .headerWrapper.wrapper {
+  max-width: initial;
+}
+
+.languageDropdown {
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  background: #fff;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  overflow: hidden;
+  display: none;
+}
+.languageDropdown .dropdownItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  height: 48px;
+  cursor: pointer;
+}
+.languageDropdown .dropdownItem .title {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #24292e;
+}
+.languageDropdown .dropdownItem .divider {
+  margin: 0 8px;
+  width: 1px;
+  height: 100%;
+  background: #cccccc;
+}
+.languageDropdown .dropdownItem .content {
+  font-family: "PingFang SC";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
+  color: #24292e;
+  width: 72px;
+  text-align: left;
+}
+.languageDropdown .dropdownItem .icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  background-image: url("../img/commerce/icon_support.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: none;
+}
+.languageDropdown .dropdownItem.active .icon {
+  display: block;
+}
+.languageDropdown .dropdownItem:hover {
+  background: #fafafa;
+}
+
+.languageDropdown.show {
+  display: block;
+}
+
+/*# sourceMappingURL=pc.css.map */

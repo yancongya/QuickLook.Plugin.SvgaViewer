@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 82" role="img" aria-labelledby="title">
+  <title id="title">SVGA Viewer</title>
+  <defs><linearGradient id="purple" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#6b30cf"/><stop offset=".55" stop-color="#a54aef"/><stop offset="1" stop-color="#7034d1"/></linearGradient></defs>
+  <g fill="none" stroke="url(#purple)" stroke-width="3.7" stroke-linecap="round" stroke-linejoin="round" transform="translate(2 5) scale(1.02 1.05)">
+    <path d="M51 13C40 6 26 6 15 13 2 22 8 35 27 37l12 2c13 2 17 12 7 19-10 8-26 8-40 0"/>
+    <path d="m67 9 23 54 23-54"/>
+    <path d="M177 18c-9-8-18-11-29-11-19 0-32 13-32 28s13 28 32 28c13 0 22-5 29-13V36h-26"/>
+    <path d="m190 62 29-54 29 54M199 47h40"/>
+  </g>
+  <text x="257" y="68" fill="#34313b" font-family="Segoe UI Light, Helvetica Neue, Arial, sans-serif" font-size="61" font-weight="200" letter-spacing="-4">Viewer</text>
+</svg>

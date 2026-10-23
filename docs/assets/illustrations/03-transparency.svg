@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1068 720" role="img" aria-labelledby="title desc" data-run="paused">
+<title id="title">背景对比与音量控制</title><desc id="desc">SvgaViewer 功能示意；分层 SVG 操作场景与 AI 生成的 SVGA 动效示意素材，不是 Windows 实测截图。</desc>
+<defs>
+<linearGradient id="paper" x2="0" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#edf2fa"/></linearGradient>
+<linearGradient id="blue" x1=".2" y1="0" x2=".8" y2="1"><stop stop-color="#d59bff"/><stop offset=".46" stop-color="#8e42e8"/><stop offset="1" stop-color="#5d27bb"/></linearGradient>
+<linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a98bff"/><stop offset=".48" stop-color="#7161ee"/><stop offset="1" stop-color="#3444bd"/></linearGradient>
+<linearGradient id="mint" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#e2c4ff"/><stop offset=".5" stop-color="#b87af1"/><stop offset="1" stop-color="#7137ca"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#24273e"/><stop offset="1" stop-color="#101525"/></linearGradient>
+<linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff" stop-opacity=".75"/><stop offset=".4" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#cfa5fb" stop-opacity=".2"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#d6b2fa" stop-opacity=".4"/><stop offset="1" stop-color="#d6b2fa" stop-opacity="0"/></radialGradient>
+<filter id="shadow" x="-35%" y="-35%" width="180%" height="190%"><feDropShadow dx="0" dy="17" stdDeviation="18" flood-color="#162753" flood-opacity=".17"/></filter>
+<filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#12295a" flood-opacity=".12"/></filter>
+<pattern id="checker" width="32" height="32" patternUnits="userSpaceOnUse"><rect width="32" height="32" fill="#f4f5f8"/><path d="M0 0H16V16H0ZM16 16H32V32H16Z" fill="#dfe3ec"/></pattern>
+<pattern id="dark-checker" width="32" height="32" patternUnits="userSpaceOnUse"><rect width="32" height="32" fill="#202437"/><path d="M0 0H16V16H0ZM16 16H32V32H16Z" fill="#262b40"/></pattern>
+<symbol id="folder" viewBox="0 0 40 34"><path d="M2 6Q2 2 6 2H17L22 7H35Q39 7 39 12V29Q39 33 35 33H6Q2 33 2 29Z" fill="#ffcc62"/><path d="M1 12H39L35 31H4Z" fill="#ffe49a"/></symbol>
+<symbol id="svgafile" viewBox="0 0 48 58"><path d="M5 1H30L46 17V52Q46 57 41 57H5Q1 57 1 52V6Q1 1 5 1Z" fill="url(#blue)"/><path d="M30 1V17H46" fill="#ead4ff"/><path d="M14 42V25H24Q32 25 32 32T24 39H14M14 33H24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="cursor" viewBox="0 0 28 36"><path d="M3 1V29L10 23L16 34L21 31L15 20H25Z" fill="#fff" stroke="#263754" stroke-width="2"/></symbol>
+<symbol id="art" viewBox="0 0 320 300">
+  <ellipse cx="160" cy="279" rx="101" ry="11" fill="#11295c" opacity=".13"/>
+  <image href="./svga-ribbon-art.png" x="10" y="0" width="300" height="280" preserveAspectRatio="xMidYMid meet"/>
+</symbol>
+</defs><style>
+.play-progress{transform-box:fill-box;transform-origin:left;animation:progress 8s linear infinite}
+@keyframes progress{0%{transform:scaleX(.05)}90%,100%{transform:scaleX(1.6)}}
+text{font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.s{font-size:17px;fill:#8c96aa}.tiny{font-size:13px;fill:#8491a7}.label{font-size:20px;fill:#42506b}.white{fill:#edf4ff}.bold{font-weight:600}.mono{font-family:Consolas,monospace}
+:root:not([data-run="playing"]) *{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+.background-dark{animation:bg 10s infinite}.zoom-art{transform-origin:534px 335px;animation:zoom 10s ease-in-out infinite}
+@keyframes bg{0%,25%,85%,100%{opacity:0}40%,70%{opacity:1}}
+@keyframes zoom{0%,18%,85%,100%{transform:scale(1)}42%,65%{transform:translate(15px,0) scale(1.12)}}
+</style><rect x="24" y="42" width="1020" height="626" rx="24" fill="#f8f3ff" /><g filter="url(#shadow)"><rect x="88" y="98" width="893" height="479" rx="13" fill="#fff" /><rect x="88" y="98" width="893" height="46" rx="10" fill="#fff" /><rect x="88" y="120" width="893" height="24" rx="0" fill="#fff" /><text x="108" y="127" class="s" >检查透明背景 · 100%</text><text x="878" y="126" class="s" >−    □    ×</text><path d="M88 144H981" stroke="#e6eaf0"/><rect x="104" y="157" width="860" height="353" rx="5" fill="#fff" /><rect x="534" y="157" width="430" height="353" rx="0" fill="url(#checker)" /><g class="background-dark"><rect x="104" y="157" width="860" height="353" rx="5" fill="url(#dark-checker)" /></g><g opacity=".35" stroke="#8ca4c4" stroke-width="1" fill="none"><path d="M293 207h22M304 196v22M753 447h22M764 436v22"/><rect x="304" y="207" width="460" height="240" stroke-dasharray="5 7"/></g><g class="zoom-art"><image href="./svga-ribbon-art.png" x="349" y="169" width="370" height="329" preserveAspectRatio="xMidYMid meet" /></g><path d="M534 158V508" stroke="#fff" stroke-width="3"/><circle cx="534" cy="336" r="21" fill="#fff" stroke="#d5dfea"/><path d="M526 330L520 336L526 342M542 330L548 336L542 342" fill="none" stroke="#7739d8" stroke-width="2"/><text x="125" y="487" class="tiny" >LIGHT</text><text x="802" y="487" class="tiny" >TRANSPARENCY</text><rect x="104" y="518" width="860" height="43" rx="6" fill="#f7f9fc" /><text x="124" y="546" class="s" >背景</text><rect x="194" y="527" width="28" height="25" rx="5" fill="#fff" stroke="#d2d9e5"/><rect x="241" y="527" width="28" height="25" rx="5" fill="#202437" stroke="#d2d9e5"/><rect x="288" y="527" width="28" height="25" rx="5" fill="#d9e0ea" stroke="#d2d9e5"/><rect x="335" y="527" width="28" height="25" rx="5" fill="#c5b8fc" stroke="#d2d9e5"/><text x="716" y="546" class="s" >−     100%     +</text></g><g filter="url(#soft)"><rect x="313" y="598" width="444" height="50" rx="25" fill="#fff" /><text x="350" y="631" class="s bold" >音量滑块</text><text x="505" y="631" class="s" >调整声音，检查画面</text></g></svg>
