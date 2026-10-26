@@ -12,6 +12,8 @@
 
 **修复官方 ImageViewer 的 SVGA 1.x 空白预览问题**，完整支持 1.x（ZIP 格式）和 2.x（zlib 格式）。
 
+该修复已于 2026-09-01 通过 [PR #1994](https://github.com/QL-Win/QuickLook/pull/1994) 合并进官方 QuickLook 仓库，但**尚未随正式版发布**（最新正式版 4.5.0 发布于 2026-04-14）。在此之上，本插件还提供播放控制、背景切换、文件信息面板、导出 PNG 等预览体验。
+
 🌐 在线预览（GitHub Pages）：https://yancongya.github.io/QuickLook.Plugin.SvgaViewer/
 
 ### 功能特性
@@ -75,7 +77,9 @@ powershell -ExecutionPolicy Bypass -File Scripts/build.ps1
 
 ### 为什么需要这个插件？
 
-官方 QuickLook 的 ImageViewer 内置了 SVGA 支持，但使用 SVGAPlayer-Web-Lite（不支持 1.x 格式）。当预览 1.x 格式的 SVGA 文件时会出现空白预览或 `incorrect header check` 错误。
+> **2026-09-01 更新**：下面描述的 1.x 空白预览问题已经修好并合并进官方仓库（[PR #1994](https://github.com/QL-Win/QuickLook/pull/1994) —— `SvgaPlayer.Data.cs` 增加 ZIP 检测与 1.x JSON 解析，并引入 JSZip）。官方最新正式版 **4.5.0 还不包含**这个修复，所以今天要预览 1.x 文件，仍然需要本插件或自行构建的 QuickLook。
+
+（合并前的情况）官方 QuickLook 的 ImageViewer 内置了 SVGA 支持，但使用 SVGAPlayer-Web-Lite（不支持 1.x 格式）。当预览 1.x 格式的 SVGA 文件时会出现空白预览或 `incorrect header check` 错误。
 
 本插件：
 - 使用 SVGAPlayer-Web 原版（支持 1.x + 2.x）
@@ -91,6 +95,8 @@ powershell -ExecutionPolicy Bypass -File Scripts/build.ps1
 A [QuickLook](https://github.com/QL-Win/QuickLook) plugin for previewing SVGA (SVGA Animation) files.
 
 **Fixes the official ImageViewer's SVGA 1.x blank preview issue**, with full support for both 1.x (ZIP format) and 2.x (zlib format).
+
+The fix was merged into the official QuickLook repository on 2026-09-01 via [PR #1994](https://github.com/QL-Win/QuickLook/pull/1994), but it is **not in a released build yet** (the latest release, 4.5.0, shipped on 2026-04-14). On top of it, this plugin also adds playback controls, background switching, a file info panel, PNG export and more.
 
 🌐 Online preview (GitHub Pages): https://yancongya.github.io/QuickLook.Plugin.SvgaViewer/
 
@@ -155,7 +161,9 @@ powershell -ExecutionPolicy Bypass -File Scripts/build.ps1
 
 ### Why this plugin?
 
-The official QuickLook's ImageViewer has built-in SVGA support, but uses SVGAPlayer-Web-Lite which doesn't support 1.x format. When previewing 1.x SVGA files, you get blank preview or `incorrect header check` error.
+> **Update 2026-09-01**: the 1.x blank-preview issue described below has been fixed and merged upstream ([PR #1994](https://github.com/QL-Win/QuickLook/pull/1994) — ZIP detection plus 1.x JSON parsing in `SvgaPlayer.Data.cs`, with JSZip added). The latest official release, **4.5.0, does not include it yet**, so today you still need this plugin or a self-built QuickLook to preview 1.x files.
+
+(Before the merge) The official QuickLook's ImageViewer has built-in SVGA support, but uses SVGAPlayer-Web-Lite which doesn't support 1.x format. When previewing 1.x SVGA files, you get blank preview or `incorrect header check` error.
 
 This plugin:
 - Uses SVGAPlayer-Web original (supports 1.x + 2.x)
