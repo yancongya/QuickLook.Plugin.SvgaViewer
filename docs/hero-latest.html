@@ -133,20 +133,37 @@
 .pm-demo .file-mark img{width:20px;height:20px;object-fit:contain;border-radius:5px;display:block}
 
 html,body{margin:0;min-width:0;background:transparent;overflow:hidden}body{display:grid;place-items:center;min-height:407px;font-family:"Segoe UI","Microsoft YaHei",sans-serif}body[data-host-paused=true] *{animation-play-state:paused!important}
-html,body{width:100%;height:100%;margin:0!important;background:transparent!important;overflow:hidden}</style></head><body><div class="pm-demo" id="pm-stage" data-mode="svga"><div class="aura"></div><div class="artifact" id="pm-artifact" role="group" aria-label="SVGA 文件和预览播放器"><div class="page-content" id="pm-page"><div class="page-fold"></div><div class="file-mark"><img src="./assets/svga-logo.png" alt=""></div><div class="lines"><i></i><i></i><i></i></div><div class="type" id="pm-type">SVGA</div></div><div class="viewer-content" id="pm-viewer"><div class="viewer-head"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="filename" id="pm-filename">animated.svga</span></div><div class="scene"><div class="orbit"></div><div class="orbit two"></div><div class="orb"></div><div class="controls" id="pm-controls"><button class="play-control" id="pm-play" type="button" aria-label="暂停动画" title="播放/暂停"><svg viewBox="0 0 20 20"><path d="M5 4h3v12H5zm7 0h3v12h-3z"/></svg></button><input id="pm-timeline" class="timeline" type="range" min="0" max="8000" step="10" value="0" aria-label="动画时间轴"><span class="clock" id="pm-clock">00:00 / 00:08</span></div></div></div></div><div class="key-row"><button id="pm-key" class="key" type="button" aria-label="按住并松开 Space"><span>SPACE</span></button><span class="key-hint" id="pm-hint">按住松开：展开 / 收回</span></div><div class="status" id="pm-status" aria-live="polite">把鼠标移到文件上试试</div></div><script>
+.pm-demo .file-caption{position:absolute;left:50%;top:214px;transform:translateX(-50%);z-index:3;font-size:11px;line-height:15px;color:#637690;white-space:nowrap;transition:opacity .2s ease}
+.pm-demo .artifact.opened~.file-caption,.pm-demo .artifact.morphing~.file-caption,.pm-demo .artifact.closing~.file-caption{opacity:0}
+.pm-demo .artifact.selected{outline:2px solid var(--accent);outline-offset:3px}
+.pm-demo .artifact.selected~.file-caption{background:var(--accent);color:#fff;padding:1px 7px;border-radius:5px}
+.pm-demo .artifact.nudge{animation:pm-nudge .42s ease}
+@keyframes pm-nudge{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(-50%,-50%) rotate(-2.5deg)}55%{transform:translate(-50%,-50%) rotate(2.5deg)}80%{transform:translate(-50%,-50%) rotate(-1deg)}}
+.pm-demo .marquee{position:absolute;display:none;z-index:6;border:1px solid var(--accent);background:var(--tint);border-radius:3px;pointer-events:none}
+.pm-demo{user-select:none;-webkit-user-select:none}
+@media(prefers-reduced-motion:reduce){.pm-demo .artifact.nudge{animation:none!important}}
+html,body{width:100%;height:100%;margin:0!important;background:transparent!important;overflow:hidden}</style></head><body><div class="pm-demo" id="pm-stage" data-mode="svga"><div class="aura"></div><div class="artifact" id="pm-artifact" role="group" tabindex="0" aria-label="SVGA 文件和预览播放器"><div class="page-content" id="pm-page"><div class="page-fold"></div><div class="file-mark"><img src="./assets/svga-logo.png" alt=""></div><div class="lines"><i></i><i></i><i></i></div><div class="type" id="pm-type">SVGA</div></div><div class="viewer-content" id="pm-viewer"><div class="viewer-head"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="filename" id="pm-filename">animated.svga</span></div><div class="scene"><div class="orbit"></div><div class="orbit two"></div><div class="orb"></div><div class="controls" id="pm-controls"><button class="play-control" id="pm-play" type="button" aria-label="暂停动画" title="播放/暂停"><svg viewBox="0 0 20 20"><path d="M5 4h3v12H5zm7 0h3v12h-3z"/></svg></button><input id="pm-timeline" class="timeline" type="range" min="0" max="8000" step="10" value="0" aria-label="动画时间轴"><span class="clock" id="pm-clock">00:00 / 00:08</span></div></div></div></div><span class="file-caption" id="pm-caption">animated.svga</span><div class="marquee" id="pm-marquee" aria-hidden="true"></div><div class="key-row"><button id="pm-key" class="key" type="button" aria-label="按住并松开 Space"><span>SPACE</span></button><span class="key-hint" id="pm-hint">选择文件后点击空格键即可预览</span></div><div class="status" id="pm-status" aria-live="polite">把鼠标移到文件上试试</div></div><script>
 
 (()=>{
 const $=id=>document.getElementById(id);
-const stage=$('pm-stage'),art=$('pm-artifact'),key=$('pm-key'),status=$('pm-status'),hint=$('pm-hint');
-const page=$('pm-page'),viewer=$('pm-viewer');
+const stage=$('pm-stage'),art=$('pm-artifact'),key=$('pm-key'),status=$('pm-status');
+const page=$('pm-page'),viewer=$('pm-viewer'),marquee=$('pm-marquee');
 const FILE={w:104,h:130,r:11},PLAYER={w:332,h:242,r:18};
 let phase='file',held=null,heldPointer=null,animationId=0,raf=0;
+let selected=false,drag=null;
 let inView=true;
 if('IntersectionObserver' in window){
  new IntersectionObserver(es=>{inView=es.some(e=>e.isIntersecting)},{threshold:.2}).observe(stage);
 }
 const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
 function say(s){status.textContent=s}
+function select(v){
+ if(selected===v)return;
+ selected=v;art.classList.toggle('selected',v);
+ say(v?'文件已选中，按住 Space 后松开展开':'未选中文件');
+}
+function nudge(){art.classList.remove('nudge');void art.offsetWidth;art.classList.add('nudge')}
+function hits(a,b){return !(a.right<b.left||a.left>b.right||a.bottom<b.top||a.top>b.bottom)}
 function interpolate(a,b,t){return a+(b-a)*t}
 function easeOutBack(t){const s=1.28;return 1+Math.pow(t-1,3)*(s+1)+Math.pow(t-1,2)*s}
 function color(a,b,t){t=Math.max(0,Math.min(1,t));return '#'+a.map((v,i)=>Math.round(interpolate(v,b[i],t)).toString(16).padStart(2,'0')).join('')}
@@ -163,7 +180,6 @@ function apply(isOpen){
  art.classList.toggle('opened',isOpen);
  art.classList.remove('morphing','closing');
  art.setAttribute('aria-label',isOpen?'播放器，使用播放按钮和时间轴控制':'文件，仅通过 Space 键展开');
- hint.textContent=isOpen?'按下 Space 收回 · 播放器控制不触发变形':'按下并松开 Space：展开 / 收回';
  say(isOpen?'可播放、暂停与拖动时间轴 · Space 键收回':'鼠标悬停文件，或按住 Space 后松开');
 }
 function releaseKey(){
@@ -173,6 +189,7 @@ function releaseKey(){
 }
 function press(source,pid){
  if(phase==='transition'||held)return;
+ if(phase==='file'&&!selected){nudge();say('未选中文件，Space 无效');return;}
  held=source;heldPointer=pid!==undefined?pid:null;
  key.classList.remove('releasing');key.classList.add('down');stage.classList.add('holding');
  say(phase==='file'?'松开后文件变为播放器':'松开后播放器收回为文件');
@@ -234,6 +251,34 @@ function toggle(){
  }
  raf=requestAnimationFrame(step);
 }
+stage.addEventListener('pointerdown',e=>{
+ if(phase!=='file'||e.target.closest('.key-row'))return;
+ if(e.target.closest('#pm-artifact')){e.preventDefault();select(true);return;}
+ if(e.pointerType!=='mouse'||e.button!==0)return;
+ const r=stage.getBoundingClientRect();
+ drag={x0:e.clientX-r.left,y0:e.clientY-r.top,moved:false};
+});
+window.addEventListener('pointermove',e=>{
+ if(!drag)return;
+ const r=stage.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+ const dx=x-drag.x0,dy=y-drag.y0;
+ if(!drag.moved&&Math.hypot(dx,dy)<5)return;
+ drag.moved=true;
+ marquee.style.display='block';
+ marquee.style.left=Math.min(drag.x0,x)+'px';
+ marquee.style.top=Math.min(drag.y0,y)+'px';
+ marquee.style.width=Math.abs(dx)+'px';
+ marquee.style.height=Math.abs(dy)+'px';
+});
+window.addEventListener('pointerup',()=>{
+ if(!drag)return;
+ const box=marquee.getBoundingClientRect(),moved=drag.moved;
+ marquee.style.display='none';
+ drag=null;
+ select(moved?hits(box,art.getBoundingClientRect()):false);
+});
+art.addEventListener('focus',()=>{if(phase==='file')select(true)});
+art.addEventListener('animationend',()=>art.classList.remove('nudge'));
 key.addEventListener('pointerdown',e=>{
  if(e.pointerType==='mouse'&&e.button!==0)return;
  if(phase==='transition'||held)return;
