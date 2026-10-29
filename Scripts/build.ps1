@@ -1,4 +1,4 @@
-# Build and package QuickLook.Plugin.SvgaViewer
+﻿# Build and package QuickLook.Plugin.SvgaViewer
 param(
     [switch]$Clean,
     [switch]$SkipBuild,

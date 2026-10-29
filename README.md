@@ -176,6 +176,13 @@ This plugin:
 
 See [CHANGELOG.md](CHANGELOG.md)
 
+## Credits
+
+- [QuickLook](https://github.com/QL-Win/QuickLook) by QL-Win
+- [SVGAPlayer-Web](https://github.com/yyued/SVGAPlayer-Web) by YYED (yyued)
+- [JSZip](https://github.com/Stuk/jszip) by Stuart Knightley
+- UI design references official QuickLook plugins (VideoViewer, ImageViewer)
+
 ## License
 
 [GPL-3.0](LICENSE)

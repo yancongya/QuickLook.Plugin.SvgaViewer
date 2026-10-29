@@ -1,4 +1,4 @@
-# Quick packaging script (run from project root)
+﻿# Quick packaging script (run from project root)
 $ErrorActionPreference = "Stop"
 
 Remove-Item QuickLook.Plugin.SvgaViewer.qlplugin -ErrorAction SilentlyContinue

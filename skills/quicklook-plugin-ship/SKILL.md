@@ -55,11 +55,14 @@ Q3: 是否需要覆盖内置预览？
 ### Priority 策略
 
 ```csharp
-// 官方已支持但有 bug → 高优先级覆盖
-public int Priority => 10;
-
 // 官方不支持 → 默认优先级
 public int Priority => 0;
+
+// 官方已支持但有 bug → 覆盖内置
+// 官方内置插件 Priority 分布在 int.MinValue ~ 11（ImageViewer = 0，VideoViewer = -3），
+// 要可靠覆盖取 100（AlphaVideoViewer 覆盖内置 VideoViewer 的先例）；
+// SvgaViewer 用 10 覆盖 ImageViewer 也可行，但 100 更稳妥，不受官方数值变动影响
+public int Priority => 100;
 
 // 仅作为备选方案
 public int Priority => -1;
@@ -428,7 +431,7 @@ git push origin master --follow-tags
 禁止在 workflow 内联第二份打包/命名逻辑——SvgaViewer 曾因 workflow 从 PagViewer 复制，
 发布出错名资产 `QuickLook.Plugin.PagViewer.qlplugin`。
 
-workflow 关键要素（两插件仓已按此规范化）：
+workflow 关键要素（四个插件仓已按此规范化；PluginManager 为 WPF 原生面板，无 WebView2/Web 资产）：
 
 | 要素 | 约定 |
 |------|------|
@@ -445,6 +448,8 @@ workflow 关键要素（两插件仓已按此规范化）：
 配套约定：
 
 - `AGENTS.md` 必须含 `## CI / Release` 节，与 workflow 使用同一资产名（命名改点变了要同步）
+- `Scripts/*.ps1` 一律存 **UTF-8 with BOM**（PowerShell 5.1 读中文注释必需；四个插件仓已统一）
+- `update-version.ps1` 必须校验 `git describe` 输出格式：**仓库还没有任何 tag 时 `--always` 会回退打印 commit hash**，直接当 `AssemblyVersion` 写入会 CS7034 编译失败。四个插件仓已统一为 `^v?\d+(\.\d+){1,3}$`，不合法回退 `1.0.0`（hash 只进 InformationalVersion）
 - 落地页从 `releases/latest` 按 `.qlplugin` **扩展名**抓资产，workflow/资产改名不破坏落地页
 - 首次推 tag 前先在本地确认 `Scripts/build.ps1` 能产出正确名的 `.qlplugin`
 
@@ -466,6 +471,30 @@ workflow 关键要素（两插件仓已按此规范化）：
 ## Credits
 ## License
 ```
+
+### CHANGELOG 格式
+
+统一用简单版本节（三个插件仓一致；**不**采用 Keep a Changelog 的前言与长段散文）：
+
+```markdown
+# Changelog
+
+## [Unreleased]
+
+## [1.0.0] - 2026-08-25
+
+### Added
+- 一行一个变化，写用户可感知的行为
+
+### Changed
+- ...
+
+### Fixed
+- ...
+```
+
+- 未发布内容放 `## [Unreleased]`，发版时改成 `## [X.Y.Z] - YYYY-MM-DD` 并新建空的 Unreleased 节
+- 节名只用 `Added` / `Changed` / `Fixed` / `Removed`
 
 ## 阶段 6：官方曝光
 
@@ -536,9 +565,34 @@ I'd like to add my {Format} viewer plugin to the Available Plugins list.
 - HelloWorld 模板：https://github.com/QL-Win/QuickLook.Plugin.HelloWorld
 - PagViewer 参考：https://github.com/yancongya/QuickLook.Plugin.PagViewer
 - SvgaViewer 参考：https://github.com/yancongya/QuickLook.Plugin.SvgaViewer
+- AlphaVideoViewer：工作区本地仓库（远端待建），Priority=100 覆盖内置 VideoViewer、Media Foundation 解码像素自检的先例
+- PluginManager：工作区本地仓库（远端待建），WPF 原生面板（无 WebView2/Web 资产）插件的先例——SKILL 的 WebView2 方案之外的另一条路
 - IViewer 接口：https://github.com/QL-Win/QuickLook.Common/blob/master/Plugin/IViewer.cs
 
-## 实战经验（PagViewer + SvgaViewer 总结）
+## 实战经验（PagViewer + SvgaViewer + AlphaVideoViewer 总结）
+
+### 覆盖内置预览插件的先例（AlphaVideoViewer）
+
+```csharp
+// 1. Priority 取 100，稳超官方内置全集（int.MinValue ~ 11，VideoViewer = -3）
+public int Priority => 100;
+
+// 2. CanHandle 做双向判定，不抢不属于自己的文件：
+//    - 确认为普通文件（解码像素自检：两半都是彩色画面）→ return false，交回内置 VideoViewer
+//    - 命中目标特征、或无法定论（解码器缺失/单色歧义/解码失败）→ return true 接管（宁漏勿抢）
+// 3. CanHandle 的探测结果在 View 复用前缓存（60s TTL），避免重复解码
+```
+
+### 元数据优先，像素兜底（AlphaVideoViewer / 腾讯 VAP 先例）
+
+若格式容器携带官方对位/布局元数据（自定义盒、sidecar 字段等），**优先解析元数据直送渲染器，
+像素统计只做无元数据素材的兜底**——VAP 的 `vapc` 顶级盒里写着 `rgbFrame`/`aFrame` 精确坐标时，
+任何"半区 + 象限"网格拟合都是放着标准答案不抄、自己在猜。
+
+- 一次顶层扫描顺手抓元数据盒（它可能出现在 `moov` 之前，如 ftyp→vapc→free→moov→mdat），不要分两次开文件
+- 元数据命中即定案，跳过像素自检（像素自检是给没有元数据的压平素材用的）
+- 元数据坏了（坏 JSON / 缺字段 / 坐标越界）静默回退几何/像素路径，宁可多走兜底也不因脏数据误接管
+- 归一化矩形连同输出尺寸一起下发前端，合成器只负责"两个任意源矩形"，对位决策留在探测层
 
 ### WebView2 关键配置
 

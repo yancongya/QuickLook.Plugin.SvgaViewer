@@ -8,7 +8,7 @@
 
 - [ ] 官方插件列表中无同格式插件（或确认要覆盖的原因）
 - [ ] 有可用的 Web SDK / 原生渲染方案
-- [ ] 确认 Priority 值
+- [ ] 确认 Priority 值（覆盖内置用 100，默认 0）
 - [ ] 确认许可证（推荐 GPL-3.0）
 
 ---
@@ -24,6 +24,7 @@
 - [ ] `Translations.config` 存在且有中英翻译
 - [ ] `QuickLook.Plugin.Metadata.config` 描述正确
 - [ ] 脚本/CI 命名已替换（build.ps1、pack-zip.ps1、update-version.ps1、build.yml 的 `PLUGIN_NAME`、AGENTS.md）
+- [ ] `Scripts/*.ps1` 为 UTF-8 with BOM
 - [ ] 残留检查通过：脚本/workflow/源码中 `PagViewer` 为 0（skills/ 模板与参考链接除外）
 
 ---
@@ -34,6 +35,7 @@
 - [ ] `CanHandle` 检查扩展名
 - [ ] `CanHandle` 检查文件头魔字节
 - [ ] `CanHandle` 对目录返回 false
+- [ ] 格式若带官方布局/对位元数据，优先解析直送渲染器（像素自检只做兜底）
 - [ ] `Prepare` 设置合理的 PreferredSize
 - [ ] `View` 创建面板并设置 Content
 - [ ] `View` 设置 `IsBusy = false`
@@ -125,6 +127,7 @@
 
 ### 版本
 - [ ] `update-version.ps1` 能正确更新版本号
+- [ ] `update-version.ps1` 对无 tag 仓库回退 1.0.0（不把 `git describe --always` 的 commit hash 当版本号）
 - [ ] Git tag 格式为 `v{major}.{minor}.{patch}`
 
 ### GitHub
@@ -143,7 +146,8 @@
 - [ ] README 包含从源码构建
 - [ ] README 包含快捷键
 - [ ] README 包含项目结构
-- [ ] CHANGELOG 有版本记录
+- [ ] README 包含 Credits 节
+- [ ] CHANGELOG 采用统一版本节格式（见 SKILL.md）
 - [ ] LICENSE 文件存在（GPL-3.0）
 
 ---
