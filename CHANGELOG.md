@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-11-25
+
+### Changed
+- Unified monochrome spinning Loading indicator and localized initial loading text in `SvgaViewerPanel.xaml(.cs)`
+
 ## [1.1.0] - 2026-11-25
 
 ### Added
