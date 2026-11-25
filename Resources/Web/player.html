@@ -7,7 +7,7 @@
             --bg: #202020;
             --fg: #cccccc;
             --fg-alt: #888888;
-            --accent: #76b9ed;
+            --accent: #e0e0e0;
             --control-bg: rgba(30,30,30,0.92);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -69,7 +69,7 @@
         #topBar {
             position: absolute; top: 8px; right: 8px;
             display: flex; gap: 4px;
-            z-index: 20; opacity: 1; transition: opacity 0.3s;
+            z-index: 25; opacity: 1; transition: opacity 0.3s;
         }
         #topBar.hidden { opacity: 0; pointer-events: none; }
         #topBar .btn {
@@ -132,7 +132,7 @@
             position: absolute; bottom: 0; left: 0; right: 0;
             height: 32px; background: var(--control-bg);
             display: flex; align-items: center; padding: 0 8px;
-            opacity: 1; transition: opacity 0.3s ease; z-index: 10;
+            opacity: 1; transition: opacity 0.3s ease; z-index: 25;
         }
         #controls.hidden { opacity: 0; pointer-events: none; }
 
@@ -147,7 +147,7 @@
         .btn:active { background: rgba(255,255,255,0.15); }
         .btn.active { color: var(--accent); }
         .btn.pinned {
-            background: rgba(118,185,237,0.3);
+            background: rgba(255,255,255,0.18);
             color: var(--accent);
             box-shadow: inset 0 -2px 0 var(--accent);
         }
@@ -193,7 +193,7 @@
             background: var(--control-bg);
             display: flex; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.15s; z-index: 11;
+            transition: opacity 0.15s; z-index: 26;
         }
         #volumeLayer.show { opacity: 1; pointer-events: auto; }
         #volumeSlider {
@@ -213,21 +213,6 @@
             color: var(--fg-alt); font-size: 13px; z-index: 1;
         }
 
-        #info {
-            position: absolute; top: 8px; left: 8px;
-            color: var(--fg-alt); font-size: 11px;
-            font-family: 'Segoe UI', sans-serif;
-            pointer-events: none; opacity: 0;
-            transition: opacity 0.3s; z-index: 2;
-            line-height: 1.4;
-        }
-        #info.show { opacity: 1; }
-        #fpsDisplay {
-            font-family: 'Consolas', monospace;
-            font-weight: bold;
-            font-size: 11px;
-        }
-
         #toast {
             position: absolute; bottom: 44px; left: 50%;
             transform: translateX(-50%);
@@ -237,6 +222,233 @@
             opacity: 0; z-index: 30; transition: opacity 0.3s;
         }
         #toast.show { opacity: 1; }
+
+        /* Debug & playback options popup */
+        #optsMenu {
+            position: absolute; top: 36px; right: 8px; width: 224px;
+            background: var(--control-bg); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 6px; padding: 8px 10px; color: var(--fg); font-size: 11px;
+            display: none; flex-direction: column; gap: 7px; z-index: 22;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+        }
+        #optsMenu.show { display: flex; }
+        .opt-row { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+        .opt-row label { color: var(--fg-alt); font-size: 10px; white-space: nowrap; }
+        .opt-pills { display: flex; gap: 3px; flex-wrap: wrap; justify-content: flex-end; }
+        .opt-pill {
+            padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.15);
+            background: transparent; color: var(--fg-alt); font-size: 10px; cursor: pointer;
+        }
+        .opt-pill:hover { color: var(--fg); border-color: rgba(255,255,255,0.3); }
+        .opt-pill.active { background: rgba(255,255,255,0.16); color: var(--accent); border-color: var(--accent); }
+        .opt-chk { accent-color: var(--accent); cursor: pointer; }
+        .opt-range-inp {
+            width: 46px; padding: 2px 4px; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.18); border-radius: 3px;
+            color: var(--fg); font-size: 10px; text-align: center; outline: none;
+        }
+
+        /* Unified Info & Performance overlay (bottom-right, transparent panel, resizable from top-left) */
+        #perfOverlay {
+            position: absolute; bottom: 42px; right: 10px;
+            width: 256px; min-width: 216px; max-width: 420px;
+            min-height: 168px; max-height: calc(100% - 82px);
+            background: rgba(16, 16, 16, 0.16);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 6px; padding: 8px 10px;
+            color: #f4f4f4; font-size: 10px;
+            font-family: 'Segoe UI', sans-serif;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.95), 0 0 6px rgba(0,0,0,0.85);
+            z-index: 18; display: none;
+            flex-direction: column; overflow: hidden;
+            transition: background 0.18s ease;
+        }
+        #perfOverlay:hover { background: rgba(16, 16, 16, 0.44); }
+        #perfOverlay.show { display: flex; }
+        #perfDot {
+            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: #66bb6a; margin-right: 5px; vertical-align: middle;
+            box-shadow: 0 0 4px rgba(102,187,106,0.7);
+        }
+        #btnCopyPerf {
+            background: transparent; border: none; color: rgba(255,255,255,0.55);
+            cursor: pointer; font-size: 10px; padding: 1px 3px; border-radius: 3px;
+            font-family: 'Segoe MDL2 Assets', 'Segoe Fluent Icons';
+        }
+        #btnCopyPerf:hover { color: #ffffff; background: rgba(255,255,255,0.12); }
+        #perfResizeHandle {
+            position: absolute; top: 0; left: 0;
+            width: 12px; height: 12px; cursor: nwse-resize;
+            z-index: 3; opacity: 0.45; transition: opacity 0.15s;
+        }
+        #perfResizeHandle::before {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 6px; height: 6px;
+            border-top: 2px solid rgba(255,255,255,0.75);
+            border-left: 2px solid rgba(255,255,255,0.75);
+            border-top-left-radius: 1px;
+        }
+        #perfResizeL {
+            position: absolute; top: 12px; left: 0; bottom: 0; width: 6px;
+            cursor: ew-resize; z-index: 2;
+        }
+        #perfResizeT {
+            position: absolute; top: 0; left: 12px; right: 28px; height: 6px;
+            cursor: ns-resize; z-index: 2;
+        }
+        #perfOverlay:hover #perfResizeHandle { opacity: 1; }
+        #perfHeader {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 5px; cursor: grab; color: #d8d8d8;
+            font-size: 10px; font-weight: 600; flex-shrink: 0;
+            padding-left: 6px; gap: 6px;
+        }
+        #perfHeader:active { cursor: grabbing; }
+        #perfDragGrip {
+            font-size: 11px; color: rgba(255,255,255,0.45);
+            letter-spacing: -1px; cursor: grab; transition: color 0.15s;
+        }
+        #perfHeader:hover #perfDragGrip { color: #ffffff; }
+        #perfMetaGrid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 4px 8px; margin-bottom: 6px;
+            padding: 2px 2px 6px 2px; border-bottom: 1px solid rgba(255,255,255,0.18);
+            flex-shrink: 0;
+        }
+        .pm-cell { display: flex; flex-direction: column; min-width: 0; }
+        .pm-k { font-size: 9px; color: #cccccc; white-space: nowrap; }
+        .pm-v { font-size: 11px; font-weight: 600; color: #ffffff; font-family: 'Consolas', 'Segoe UI', monospace; white-space: nowrap; }
+        .pm-sub {
+            grid-column: 1 / -1; display: flex; justify-content: space-between;
+            font-size: 9px; color: #dcdcdc; padding-top: 2px;
+        }
+        #perfChart {
+            width: 100%; flex: 1; min-height: 28px; display: block;
+            background: transparent; border-radius: 2px;
+            margin-bottom: 4px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.9));
+        }
+        .perf-row {
+            display: grid; grid-template-columns: 46px 1fr 1fr 1fr;
+            gap: 2px; line-height: 1.45; flex-shrink: 0;
+            font-family: 'Consolas', 'Segoe UI', monospace;
+        }
+        .perf-row .p-name { color: #d0d0d0; font-family: 'Segoe UI', sans-serif; }
+        .perf-row .p-val { text-align: right; color: #ffffff; }
+
+        /* File structure single panel (independent, sortable, resizable, inline edit) */
+        #structPanel {
+            position: absolute; top: 36px; right: 8px; bottom: 42px;
+            width: 336px; min-width: 260px; max-width: 520px;
+            background: var(--control-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px; color: var(--fg); font-size: 11px;
+            z-index: 21; display: none; flex-direction: column;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+        }
+        #structPanel.show { display: flex; }
+        #structResizeL {
+            position: absolute; top: 0; left: 0; bottom: 0; width: 6px;
+            cursor: ew-resize; z-index: 3;
+        }
+        #structResizeL:hover { background: rgba(255,255,255,0.18); border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+        .struct-top {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0; font-weight: 600;
+        }
+        #structTitle { flex-shrink: 0; font-size: 12px; }
+        #structSearch {
+            flex: 1; min-width: 0; padding: 3px 8px;
+            background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 4px; color: var(--fg); font-size: 11px; outline: none;
+        }
+        #structSearch:focus { border-color: var(--accent); }
+        #btnStructClose {
+            width: 20px; height: 20px; border: none; background: transparent;
+            color: var(--fg-alt); cursor: pointer; border-radius: 4px;
+            display: flex; align-items: center; justify-content: center; font-size: 12px;
+            flex-shrink: 0;
+        }
+        #btnStructClose:hover { background: rgba(255,255,255,0.1); color: var(--fg); }
+        .struct-reset {
+            background: transparent; border: 1px solid rgba(255,255,255,0.2);
+            color: var(--fg-alt); border-radius: 4px; padding: 2px 6px;
+            font-size: 10px; cursor: pointer; flex-shrink: 0; white-space: nowrap;
+        }
+        .struct-reset:hover { color: var(--accent); border-color: var(--accent); }
+        .struct-header {
+            display: grid; grid-template-columns: 1fr 48px 66px 54px;
+            gap: 6px; padding: 6px 12px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 10px; color: var(--fg-alt); flex-shrink: 0;
+        }
+        .struct-col {
+            cursor: pointer; user-select: none; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+        .struct-col:hover { color: var(--fg); }
+        .struct-col.num { text-align: right; }
+        .struct-col.sorted { color: var(--accent); }
+        .struct-body {
+            flex: 1; overflow-y: auto; padding: 4px 6px;
+        }
+        .struct-body::-webkit-scrollbar { width: 4px; }
+        .struct-body::-webkit-scrollbar-track { background: transparent; }
+        .struct-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
+        .s-row {
+            display: grid; grid-template-columns: 1fr 48px 66px 54px;
+            gap: 6px; align-items: center; min-height: 26px; padding: 3px 6px;
+            border-radius: 5px; cursor: pointer; margin-bottom: 1px;
+            transition: background 0.12s;
+        }
+        .s-row:hover { background: rgba(255,255,255,0.07); }
+        .s-row.selected { background: rgba(255,255,255,0.16); color: #fff; }
+        .s-name {
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .s-type {
+            font-size: 9px; padding: 2px 5px; border-radius: 4px;
+            background: rgba(255,255,255,0.08); color: #b8c4d0;
+            text-align: center; white-space: nowrap; font-weight: 500;
+        }
+        .s-type.t-sprite { background: rgba(118,185,237,0.14); color: #e0e0e0; }
+        .s-type.t-image { background: rgba(78,201,176,0.14); color: #4ec9b0; }
+        .s-type.t-audio { background: rgba(218,112,214,0.15); color: #e28ce0; }
+        .s-num {
+            text-align: right; font-family: 'Consolas', monospace;
+            font-size: 10px; color: var(--fg-alt); white-space: nowrap;
+        }
+        .s-inline-edit {
+            padding: 6px 8px; margin: 2px 2px 4px 2px;
+            background: rgba(0,0,0,0.25); border-radius: 5px;
+            border-left: 2px solid var(--accent);
+            display: flex; flex-direction: column; gap: 5px;
+        }
+        .s-inline-row { display: flex; gap: 4px; align-items: center; }
+        .s-inline-edit input[type="text"] {
+            flex: 1; padding: 3px 6px; background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.18); border-radius: 4px;
+            color: var(--fg); font-size: 11px; outline: none; min-width: 0;
+        }
+        .s-inline-edit input[type="text"]:focus { border-color: var(--accent); }
+        .insp-btn {
+            padding: 3px 8px; background: rgba(255,255,255,0.16);
+            border: 1px solid var(--accent); border-radius: 4px;
+            color: var(--accent); cursor: pointer; font-size: 10px; white-space: nowrap;
+        }
+        .insp-btn:hover { background: rgba(255,255,255,0.24); }
+        .struct-footer {
+            padding: 6px 10px; border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 10px; color: var(--fg-alt); flex-shrink: 0;
+            display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+        }
+        .sf-tag {
+            padding: 1px 6px; border-radius: 3px;
+            background: rgba(255,255,255,0.07); color: var(--fg);
+            font-size: 10px; white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -246,11 +458,13 @@
             <canvas id="canvas"></canvas>
         </div>
         <div id="zoomInfo"></div>
-        <div id="info"></div>
         <div id="toast"></div>
 
         <div id="topBar">
-            <button class="btn" id="btnMeta" title="文件信息">
+            <button class="btn" id="btnStruct" title="文件结构 (F)">
+                <span class="icon">&#xE8FD;</span>
+            </button>
+            <button class="btn" id="btnMeta" title="文件信息与性能监控 (L)">
                 <span class="icon">&#xE946;</span>
             </button>
             <button class="btn" id="btnSave" title="保存为PNG">
@@ -259,8 +473,59 @@
             <button class="btn" id="btnBg" title="切换背景">
                 <span class="icon">&#xEF1F;</span>
             </button>
+            <button class="btn" id="btnOpts" title="播放与调试选项">
+                <span class="icon">&#xE713;</span>
+            </button>
         </div>
-        <div id="metaPanel"></div>
+        <div id="optsMenu">
+            <div class="opt-row"><label id="lblOptReverse">倒放</label><input type="checkbox" id="chkReverse" class="opt-chk"></div>
+            <div class="opt-row"><label id="lblOptFillMode">停帧模式</label><div class="opt-pills" id="grpFillMode"><button class="opt-pill active" data-val="Forward" id="optFwd">停在末帧</button><button class="opt-pill" data-val="Backward" id="optBwd">停在首帧</button></div></div>
+            <div class="opt-row"><label id="lblOptContentMode">填充模式</label><div class="opt-pills" id="grpContentMode"><button class="opt-pill active" data-val="AspectFit" id="optCmFit">适应</button><button class="opt-pill" data-val="AspectFill" id="optCmZoom">裁剪</button><button class="opt-pill" data-val="Fill" id="optCmFill">拉伸</button></div></div>
+            <div class="opt-row">
+                <label id="lblOptRange">区间播放</label>
+                <div class="opt-pills">
+                    <input type="number" id="rngStart" class="opt-range-inp" min="0" value="0">
+                    <span style="color:var(--fg-alt)">-</span>
+                    <input type="number" id="rngEnd" class="opt-range-inp" min="0" value="0">
+                </div>
+            </div>
+            <div class="opt-row" style="justify-content:flex-end;gap:4px">
+                <button class="insp-btn" id="btnApplyRange">应用</button>
+                <button class="insp-btn" id="btnResetRange">全片</button>
+            </div>
+        </div>
+        <div id="structPanel">
+            <div id="structResizeL"></div>
+            <div class="struct-top">
+                <span id="structTitle">文件结构</span>
+                <input type="text" id="structSearch" placeholder="搜索键名...">
+                <button class="struct-reset" id="btnResetDynTop">重置动态元素</button>
+                <button id="btnStructClose" title="关闭">&#x2715;</button>
+            </div>
+            <div class="struct-header" id="structHeader">
+                <div class="struct-col" data-sort="name" id="colName">名称 / 键名</div>
+                <div class="struct-col" data-sort="type" id="colType">类型</div>
+                <div class="struct-col num" data-sort="size" id="colSize">尺寸</div>
+                <div class="struct-col num" data-sort="bytes" id="colBytes">大小</div>
+            </div>
+            <div class="struct-body" id="structBody"></div>
+            <div class="struct-footer" id="structFooter">提示：点击表头可排序，双击行可替换图片/文本</div>
+        </div>
+        <div id="perfOverlay">
+            <div id="perfResizeHandle"></div>
+            <div id="perfResizeL"></div>
+            <div id="perfResizeT"></div>
+            <div id="perfHeader">
+                <span><span id="perfDot"></span><span id="perfTitle">文件信息与性能</span></span>
+                <span id="perfFrameLabel">0 / 0</span>
+                <button id="btnCopyPerf" title="复制摘要">&#xE8C8;</button>
+                <span id="perfDragGrip">&#x22EE;&#x22EE;</span>
+            </div>
+            <div id="perfMetaGrid"></div>
+            <canvas id="perfChart" width="232" height="48"></canvas>
+            <div class="perf-row"><span class="p-name" id="pFpsLabel">帧率</span><span class="p-val" id="pFpsCur">0</span><span class="p-val" id="pFpsAvg">平均 0</span><span class="p-val" id="pFpsMin">最低 0</span></div>
+            <div class="perf-row"><span class="p-name" id="pFlushLabel">帧耗时</span><span class="p-val" id="pFlushCur">0ms</span><span class="p-val" id="pFlushAvg">平均 0</span><span class="p-val" id="pFlushMax">最高 0</span></div>
+        </div>
         <div id="colorPicker">
             <div class="colorSwatches">
                 <div class="swatch" data-bg="default" style="background:var(--bg)" title="默认"></div>
@@ -274,6 +539,12 @@
         <div id="controls">
             <button class="btn" id="btnPlayPause" title="播放 / 暂停">
                 <span class="icon">&#xE768;</span>
+            </button>
+            <button class="btn" id="btnPrevFrame" title="上一帧">
+                <span class="icon">&#xE76B;</span>
+            </button>
+            <button class="btn" id="btnNextFrame" title="下一帧">
+                <span class="icon">&#xE76C;</span>
             </button>
             <button class="btn active" id="btnLoop" title="循环">
                 <span class="icon">&#xE777;</span>
@@ -307,9 +578,14 @@
             'BTN_PlayPause': {zh:'播放 / 暂停',en:'Play / Pause'},
             'BTN_Loop': {zh:'循环',en:'Loop'},
             'BTN_Volume': {zh:'音量',en:'Volume'},
-            'BTN_Meta': {zh:'文件信息',en:'Info'},
+            'BTN_Meta': {zh:'文件信息与性能监控 (L)',en:'Info & Performance (L)'},
             'BTN_Save': {zh:'保存为PNG',en:'Save as PNG'},
             'BTN_Background': {zh:'切换背景',en:'Background'},
+            'BTN_PrevFrame': {zh:'上一帧',en:'Previous frame'},
+            'BTN_NextFrame': {zh:'下一帧',en:'Next frame'},
+            'BTN_Struct': {zh:'文件结构 (F)',en:'File Structure (F)'},
+            'TAB_Structure': {zh:'文件结构',en:'File Structure'},
+            'TAB_Inspector': {zh:'图层详情',en:'Layer Inspector'},
             'BG_Default': {zh:'默认',en:'Default'},
             'BG_Checker': {zh:'棋盘格',en:'Checkerboard'},
             'BG_White': {zh:'白色',en:'White'},
@@ -328,7 +604,57 @@
             'META_Frames': {zh:'总帧数',en:'Frames'},
             'META_FPS': {zh:'帧率',en:'FPS'},
             'META_Sprites': {zh:'精灵数',en:'Sprites'},
-            'META_Version': {zh:'版本',en:'Version'}
+            'META_Images': {zh:'图片数',en:'Images'},
+            'META_Version': {zh:'版本',en:'Version'},
+            'META_Duration': {zh:'时长',en:'Duration'},
+            'META_FileSize': {zh:'文件大小',en:'File Size'},
+            'META_Memory': {zh:'资源内存',en:'Memory'},
+            'META_Audios': {zh:'音频数',en:'Audios'},
+            'PERF_Title': {zh:'文件信息与性能',en:'Info & Performance'},
+            'PERF_FPS': {zh:'帧率',en:'FPS'},
+            'PERF_FrameTime': {zh:'帧耗时',en:'Frame'},
+            'PERF_Avg': {zh:'平均',en:'AVG'},
+            'PERF_Min': {zh:'最低',en:'MIN'},
+            'PERF_Max': {zh:'最高',en:'MAX'},
+            'TREE_Sprites': {zh:'精灵图层',en:'Sprites'},
+            'TREE_Images': {zh:'图片资源',en:'Images'},
+            'TREE_Audios': {zh:'音频轨道',en:'Audios'},
+            'INSP_Empty': {zh:'点击文件结构中的精灵或图片查看详情并测试动态替换',en:'Select a sprite or image in File Structure to inspect or test dynamic replacement'},
+            'INSP_Key': {zh:'资源键',en:'Key'},
+            'INSP_ImageKey': {zh:'图片键',en:'Image Key'},
+            'INSP_MatteKey': {zh:'遮罩键',en:'Matte Key'},
+            'INSP_KeyFrames': {zh:'关键帧',en:'Keyframes'},
+            'INSP_Size': {zh:'尺寸',en:'Size'},
+            'INSP_Bytes': {zh:'大小',en:'Bytes'},
+            'INSP_ReplaceImage': {zh:'替换图片...',en:'Replace Image...'},
+            'INSP_ApplyText': {zh:'应用动态文本',en:'Apply Text'},
+            'INSP_ResetDynamic': {zh:'重置动态元素',en:'Reset Dynamic'},
+            'TOAST_ImageUpdated': {zh:'图片已替换',en:'Image replaced'},
+            'TOAST_TextUpdated': {zh:'文本已更新',en:'Text updated'},
+            'TOAST_DynamicReset': {zh:'已重置动态元素',en:'Dynamic elements reset'},
+            'COL_Name': {zh:'名称 / 键名',en:'Name / Key'},
+            'COL_Type': {zh:'类型',en:'Type'},
+            'COL_Size': {zh:'尺寸',en:'Size'},
+            'COL_Bytes': {zh:'大小',en:'Bytes'},
+            'TYPE_Sprite': {zh:'精灵',en:'Sprite'},
+            'TYPE_Image': {zh:'图片',en:'Image'},
+            'TYPE_Audio': {zh:'音频',en:'Audio'},
+            'STRUCT_Hint': {zh:'提示：点击表头可排序，双击行可替换图片/文本',en:'Tip: Click headers to sort, double-click row to edit'},
+            'STRUCT_Search': {zh:'搜索键名...',en:'Filter by key...'},
+            'BTN_CopyMeta': {zh:'复制摘要',en:'Copy summary'},
+            'BTN_Opts': {zh:'播放与调试选项',en:'Playback & Debug Options'},
+            'OPT_Reverse': {zh:'倒放',en:'Reverse'},
+            'OPT_FillMode': {zh:'停帧模式',en:'Fill Mode'},
+            'OPT_Forward': {zh:'停在末帧',en:'Forward'},
+            'OPT_Backward': {zh:'停在首帧',en:'Backward'},
+            'OPT_ContentMode': {zh:'填充模式',en:'Content Mode'},
+            'OPT_Range': {zh:'区间播放',en:'Frame Range'},
+            'OPT_ApplyRange': {zh:'应用',en:'Apply'},
+            'OPT_ResetRange': {zh:'全片',en:'Full'},
+            'SCALE_Fit': {zh:'适应',en:'Fit'},
+            'SCALE_Zoom': {zh:'裁剪',en:'Zoom'},
+            'SCALE_Fill': {zh:'拉伸',en:'Fill'},
+            'INSP_TextPlaceholder': {zh:'输入替换文本...',en:'Enter text...'}
         };
         var lang = (navigator.language || 'zh').startsWith('zh') ? 'zh' : 'en';
         var _t = _defaultT;
@@ -343,9 +669,36 @@
         var btnLoop = document.getElementById('btnLoop');
         var btnMute = document.getElementById('btnMute');
         var btnBg = document.getElementById('btnBg');
+        var btnOpts = document.getElementById('btnOpts');
+        var optsMenu = document.getElementById('optsMenu');
         var btnMeta = document.getElementById('btnMeta');
         var btnSave = document.getElementById('btnSave');
-        var metaPanel = document.getElementById('metaPanel');
+        var btnPrevFrame = document.getElementById('btnPrevFrame');
+        var btnNextFrame = document.getElementById('btnNextFrame');
+        var btnStruct = document.getElementById('btnStruct');
+        var structPanel = document.getElementById('structPanel');
+        var structBody = document.getElementById('structBody');
+        var structTitle = document.getElementById('structTitle');
+        var structSearch = document.getElementById('structSearch');
+        var btnStructClose = document.getElementById('btnStructClose');
+        var structResizeL = document.getElementById('structResizeL');
+        var btnResetDynTop = document.getElementById('btnResetDynTop');
+        var structFooter = document.getElementById('structFooter');
+        var colName = document.getElementById('colName');
+        var colType = document.getElementById('colType');
+        var colSize = document.getElementById('colSize');
+        var colBytes = document.getElementById('colBytes');
+        var perfOverlay = document.getElementById('perfOverlay');
+        var perfHeader = document.getElementById('perfHeader');
+        var perfMetaGrid = document.getElementById('perfMetaGrid');
+        var perfChart = document.getElementById('perfChart');
+        var perfFrameLabel = document.getElementById('perfFrameLabel');
+        var perfTitle = document.getElementById('perfTitle');
+        var perfDot = document.getElementById('perfDot');
+        var btnCopyPerf = document.getElementById('btnCopyPerf');
+        var pFpsLabel = document.getElementById('pFpsLabel');
+        var pFlushLabel = document.getElementById('pFlushLabel');
+        var zoomInfoEl = document.getElementById('zoomInfo');
         var colorPicker = document.getElementById('colorPicker');
         var customColor = document.getElementById('customColor');
         var volumeIcon = document.getElementById('volumeIcon');
@@ -355,19 +708,30 @@
         var progressFill = document.getElementById('progressFill');
         var progressThumb = document.getElementById('progressThumb');
         var timeEl = document.getElementById('time');
-        var infoEl = document.getElementById('info');
         var toastEl = document.getElementById('toast');
 
         var player = null;
         var parser = null;
         var svgaData = null;
         var isPlaying = false, isLooping = true, isDragging = false;
-        var totalFrames = 0, fps = 20, currentFrame = 0;
+        var totalFrames = 0, fps = 20, currentFrame = 0, fileSize = 0;
         var hideTimer = null;
         var volume = 1.0;
         var isMuted = false;
         var svgaMeta = null;
         var currentFps = 0;
+        var perfVisible = false;
+        var structVisible = false;
+        var perfHistory = [];
+        var PERF_MAX_SAMPLES = 64;
+        var perfDrag = { active: false, startX: 0, startY: 0, origLeft: 0, origTop: 0 };
+        var perfResize = { mode: '', startX: 0, startY: 0, origW: 0, origH: 0, rightX: 0, bottomY: 0 };
+        var perfResizeHandle = document.getElementById('perfResizeHandle');
+        var perfResizeL = document.getElementById('perfResizeL');
+        var perfResizeT = document.getElementById('perfResizeT');
+        var SAFE_TOP = 36, SAFE_BOTTOM = 42, SAFE_SIDE = 8, MIN_PERF_W = 216, MIN_PERF_H = 168;
+        var selectedItem = null;
+        var structNodeList = [];
 
         window.applyI18n = function() {
             lang = window.__lang || lang;
@@ -378,12 +742,35 @@
             btnMeta.title = T('BTN_Meta');
             btnSave.title = T('BTN_Save');
             btnBg.title = T('BTN_Background');
+            if (btnPrevFrame) btnPrevFrame.title = T('BTN_PrevFrame');
+            if (btnNextFrame) btnNextFrame.title = T('BTN_NextFrame');
+            if (btnStruct) btnStruct.title = T('BTN_Struct');
+            if (structTitle) structTitle.textContent = T('TAB_Structure');
+            if (structSearch) structSearch.placeholder = T('STRUCT_Search');
+            if (btnResetDynTop) btnResetDynTop.textContent = T('INSP_ResetDynamic');
+            if (structFooter && !selectedItem) structFooter.textContent = T('STRUCT_Hint');
+            if (perfTitle) perfTitle.textContent = T('PERF_Title');
+            if (btnCopyPerf) btnCopyPerf.title = T('BTN_CopyMeta');
+            if (btnOpts) btnOpts.title = T('BTN_Opts');
+            var elMap = {
+                lblOptReverse: 'OPT_Reverse', lblOptFillMode: 'OPT_FillMode', optFwd: 'OPT_Forward',
+                optBwd: 'OPT_Backward', lblOptContentMode: 'OPT_ContentMode', lblOptRange: 'OPT_Range',
+                btnApplyRange: 'OPT_ApplyRange', btnResetRange: 'OPT_ResetRange',
+                optCmFit: 'SCALE_Fit', optCmZoom: 'SCALE_Zoom', optCmFill: 'SCALE_Fill'
+            };
+            for (var eid in elMap) { var e = document.getElementById(eid); if (e) e.textContent = T(elMap[eid]); }
+            if (pFpsLabel) pFpsLabel.textContent = T('PERF_FPS');
+            if (pFlushLabel) pFlushLabel.textContent = T('PERF_FrameTime');
             document.querySelector('.swatch[data-bg="default"]').title = T('BG_Default');
             document.querySelector('.swatch[data-bg="checker"]').title = T('BG_Checker');
             document.querySelector('.swatch[data-bg="white"]').title = T('BG_White');
             document.querySelector('.swatch[data-bg="black"]').title = T('BG_Black');
             customColor.title = T('BG_Custom');
             statusEl.textContent = T('STATUS_Loading');
+            if (svgaMeta) {
+                updateMetaPanel();
+                refreshStructureTree();
+            }
         };
         applyI18n();
 
@@ -396,55 +783,159 @@
             toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 1500);
         }
 
-        // --- Metadata ---
-        function updateMetaPanel() {
-            if (!svgaMeta) return;
-            
-            var memoryStr = svgaMeta.memory ? (svgaMeta.memory / 1024 / 1024).toFixed(2) + ' MB' : '-';
-            
-            var html = 
-                '<div class="meta-row"><span class="label">' + T('META_Version') + '</span><span class="value">' + (svgaMeta.version || '-') + '</span></div>' +
-                '<div class="meta-row"><span class="label">' + T('META_FPS') + '</span><span class="value">' + (svgaMeta.fps || '-') + '</span></div>' +
-                '<div class="meta-row"><span class="label">' + T('META_Frames') + '</span><span class="value">' + (svgaMeta.frames || '-') + '</span></div>' +
-                '<div class="meta-row"><span class="label">' + T('META_Width') + '×' + T('META_Height') + '</span><span class="value">' + (svgaMeta.width || '-') + '×' + (svgaMeta.height || '-') + '</span></div>' +
-                '<div class="meta-row"><span class="label">' + T('META_Sprites') + '</span><span class="value">' + (svgaMeta.sprites || '-') + '</span></div>' +
-                '<div class="meta-row"><span class="label">' + T('META_Images') + '</span><span class="value">' + (svgaMeta.images || '-') + '</span></div>' +
-                '<div class="meta-row"><span class="label">Memory</span><span class="value">' + memoryStr + '</span></div>';
-            
-            // Add image details in compact grid
-            if (svgaMeta.imageDetails && svgaMeta.imageDetails.length > 0) {
-                html += '<hr>';
-                html += '<div class="image-grid">';
-                svgaMeta.imageDetails.forEach(function(img) {
-                    html += '<div class="image-item"><span class="label">' + img.key + '</span> ' + img.width + '×' + img.height + '</div>';
-                });
-                html += '</div>';
+        // --- Unified Info & Performance Overlay ---
+        function setPerfVisible(show) {
+            perfVisible = show;
+            perfOverlay.classList.toggle('show', perfVisible);
+            if (perfVisible) { clampPerfOverlay(); drawPerfChart(); }
+        }
+
+        function clampPerfOverlay() {
+            if (!perfOverlay || !perfVisible) return;
+            var cw = document.documentElement.clientWidth;
+            var ch = document.documentElement.clientHeight;
+            var availH = Math.max(100, ch - SAFE_TOP - SAFE_BOTTOM);
+            var rect = perfOverlay.getBoundingClientRect();
+            if (rect.width === 0) return;
+            var w = Math.max(MIN_PERF_W, Math.min(rect.width, Math.max(MIN_PERF_W, cw - SAFE_SIDE * 2)));
+            var h = Math.min(Math.max(rect.height, MIN_PERF_H), availH);
+            perfOverlay.style.width = w + 'px';
+            if (perfOverlay.style.height) perfOverlay.style.height = h + 'px';
+            if (perfOverlay.style.left && perfOverlay.style.left !== 'auto') {
+                var curH = perfOverlay.getBoundingClientRect().height;
+                var l = Math.max(SAFE_SIDE, Math.min(cw - w - SAFE_SIDE, parseFloat(perfOverlay.style.left) || rect.left));
+                var t = Math.max(SAFE_TOP, Math.min(ch - curH - SAFE_BOTTOM, parseFloat(perfOverlay.style.top) || rect.top));
+                perfOverlay.style.left = l + 'px';
+                perfOverlay.style.top = t + 'px';
+            } else {
+                var curH2 = perfOverlay.getBoundingClientRect().height;
+                var r = Math.max(SAFE_SIDE, Math.min(cw - w - SAFE_SIDE, parseFloat(perfOverlay.style.right) || 10));
+                var b = Math.max(SAFE_BOTTOM, Math.min(ch - curH2 - SAFE_TOP, parseFloat(perfOverlay.style.bottom) || SAFE_BOTTOM));
+                perfOverlay.style.right = r + 'px';
+                perfOverlay.style.bottom = b + 'px';
             }
-            
-            metaPanel.innerHTML = html;
+        }
+
+        function startPerfResize(mode, e) {
+            if (e.button !== 0) return;
+            e.stopPropagation();
+            e.preventDefault();
+            var rect = perfOverlay.getBoundingClientRect();
+            var cw = document.documentElement.clientWidth;
+            var ch = document.documentElement.clientHeight;
+            var safeBottomEdge = Math.min(rect.bottom, ch - SAFE_BOTTOM);
+            perfOverlay.style.left = 'auto';
+            perfOverlay.style.top = 'auto';
+            perfOverlay.style.right = Math.max(SAFE_SIDE, cw - rect.right) + 'px';
+            perfOverlay.style.bottom = Math.max(SAFE_BOTTOM, ch - safeBottomEdge) + 'px';
+            perfResize.mode = mode;
+            perfResize.startX = e.clientX;
+            perfResize.startY = e.clientY;
+            perfResize.origW = rect.width;
+            perfResize.origH = rect.height;
+            perfResize.rightX = rect.right;
+            perfResize.bottomY = safeBottomEdge;
+        }
+        if (perfResizeHandle) perfResizeHandle.addEventListener('mousedown', function(e) { startPerfResize('nw', e); });
+        if (perfResizeL) perfResizeL.addEventListener('mousedown', function(e) { startPerfResize('w', e); });
+        if (perfResizeT) perfResizeT.addEventListener('mousedown', function(e) { startPerfResize('n', e); });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!perfResize.mode) return;
+            var maxW = Math.min(420, perfResize.rightX - SAFE_SIDE);
+            var maxH = Math.min(340, perfResize.bottomY - SAFE_TOP);
+            if (perfResize.mode === 'nw' || perfResize.mode === 'w') {
+                var newW = Math.max(MIN_PERF_W, Math.min(maxW, perfResize.origW + (perfResize.startX - e.clientX)));
+                perfOverlay.style.width = newW + 'px';
+            }
+            if (perfResize.mode === 'nw' || perfResize.mode === 'n') {
+                var newH = Math.max(MIN_PERF_H, Math.min(maxH, perfResize.origH + (perfResize.startY - e.clientY)));
+                perfOverlay.style.height = newH + 'px';
+            }
+            drawPerfChart();
+        });
+        document.addEventListener('mouseup', function() { perfResize.mode = ''; });
+        window.addEventListener('resize', function() { clampPerfOverlay(); drawPerfChart(); });
+
+        if (perfHeader) {
+            perfHeader.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                e.stopPropagation();
+                var rect = perfOverlay.getBoundingClientRect();
+                perfOverlay.style.right = 'auto';
+                perfOverlay.style.bottom = 'auto';
+                perfOverlay.style.left = rect.left + 'px';
+                perfOverlay.style.top = rect.top + 'px';
+                perfDrag.active = true;
+                perfDrag.startX = e.clientX;
+                perfDrag.startY = e.clientY;
+                perfDrag.origLeft = rect.left;
+                perfDrag.origTop = rect.top;
+            });
+            document.addEventListener('mousemove', function(e) {
+                if (!perfDrag.active) return;
+                var cw = document.documentElement.clientWidth;
+                var ch = document.documentElement.clientHeight;
+                var rect = perfOverlay.getBoundingClientRect();
+                var w = rect.width || 256;
+                var h = rect.height || MIN_PERF_H;
+                var nx = Math.max(SAFE_SIDE, Math.min(cw - w - SAFE_SIDE, perfDrag.origLeft + e.clientX - perfDrag.startX));
+                var ny = Math.max(SAFE_TOP, Math.min(ch - h - SAFE_BOTTOM, perfDrag.origTop + e.clientY - perfDrag.startY));
+                perfOverlay.style.left = nx + 'px';
+                perfOverlay.style.top = ny + 'px';
+            });
+            document.addEventListener('mouseup', function() { perfDrag.active = false; });
+        }
+
+        function updateMetaPanel() {
+            if (!svgaMeta || !perfMetaGrid) return;
+            var dur = svgaMeta.fps > 0 ? (svgaMeta.frames / svgaMeta.fps).toFixed(2) : '-';
+            var fileSizeStr = '-';
+            if (fileSize > 0) {
+                var fmb = fileSize / (1024 * 1024);
+                fileSizeStr = fmb >= 1 ? fmb.toFixed(2) + 'MB' : (fileSize / 1024).toFixed(0) + 'KB';
+            }
+            var memStr = svgaMeta.memory ? (svgaMeta.memory / 1024 / 1024).toFixed(2) + 'MB' : '0MB';
+            perfMetaGrid.innerHTML =
+                '<div class="pm-cell"><span class="pm-k">' + T('META_Duration') + '</span><span class="pm-v">' + dur + 's</span></div>' +
+                '<div class="pm-cell"><span class="pm-k">' + T('META_FPS') + '</span><span class="pm-v">' + (svgaMeta.fps || '-') + '</span></div>' +
+                '<div class="pm-cell"><span class="pm-k">' + T('META_Width') + '</span><span class="pm-v">' + (svgaMeta.width || '-') + '</span></div>' +
+                '<div class="pm-cell"><span class="pm-k">' + T('META_Height') + '</span><span class="pm-v">' + (svgaMeta.height || '-') + '</span></div>' +
+                '<div class="pm-cell"><span class="pm-k">' + T('META_FileSize') + '</span><span class="pm-v">' + fileSizeStr + '</span></div>' +
+                '<div class="pm-cell"><span class="pm-k">' + T('META_Memory') + '</span><span class="pm-v">' + memStr + '</span></div>' +
+                '<div class="pm-cell"><span class="pm-k">' + T('META_Sprites') + '</span><span class="pm-v">' + (svgaMeta.sprites || 0) + '</span></div>' +
+                '<div class="pm-cell"><span class="pm-k">' + T('META_Version') + '</span><span class="pm-v">' + (svgaMeta.version || '-') + '</span></div>' +
+                '<div class="pm-sub">' +
+                    '<span>' + T('META_Images') + ': ' + (svgaMeta.images || 0) + '</span>' +
+                    '<span>' + T('META_Audios') + ': ' + (svgaMeta.audios || 0) + '</span>' +
+                    '<span>' + totalFrames + 'f</span>' +
+                '</div>';
         }
 
         var metaPinned = false;
-        btnMeta.addEventListener('click', function(e) {
-            e.stopPropagation();
-            metaPinned = !metaPinned;
+        function toggleMetaPanel(forceOpen) {
+            metaPinned = typeof forceOpen === 'boolean' ? forceOpen : !metaPinned;
             btnMeta.classList.toggle('pinned', metaPinned);
             if (metaPinned) {
                 updateMetaPanel();
-                metaPanel.classList.add('show');
+                setPerfVisible(true);
             } else {
-                metaPanel.classList.remove('show');
+                setPerfVisible(false);
             }
+        }
+        btnMeta.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMetaPanel();
         });
         btnMeta.addEventListener('mouseenter', function() {
             if (!metaPinned) {
                 updateMetaPanel();
-                metaPanel.classList.add('show');
+                setPerfVisible(true);
             }
         });
         btnMeta.addEventListener('mouseleave', function() {
             if (!metaPinned) {
-                metaPanel.classList.remove('show');
+                setPerfVisible(false);
             }
         });
 
@@ -486,8 +977,8 @@
         document.addEventListener('click', function(e) {
             if (!colorPicker.contains(e.target) && e.target !== btnBg && !btnBg.contains(e.target))
                 colorPicker.classList.remove('show');
-            if (!metaPinned && !metaPanel.contains(e.target) && e.target !== btnMeta && !btnMeta.contains(e.target))
-                metaPanel.classList.remove('show');
+            if (optsMenu && !optsMenu.contains(e.target) && e.target !== btnOpts && !btnOpts.contains(e.target))
+                optsMenu.classList.remove('show');
         });
 
         if (bgIndex < 0) { bgLayer.className = ''; bgLayer.style.background = customBgColor; }
@@ -497,17 +988,15 @@
         function showControls() {
             controls.classList.remove('hidden');
             topBar.classList.remove('hidden');
-            infoEl.classList.add('show');
             resetHideTimer();
         }
         function hideControls() {
-            if (isDragging) return;
+            if (isDragging || perfDrag.active || perfResize.mode || structResize.active || metaPinned || structVisible) return;
             controls.classList.add('hidden');
             topBar.classList.add('hidden');
-            infoEl.classList.remove('show');
             volumeLayer.classList.remove('show');
             colorPicker.classList.remove('show');
-            metaPanel.classList.remove('show');
+            if (optsMenu) optsMenu.classList.remove('show');
         }
         function resetHideTimer() {
             if (hideTimer) clearTimeout(hideTimer);
@@ -544,10 +1033,23 @@
         btnMute.addEventListener('click', function() { isMuted = !isMuted; updateVolumeIcon(); });
         volumeSlider.addEventListener('input', function() { volume = volumeSlider.value / 100; isMuted = false; updateVolumeIcon(); });
 
+        var zoomHideTimer = null;
+        function showZoomInfo() {
+            if (!zoomInfoEl) return;
+            zoomInfoEl.textContent = Math.round(zoomLevel * 100) + '%';
+            zoomInfoEl.style.opacity = '0.9';
+            if (zoomHideTimer) clearTimeout(zoomHideTimer);
+            zoomHideTimer = setTimeout(function() { zoomInfoEl.style.opacity = '0'; }, 600);
+        }
+
         document.addEventListener('wheel', function(e) {
             if (e.ctrlKey) {
                 e.preventDefault();
-                // Zoom not implemented for SVGA
+                var delta = e.deltaY > 0 ? -0.1 : 0.1;
+                zoomLevel = Math.max(0.1, Math.min(5.0, zoomLevel + delta));
+                applyTransform();
+                showZoomInfo();
+                showControls();
             } else {
                 if (e.deltaY < 0) volume = Math.min(1, volume + 0.04);
                 else volume = Math.max(0, volume - 0.04);
@@ -561,8 +1063,6 @@
         // --- Canvas fit to container ---
         function fitCanvasToContainer() {
             if (!svgaMeta || !svgaMeta.width) return;
-            // Let SVGAPlayer-Web handle scaling via setContentMode
-            // Just ensure canvas has correct internal resolution
             log('Canvas resolution: ' + canvas.width + 'x' + canvas.height);
         }
         
@@ -582,18 +1082,8 @@
             panX = 0;
             panY = 0;
             canvas.style.transform = '';
+            showZoomInfo();
         }
-
-        // Zoom: Ctrl+Scroll
-        document.addEventListener('wheel', function(e) {
-            if (e.ctrlKey) {
-                e.preventDefault();
-                var delta = e.deltaY > 0 ? -0.1 : 0.1;
-                zoomLevel = Math.max(0.1, Math.min(5.0, zoomLevel + delta));
-                applyTransform();
-                showControls();
-            }
-        }, { passive: false });
 
         // Pan: left-click drag on canvas
         canvas.addEventListener('mousedown', function(e) {
@@ -627,20 +1117,138 @@
             fitCanvasToContainer();
         });
 
-        // --- Performance ---
-        var currentFlushTime = 0;
-        function updatePerfDisplay() {
-            var fpsColor = currentFps >= 15 ? '#4CAF50' : (currentFps >= 10 ? '#FFC107' : '#F44336');
-            var fpsEl = document.getElementById('fpsDisplay');
-            if (fpsEl) {
-                fpsEl.textContent = currentFps + ' FPS';
-                fpsEl.style.color = fpsColor;
+        // --- Performance & Waveform ---
+        var currentFrameTime = 0;
+        var lastFrameTs = 0;
+        var perfHoverIdx = -1;
+
+        if (perfHeader) {
+            perfHeader.addEventListener('dblclick', function(e) {
+                e.stopPropagation();
+                perfOverlay.style.left = 'auto';
+                perfOverlay.style.top = 'auto';
+                perfOverlay.style.right = '10px';
+                perfOverlay.style.bottom = '42px';
+                perfOverlay.style.width = '256px';
+                perfOverlay.style.height = '';
+                clampPerfOverlay();
+                drawPerfChart();
+            });
+        }
+        if (btnCopyPerf) {
+            btnCopyPerf.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+            btnCopyPerf.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (!svgaMeta) return;
+                var dur = svgaMeta.fps > 0 ? (svgaMeta.frames / svgaMeta.fps).toFixed(2) + 's' : '-';
+                var fsz = fileSize > 0 ? (fileSize >= 1048576 ? (fileSize / 1048576).toFixed(2) + 'MB' : (fileSize / 1024).toFixed(0) + 'KB') : '-';
+                var avgFps = document.getElementById('pFpsAvg').textContent;
+                var avgFt = document.getElementById('pFlushAvg').textContent;
+                var txt = svgaMeta.width + 'x' + svgaMeta.height + ' | ' + svgaMeta.fps + ' FPS | ' + dur + ' | ' + fsz + ' | ' + avgFps + ' FPS / ' + avgFt + 'ms';
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(txt).then(function() { showToast(T('TOAST_Copied')); });
+                }
+            });
+        }
+        if (perfChart) {
+            perfChart.addEventListener('mousemove', function(e) {
+                if (perfHistory.length === 0) return;
+                var rect = perfChart.getBoundingClientRect();
+                var barW = rect.width / PERF_MAX_SAMPLES;
+                var startX = rect.width - perfHistory.length * barW;
+                var idx = Math.floor((e.clientX - rect.left - startX) / barW);
+                if (idx >= 0 && idx < perfHistory.length) {
+                    perfHoverIdx = idx;
+                    var s = perfHistory[idx];
+                    perfFrameLabel.textContent = s.ft.toFixed(1) + 'ms · ' + s.fps + ' FPS';
+                    drawPerfChart();
+                } else if (perfHoverIdx !== -1) {
+                    perfHoverIdx = -1;
+                    drawPerfChart();
+                }
+            });
+            perfChart.addEventListener('mouseleave', function() {
+                perfHoverIdx = -1;
+                if (totalFrames > 0) perfFrameLabel.textContent = currentFrame + ' / ' + totalFrames;
+                drawPerfChart();
+            });
+        }
+
+        function drawPerfChart() {
+            if (!perfChart) return;
+            var cw = perfChart.clientWidth || 232;
+            var ch = perfChart.clientHeight || 48;
+            if (perfChart.width !== cw) perfChart.width = cw;
+            if (perfChart.height !== ch) perfChart.height = ch;
+            var ctx = perfChart.getContext('2d');
+            var w = perfChart.width, h = perfChart.height;
+            ctx.clearRect(0, 0, w, h);
+
+            var targetFt = fps > 0 ? 1000 / fps : 50;
+            var maxFt = Math.max(33, targetFt * 1.5);
+            for (var i = 0; i < perfHistory.length; i++) {
+                if (perfHistory[i].ft > maxFt) maxFt = perfHistory[i].ft;
             }
+            var refY = Math.round(h - Math.min(h - 4, (targetFt / maxFt) * (h - 4)));
+            ctx.save();
+            ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(0, refY);
+            ctx.lineTo(w, refY);
+            ctx.stroke();
+            ctx.restore();
+            ctx.fillStyle = 'rgba(255,255,255,0.55)';
+            ctx.font = '9px Consolas, monospace';
+            ctx.fillText(Math.round(targetFt) + 'ms', 2, Math.max(9, refY - 2));
+
+            if (perfHistory.length === 0) return;
+            var barW = w / PERF_MAX_SAMPLES;
+            var startX = w - perfHistory.length * barW;
+            for (var j = 0; j < perfHistory.length; j++) {
+                var item = perfHistory[j];
+                var bh = Math.max(2, Math.min(h - 2, (item.ft / maxFt) * (h - 4)));
+                var c = item.ft <= targetFt * 1.25 ? '#66bb6a' : (item.ft <= targetFt * 2 ? '#ffca28' : '#ef5350');
+                ctx.fillStyle = j === perfHoverIdx ? '#ffffff' : c;
+                ctx.fillRect(startX + j * barW, h - bh, Math.max(1, barW - 1), bh);
+            }
+        }
+
+        function updatePerfDisplay() {
+            var targetFt = fps > 0 ? 1000 / fps : 50;
             var barColor;
-            if (currentFlushTime <= 10) barColor = '#4CAF50';
-            else if (currentFlushTime <= 20) barColor = '#FFC107';
-            else barColor = '#F44336';
+            if (currentFrameTime <= targetFt * 1.25) barColor = '#66bb6a';
+            else if (currentFrameTime <= targetFt * 2) barColor = '#ffca28';
+            else barColor = '#ef5350';
             progressFill.style.background = barColor;
+
+            perfHistory.push({ fps: currentFps, ft: currentFrameTime });
+            if (perfHistory.length > PERF_MAX_SAMPLES) perfHistory.shift();
+
+            if (perfVisible) {
+                var sumFps = 0, minFps = 999, sumFt = 0, maxFt = 0;
+                for (var i = 0; i < perfHistory.length; i++) {
+                    var s = perfHistory[i];
+                    sumFps += s.fps; if (s.fps < minFps) minFps = s.fps;
+                    sumFt += s.ft; if (s.ft > maxFt) maxFt = s.ft;
+                }
+                var n = perfHistory.length;
+                var fpsColor = currentFps >= (fps * 0.8) ? '#66bb6a' : (currentFps >= (fps * 0.5) ? '#ffca28' : '#ef5350');
+                var maxColor = maxFt <= targetFt * 1.25 ? '#66bb6a' : (maxFt <= targetFt * 2 ? '#ffca28' : '#ef5350');
+                if (perfDot) { perfDot.style.background = barColor; perfDot.style.boxShadow = '0 0 4px ' + barColor; }
+
+                var fpsCurEl = document.getElementById('pFpsCur');
+                var flushCurEl = document.getElementById('pFlushCur');
+                var flushMaxEl = document.getElementById('pFlushMax');
+                fpsCurEl.textContent = currentFps; fpsCurEl.style.color = fpsColor;
+                document.getElementById('pFpsAvg').textContent = T('PERF_Avg') + ' ' + Math.round(sumFps / n);
+                document.getElementById('pFpsMin').textContent = T('PERF_Min') + ' ' + (minFps === 999 ? 0 : minFps);
+                flushCurEl.textContent = currentFrameTime.toFixed(1) + 'ms'; flushCurEl.style.color = barColor;
+                document.getElementById('pFlushAvg').textContent = T('PERF_Avg') + ' ' + (sumFt / n).toFixed(1);
+                flushMaxEl.textContent = T('PERF_Max') + ' ' + maxFt.toFixed(1); flushMaxEl.style.color = maxColor;
+                if (perfHoverIdx < 0 && totalFrames > 0) perfFrameLabel.textContent = currentFrame + ' / ' + totalFrames;
+                drawPerfChart();
+            }
         }
 
         // --- Save/Copy ---
@@ -752,6 +1360,7 @@
                     var height = size.height || 0;
                     var spriteCount = videoItem.sprites ? videoItem.sprites.length : 0;
                     var imageCount = videoItem.images ? Object.keys(videoItem.images).length : 0;
+                    var audioCount = videoItem.audios ? videoItem.audios.length : 0;
 
                     // Get image details with sizes
                     var imageDetails = [];
@@ -808,6 +1417,7 @@
                     log('=== End Metadata ===');
 
                     // Store metadata
+                    svgaData = videoItem;
                     totalFrames = videoFrames;
                     fps = videoFps;
                     svgaMeta = {
@@ -817,21 +1427,26 @@
                         fps: videoFps,
                         sprites: spriteCount,
                         images: imageCount,
+                        audios: audioCount,
                         version: version,
                         memory: memorySize,
                         imageDetails: imageDetails
                     };
+                    perfHistory = [];
+                    lastFrameTs = 0;
+                    selectedItem = null;
 
                     // Set canvas
                     canvas.width = width;
                     canvas.height = height;
                     fitCanvasToContainer();
-                    
-                    // Update info display
-                    infoEl.innerHTML = width + '\u00d7' + height + '<br><span id="fpsDisplay">0 FPS</span>';
 
-                    // Update metadata panel
+                    // Update metadata panel & structure tree
                     updateMetaPanel();
+                    buildStructureRows();
+                    refreshStructureTree();
+                    var rs = document.getElementById('rngStart'), re = document.getElementById('rngEnd');
+                    if (rs && re) { rs.value = 0; rs.max = Math.max(0, totalFrames - 1); re.value = Math.max(0, totalFrames - 1); re.max = Math.max(0, totalFrames - 1); }
 
                     // Set up player
                     player.setVideoItem(videoItem);
@@ -850,27 +1465,38 @@
                     
                     log('Player configured, starting animation...');
 
-                    // Progress tracking
-                    player.onFrame(function(frame) {
+                    // Progress & real-time perf tracking
+                    function updateFrameUI(frame) {
                         currentFrame = frame;
-                        // Log every frame for debugging
-                        if (frame < 5 || frame % 10 === 0) {
-                            log('Frame ' + frame + '/' + totalFrames + ' (fps=' + fps + ')');
+                        var p = totalFrames > 0 ? frame / totalFrames : 0;
+                        var pct = (p * 100).toFixed(2) + '%';
+                        progressFill.style.width = 'calc(' + pct + ' - 10px)';
+                        progressThumb.style.left = 'calc(' + pct + ')';
+                        timeEl.textContent = fmt(frame, fps) + ' / ' + fmt(totalFrames, fps) + '  ' + frame + '/' + totalFrames;
+                    }
+
+                    player.onFrame(function(frame) {
+                        var now = performance.now();
+                        if (lastFrameTs > 0 && isPlaying) {
+                            var dt = now - lastFrameTs;
+                            if (dt > 0 && dt < 1000) {
+                                currentFrameTime = dt;
+                                currentFps = Math.round(1000 / dt);
+                                updatePerfDisplay();
+                            }
                         }
-                        if (!isDragging) {
-                            var p = totalFrames > 0 ? frame / totalFrames : 0;
-                            var pct = (p * 100).toFixed(2) + '%';
-                            progressFill.style.width = 'calc(' + pct + ' - 10px)';
-                            progressThumb.style.left = 'calc(' + pct + ')';
-                            timeEl.textContent = fmt(frame, fps) + ' / ' + fmt(totalFrames, fps);
-                        }
+                        lastFrameTs = now;
+                        if (!isDragging) updateFrameUI(frame);
                     });
 
-                    player.onPercentage(function(pct) {
-                        // Update FPS display
-                        currentFps = Math.round(fps);
-                        updatePerfDisplay();
-                    });
+                    if (typeof player.onFinished === 'function') {
+                        player.onFinished(function() {
+                            if (!isLooping) {
+                                isPlaying = false;
+                                btnPlay.querySelector('.icon').textContent = ICON_PLAY;
+                            }
+                        });
+                    }
 
                     // Start playing
                     player.startAnimation();
@@ -940,11 +1566,360 @@
             if (player) player.loops = isLooping ? 0 : 1;
         });
 
+        // --- Frame stepping ---
+        function stepFrame(delta) {
+            if (!player || totalFrames <= 0) return;
+            if (isPlaying) {
+                player.pauseAnimation();
+                isPlaying = false;
+                btnPlay.querySelector('.icon').textContent = ICON_PLAY;
+            }
+            var nextFrame = Math.max(0, Math.min(totalFrames - 1, currentFrame + delta));
+            player.stepToFrame(nextFrame, false);
+            currentFrame = nextFrame;
+            var p = totalFrames > 0 ? nextFrame / totalFrames : 0;
+            var pct = (p * 100).toFixed(2) + '%';
+            progressFill.style.width = 'calc(' + pct + ' - 10px)';
+            progressThumb.style.left = 'calc(' + pct + ')';
+            timeEl.textContent = fmt(nextFrame, fps) + ' / ' + fmt(totalFrames, fps) + '  ' + nextFrame + '/' + totalFrames;
+            if (perfVisible) perfFrameLabel.textContent = nextFrame + ' / ' + totalFrames;
+        }
+        if (btnPrevFrame) btnPrevFrame.addEventListener('click', function() { stepFrame(-1); });
+        if (btnNextFrame) btnNextFrame.addEventListener('click', function() { stepFrame(1); });
+
+        // --- File Structure (Single Panel, Sortable, Double-Click Inline Edit) ---
+        var structSort = { key: null, dir: 0 };
+        var structFilter = '';
+        var expandedEditId = null;
+
+        function toggleStruct(forceOpen) {
+            structVisible = typeof forceOpen === 'boolean' ? forceOpen : !structVisible;
+            if (btnStruct) btnStruct.classList.toggle('pinned', structVisible);
+            if (structPanel) structPanel.classList.toggle('show', structVisible);
+        }
+        if (btnStruct) btnStruct.addEventListener('click', function(e) { e.stopPropagation(); toggleStruct(); });
+        if (btnStructClose) btnStructClose.addEventListener('click', function(e) { e.stopPropagation(); toggleStruct(false); });
+        if (structSearch) {
+            structSearch.addEventListener('input', function() {
+                structFilter = structSearch.value.trim().toLowerCase();
+                refreshStructureTree();
+            });
+            structSearch.addEventListener('click', function(e) { e.stopPropagation(); });
+        }
+
+        // Left-edge resize for structPanel
+        var structResize = { active: false, startX: 0, origW: 0 };
+        if (structResizeL) {
+            structResizeL.addEventListener('mousedown', function(e) {
+                if (e.button !== 0) return;
+                e.stopPropagation(); e.preventDefault();
+                structResize.active = true;
+                structResize.startX = e.clientX;
+                structResize.origW = structPanel.getBoundingClientRect().width;
+            });
+            document.addEventListener('mousemove', function(e) {
+                if (!structResize.active) return;
+                var maxW = Math.min(520, document.documentElement.clientWidth - 20);
+                var newW = Math.max(260, Math.min(maxW, structResize.origW + (structResize.startX - e.clientX)));
+                structPanel.style.width = newW + 'px';
+            });
+            document.addEventListener('mouseup', function() { structResize.active = false; });
+        }
+
+        if (btnResetDynTop) {
+            btnResetDynTop.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (player && typeof player.clearDynamicObjects === 'function') {
+                    player.clearDynamicObjects();
+                    showToast(T('TOAST_DynamicReset'));
+                }
+            });
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function fmtBytes(b) {
+            if (!b || b <= 0) return '-';
+            if (b >= 1048576) return (b / 1048576).toFixed(2) + 'M';
+            if (b >= 1024) return (b / 1024).toFixed(1) + 'K';
+            return b + 'B';
+        }
+
+        function updateHeaderSortUI() {
+            var cols = [
+                { el: colName, k: 'name', label: T('COL_Name') },
+                { el: colType, k: 'type', label: T('COL_Type') },
+                { el: colSize, k: 'size', label: T('COL_Size') },
+                { el: colBytes, k: 'bytes', label: T('COL_Bytes') }
+            ];
+            cols.forEach(function(c) {
+                if (!c.el) return;
+                var isSorted = structSort.key === c.k && structSort.dir !== 0;
+                c.el.classList.toggle('sorted', isSorted);
+                c.el.textContent = c.label + (isSorted ? (structSort.dir > 0 ? ' ▲' : ' ▼') : '');
+            });
+        }
+
+        document.querySelectorAll('.struct-col[data-sort]').forEach(function(col) {
+            col.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var k = col.dataset.sort;
+                if (structSort.key !== k) { structSort.key = k; structSort.dir = 1; }
+                else if (structSort.dir === 1) structSort.dir = -1;
+                else { structSort.key = null; structSort.dir = 0; }
+                refreshStructureTree();
+            });
+        });
+
+        function buildStructureRows() {
+            structNodeList = [];
+            if (!svgaData) return;
+            var imgs = (svgaMeta && svgaMeta.imageDetails) || [];
+            var imgMap = {};
+            for (var m = 0; m < imgs.length; m++) imgMap[imgs[m].key] = imgs[m];
+
+            var sprites = svgaData.sprites || [];
+            for (var i = 0; i < sprites.length; i++) {
+                var sp = sprites[i];
+                var key = sp.imageKey || ('sprite_' + i);
+                var im = sp.imageKey ? imgMap[sp.imageKey] : null;
+                var w = im ? im.width : 0;
+                var h = im ? im.height : 0;
+                structNodeList.push({
+                    id: 'sp_' + i,
+                    order: structNodeList.length,
+                    kind: 'sprite',
+                    typeLabel: T('TYPE_Sprite'),
+                    key: key,
+                    width: w,
+                    height: h,
+                    area: w * h,
+                    bytes: im ? im.size : 0,
+                    matteKey: sp.matteKey || '',
+                    kfCount: sp.frames ? sp.frames.length : 0
+                });
+            }
+
+            for (var j = 0; j < imgs.length; j++) {
+                var img = imgs[j];
+                structNodeList.push({
+                    id: 'im_' + j,
+                    order: structNodeList.length,
+                    kind: 'image',
+                    typeLabel: T('TYPE_Image'),
+                    key: img.key,
+                    width: img.width,
+                    height: img.height,
+                    area: img.width * img.height,
+                    bytes: img.size || 0
+                });
+            }
+
+            var audios = svgaData.audios || [];
+            for (var k = 0; k < audios.length; k++) {
+                var au = audios[k];
+                structNodeList.push({
+                    id: 'au_' + k,
+                    order: structNodeList.length,
+                    kind: 'audio',
+                    typeLabel: T('TYPE_Audio'),
+                    key: au.audioKey || ('audio_' + k),
+                    width: 0,
+                    height: 0,
+                    area: 0,
+                    bytes: 0
+                });
+            }
+        }
+
+        function refreshStructureTree() {
+            updateHeaderSortUI();
+            if (!structBody || !svgaData) return;
+            var rows = structNodeList.slice();
+            if (structFilter) {
+                rows = rows.filter(function(r) {
+                    return r.key.toLowerCase().indexOf(structFilter) >= 0 || r.typeLabel.toLowerCase().indexOf(structFilter) >= 0;
+                });
+            }
+            if (structSort.key && structSort.dir !== 0) {
+                var k = structSort.key, d = structSort.dir;
+                rows.sort(function(a, b) {
+                    if (k === 'name') return a.key.localeCompare(b.key) * d;
+                    if (k === 'type') return a.kind.localeCompare(b.kind) * d;
+                    if (k === 'size') return (a.area - b.area) * d;
+                    if (k === 'bytes') return (a.bytes - b.bytes) * d;
+                    return 0;
+                });
+            }
+
+            var html = '';
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                var sizeStr = r.width > 0 ? (r.width + '×' + r.height) : '-';
+                var bytesStr = fmtBytes(r.bytes);
+                var isSel = selectedItem && selectedItem.id === r.id;
+                html += '<div class="s-row' + (isSel ? ' selected' : '') + '" data-row-id="' + r.id + '">'
+                    + '<div class="s-name" title="' + escapeHtml(r.key) + '">' + escapeHtml(r.key) + '</div>'
+                    + '<div class="s-type t-' + r.kind + '">' + escapeHtml(r.typeLabel) + '</div>'
+                    + '<div class="s-num">' + sizeStr + '</div>'
+                    + '<div class="s-num">' + bytesStr + '</div>'
+                    + '</div>';
+                if (expandedEditId === r.id && (r.kind === 'sprite' || r.kind === 'image')) {
+                    html += '<div class="s-inline-edit" data-edit-id="' + r.id + '">'
+                        + '<div class="s-inline-row">'
+                        + '<input type="file" id="svgaImgInput" accept="image/*" style="display:none">'
+                        + '<button class="insp-btn" id="btnSvgaReplaceImg">' + T('INSP_ReplaceImage') + '</button>'
+                        + '</div>'
+                        + '<div class="s-inline-row">'
+                        + '<input type="text" id="svgaTextInput" placeholder="' + escapeHtml(T('INSP_TextPlaceholder')) + '">'
+                        + '<button class="insp-btn" id="btnSvgaApplyText">' + T('INSP_ApplyText') + '</button>'
+                        + '</div>'
+                        + '</div>';
+                }
+            }
+            structBody.innerHTML = html;
+
+            structBody.querySelectorAll('.s-row').forEach(function(el) {
+                var rid = el.dataset.rowId;
+                var item = rows.find(function(x) { return x.id === rid; });
+                el.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectedItem = item;
+                    if (structFooter && item) {
+                        var tags = [];
+                        tags.push('<span class="sf-tag">' + escapeHtml(item.key) + '</span>');
+                        tags.push('<span class="sf-tag">' + escapeHtml(item.typeLabel) + '</span>');
+                        if (item.width > 0) tags.push('<span class="sf-tag">' + item.width + '×' + item.height + '</span>');
+                        if (item.bytes > 0) tags.push('<span class="sf-tag">' + fmtBytes(item.bytes) + '</span>');
+                        if (item.kfCount) tags.push('<span class="sf-tag">' + escapeHtml(T('INSP_KeyFrames')) + ': ' + item.kfCount + '</span>');
+                        if (item.matteKey) tags.push('<span class="sf-tag">' + escapeHtml(T('INSP_MatteKey')) + ': ' + escapeHtml(item.matteKey) + '</span>');
+                        structFooter.innerHTML = tags.join('');
+                    }
+                    refreshStructureTree();
+                });
+                el.addEventListener('dblclick', function(e) {
+                    e.stopPropagation();
+                    if (!item || item.kind === 'audio') return;
+                    selectedItem = item;
+                    expandedEditId = expandedEditId === rid ? null : rid;
+                    refreshStructureTree();
+                });
+            });
+
+            var btnRep = document.getElementById('btnSvgaReplaceImg');
+            var inpImg = document.getElementById('svgaImgInput');
+            if (btnRep && inpImg && selectedItem) {
+                btnRep.addEventListener('click', function(e) { e.stopPropagation(); inpImg.click(); });
+                inpImg.addEventListener('change', function() {
+                    var f = inpImg.files && inpImg.files[0];
+                    if (!f || !player) return;
+                    var reader = new FileReader();
+                    reader.onload = function(ev) {
+                        player.setImage(ev.target.result, selectedItem.key);
+                        showToast(T('TOAST_ImageUpdated'));
+                    };
+                    reader.readAsDataURL(f);
+                });
+            }
+            var btnTxt = document.getElementById('btnSvgaApplyText');
+            if (btnTxt && selectedItem) {
+                btnTxt.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var val = document.getElementById('svgaTextInput').value;
+                    if (!player) return;
+                    player.setText({ text: val, family: 'Arial', size: '24px', color: '#FFFFFF' }, selectedItem.key);
+                    showToast(T('TOAST_TextUpdated'));
+                });
+            }
+        }
+
+        // --- Keyboard shortcuts ---
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'ArrowLeft') { e.preventDefault(); stepFrame(-1); showControls(); }
+            else if (e.key === 'ArrowRight') { e.preventDefault(); stepFrame(1); showControls(); }
+            else if (e.key === ' ') { e.preventDefault(); btnPlay.click(); showControls(); }
+            else if (e.key === 'l' || e.key === 'L') { e.preventDefault(); toggleMetaPanel(); showControls(); }
+            else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleStruct(); showControls(); }
+        });
+
+        // --- Playback & Debug Options (Range / Reverse / ContentMode / FillMode) ---
+        var isReverse = false;
+        var activeRange = null;
+
+        function startWithCurrentMode() {
+            if (!player) return;
+            if (activeRange && typeof player.startAnimationWithRange === 'function') {
+                player.startAnimationWithRange(activeRange, isReverse);
+            } else if (typeof player.startAnimation === 'function') {
+                player.startAnimation(isReverse);
+            }
+            isPlaying = true;
+            btnPlay.querySelector('.icon').textContent = ICON_PAUSE;
+        }
+
+        if (btnOpts) {
+            btnOpts.addEventListener('click', function(e) {
+                e.stopPropagation();
+                colorPicker.classList.remove('show');
+                optsMenu.classList.toggle('show');
+            });
+        }
+        var chkReverse = document.getElementById('chkReverse');
+        if (chkReverse) chkReverse.addEventListener('change', function() {
+            isReverse = chkReverse.checked;
+            startWithCurrentMode();
+        });
+        document.querySelectorAll('#grpFillMode .opt-pill').forEach(function(b) {
+            b.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (player) player.fillMode = b.dataset.val;
+                document.querySelectorAll('#grpFillMode .opt-pill').forEach(function(x) { x.classList.toggle('active', x === b); });
+            });
+        });
+        document.querySelectorAll('#grpContentMode .opt-pill').forEach(function(b) {
+            b.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var mode = b.dataset.val;
+                if (player && typeof player.setContentMode === 'function') {
+                    var wrap = document.getElementById('canvasWrap');
+                    if (wrap && wrap.clientWidth > 0 && wrap.clientHeight > 0) {
+                        canvas.style.width = '100%';
+                        canvas.style.height = '100%';
+                        canvas.width = wrap.clientWidth;
+                        canvas.height = wrap.clientHeight;
+                    }
+                    player.setContentMode(mode);
+                    if (!isPlaying && typeof player.stepToFrame === 'function') player.stepToFrame(currentFrame, false);
+                }
+                document.querySelectorAll('#grpContentMode .opt-pill').forEach(function(x) { x.classList.toggle('active', x === b); });
+            });
+        });
+        var btnApplyRange = document.getElementById('btnApplyRange');
+        var btnResetRange = document.getElementById('btnResetRange');
+        if (btnApplyRange) btnApplyRange.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var s = Math.max(0, parseInt(document.getElementById('rngStart').value, 10) || 0);
+            var end = Math.max(s, parseInt(document.getElementById('rngEnd').value, 10) || 0);
+            if (totalFrames > 0) end = Math.min(totalFrames - 1, end);
+            activeRange = { location: s, length: Math.max(1, end - s + 1) };
+            startWithCurrentMode();
+        });
+        if (btnResetRange) btnResetRange.addEventListener('click', function(e) {
+            e.stopPropagation();
+            activeRange = null;
+            var rs = document.getElementById('rngStart'), re = document.getElementById('rngEnd');
+            if (rs && re) { rs.value = 0; re.value = Math.max(0, totalFrames - 1); }
+            startWithCurrentMode();
+        });
+
         // --- Messages from C# ---
         window.addEventListener('message', function(e) {
             var msg = e.data;
             if (!msg || typeof msg !== 'object') return;
-            if (msg.type === 'loadFile') loadFile(msg.base64, msg.jszipSrc, msg.svgaSrc);
+            if (msg.type === 'loadFile') { fileSize = msg.fileSize || 0; loadFile(msg.base64, msg.jszipSrc, msg.svgaSrc); }
         });
 
         // --- Ready ---

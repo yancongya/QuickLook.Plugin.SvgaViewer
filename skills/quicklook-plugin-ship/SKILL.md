@@ -20,7 +20,7 @@ version: 2.0.0
 
 | 插件 | 实现 / 输入 | 核对重点 |
 |---|---|---|
-| PagViewer | WebView2 + libpag WASM；.pag；当前 Priority 0 | PAG 文件头、SDK 资源、缩放/音量/PNG 等真实控件 |
+| PagViewer | WebView2 + libpag WASM；.pag；当前 Priority 0 | PAG 文件头、SDK 资源、逐帧/缩放/音量/PNG、透明信息性能一体面板、独立结构抽屉 |
 | SvgaViewer | WebView2 + SVGAPlayer；.svga 1.x/2.x；当前 Priority 10 | 1.x ZIP 与 2.x zlib，JSZip/JSZipUtils；不可把历史错名资产当正确包 |
 | AlphaVideoViewer | WebView2 + 自写 WebGL；.mp4/.mov/.m4v；当前 Priority 100 | vapc 优先，像素检测兜底；不承诺全部 YYEVA 动态替换能力 |
 | PluginManager | 原生 WPF，无 WebView2；QuickLook 数据根目录；当前 Priority 100 | 明确排除 .qlplugin；官方安装器交接；受保护插件；延迟删除 |
@@ -53,7 +53,7 @@ version: 2.0.0
 2. .ps1 保持 UTF-8 BOM / PowerShell 5.1 兼容。无 tag 时 update-version 不能将 commit hash 写成版本。
 3. 校验包里的主 DLL、Metadata、依赖与资源；安装包不是源码 ZIP。若发布名混入其他插件，先报告，不自动删除历史资产。
 4. 下载选精确程序集名 .qlplugin；不能取列表第一项或只按扩展名任取。第三方不标准命名需检查元数据/明确用户选择，不能盲目套系列命名。
-5. master push / PR 只构建，v* tag 才发布；记录实际工作流条件。CI 绿灯不是 Windows 上已安装可用。
+5. master push / PR 只构建，v* tag 才发布；记录实际工作流条件。轻量 `git tag vX.Y.Z` 不会被 `--follow-tags` 自动推送，需显式 `git push origin vX.Y.Z`（或改用 `git tag -a`）。CI 绿灯不是 Windows 上已安装可用。
 6. Pages 先读 build_type / source，保留 legacy master:/docs 或既有 workflow，不为“统一”迁移模式。插件构建成功不代表 Pages 成功。
 7. 部署失败先读失败 job 日志；in-progress deployment 冲突与页面构建错误分开处理。只有当前任务明确授权部署时才取消/重试部署，且最终检查在线页面与提交对应关系。
 8. 提交、push、tag、公开发布和官方 Issue 分别遵循用户授权；研究/同步 Skill 不自动授权发布插件或页面。

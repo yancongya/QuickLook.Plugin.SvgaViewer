@@ -1,5 +1,22 @@
 # Changelog
 
+## [Unreleased]
+
+## [1.1.0] - 2026-11-25
+
+### Added
+- Frame-by-frame stepping controls (`stepToFrame`, previous/next buttons, Left/Right arrow keys, Space to play/pause)
+- Frame counter in playback bar (`currentFrame/totalFrames`)
+- Unified bottom-right transparent Info & Performance panel via Info button or `L` key (duration, dimensions, file size, resource memory, sprites/images/audios count, real-time FPS & frame-time waveform with target budget line, bar hover readout, status dot, edge resize, double-click reset, and summary copy)
+- Independent single-panel File Structure table via Structure button or `F` key (sortable headers, live key filter, semantic type badges, left-edge resize, tag footer, double-click inline `setImage` / `setText`, and `clearDynamicObjects` reset)
+- Playback & Debug options menu (`#btnOpts`): frame range playback (`startAnimationWithRange`), reverse playback, `fillMode` (Forward/Backward), and `setContentMode` (AspectFit/AspectFill/Fill)
+- Zoom percentage indicator (`#zoomInfo`) and `onFinished` non-loop playback state sync
+- Native monochrome gray/white styling and full bilingual i18n across all menus and panels
+
+### Fixed
+- Merged duplicate `wheel` event listeners for Ctrl+Scroll zoom and volume control
+- Fixed `setContentMode` canvas container sizing and control bar `z-index` layering
+
 ## [1.0.0] - 2026-08-25
 
 ### Added

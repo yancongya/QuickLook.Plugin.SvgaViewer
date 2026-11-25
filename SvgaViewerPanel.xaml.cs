@@ -272,12 +272,14 @@ namespace QuickLook.Plugin.SvgaViewer
                 var bytes = File.ReadAllBytes(_svgaFilePath);
                 var base64 = Convert.ToBase64String(bytes);
 
+                var fileInfo = new System.IO.FileInfo(_svgaFilePath);
                 var msg = new
                 {
                     type = "loadFile",
                     jszipSrc = "https://assets.local/jszip.min.js",
                     svgaSrc = "https://assets.local/svga.min.js",
-                    base64 = base64
+                    base64 = base64,
+                    fileSize = fileInfo.Length
                 };
 
                 var jsonMsg = JsonSerializer.Serialize(msg);

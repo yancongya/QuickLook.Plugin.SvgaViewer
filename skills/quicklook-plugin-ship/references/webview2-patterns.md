@@ -414,6 +414,16 @@ btnMeta.addEventListener('click', function(e) {
     // ...
 });
 
+// 透明底信息/性能一体面板（PagViewer v1.3.1 / SvgaViewer v1.1.0 先例）：
+// 1. 信息与性能波形可合并为右下角透明底一体浮窗（支持拖拽、左/上/左上角缩放、双击标题栏复位、一键复制摘要）
+// 2. 透明底必须配多层深色投影，且内部单元格避免 overflow:hidden 裁切投影；悬停面板时微加深底色提升可读性
+// 3. 控制栏与顶部栏 z-index（>= 25）必须高于浮窗（18），且拖拽/缩放严格限制在 SAFE_BOTTOM 之上，绝不遮挡进度条
+// 4. 波形图可绘制目标帧耗时虚线基准线，支持鼠标悬停柱子读数与标题栏健康度状态圆点
+// 5. 文件结构面板采用单一面板表格（表头列说明 + 点击排序 + 搜索过滤 + 语义化类型色 + 双击内联修改 + 底部标签卡 + 左边缘调宽）
+// 6. 切换填充模式（setScaleMode / setContentMode）时，需同步将 canvas 尺寸设为容器尺寸并刷新（PAG 调用 updateSize）
+// 7. WebGL 已开启 alpha:true / premultipliedAlpha:false 时直接导出原生透明 PNG，勿用像素阈值暴力扣黑
+// 8. 保持原生黑白灰交互色，所有菜单项/选项/占位符均走 Translations.config 双语，部署备份目录放 %TEMP% 不留插件目录
+
 // 自定义滚动条
 #metaPanel::-webkit-scrollbar { width: 4px; }
 #metaPanel::-webkit-scrollbar-track { background: transparent; }
